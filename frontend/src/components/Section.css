@@ -1,0 +1,48 @@
+/* ============================================================
+   Section.css — Style komponen Section
+   ============================================================ */
+
+.gs-section {
+  width: 100%;
+}
+
+/* ---- Background Variants ---- */
+.gs-section--bg-subtle {
+  background-color: var(--gs-bg-subtle);
+}
+.gs-section--bg-muted {
+  background-color: var(--gs-bg-muted);
+}
+.gs-section--bg-dark {
+  background-color: var(--gs-green-dark);
+  color: var(--gs-white);
+}
+
+/* ---- Padding Vertical ---- */
+.gs-section--py-sm {
+  padding-top: var(--gs-space-5);
+  padding-bottom: var(--gs-space-5);
+}
+.gs-section--py-md {
+  padding-top: var(--gs-space-6);
+  padding-bottom: var(--gs-space-6);
+}
+.gs-section--py-lg {
+  padding-top: var(--gs-space-7);
+  padding-bottom: var(--gs-space-7);
+}
+.gs-section--py-xl {
+  padding-top: var(--gs-space-8);
+  padding-bottom: var(--gs-space-8);
+}
+
+@media (max-width: 575.98px) {
+  .gs-section--py-lg {
+    padding-top: var(--gs-space-6);
+    padding-bottom: var(--gs-space-6);
+  }
+  .gs-section--py-xl {
+    padding-top: var(--gs-space-7);
+    padding-bottom: var(--gs-space-7);
+  }
+}

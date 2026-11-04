@@ -1,0 +1,80 @@
+/* ============================================================
+   Footer.css — Style khusus komponen Footer GeoSlide
+   ============================================================ */
+
+.gs-footer {
+  background-color: var(--gs-green-dark);
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.9rem;
+}
+
+/* ---- Brand ---- */
+.gs-footer__brand {
+  text-decoration: none !important;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+.gs-footer__logo-icon {
+  font-size: 1.5rem;
+  color: var(--gs-green-light);
+  line-height: 1;
+}
+.gs-footer__logo-text {
+  color: var(--gs-white);
+}
+.gs-footer__logo-accent {
+  color: var(--gs-green-light);
+}
+
+/* ---- Deskripsi ---- */
+.gs-footer__desc {
+  color: rgba(255, 255, 255, 0.60);
+  line-height: 1.65;
+  font-size: 0.875rem;
+  max-width: 320px;
+}
+
+/* ---- Judul Kolom ---- */
+.gs-footer__heading {
+  color: var(--gs-white);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+/* ---- Links ---- */
+.gs-footer__links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.gs-footer__links a {
+  color: rgba(255, 255, 255, 0.65);
+  text-decoration: none;
+  transition: color var(--gs-transition);
+  font-size: 0.875rem;
+}
+.gs-footer__links a:hover {
+  color: var(--gs-green-light);
+  text-decoration: none;
+}
+
+/* ---- Divider line ---- */
+.gs-footer__main {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+/* ---- Bottom bar ---- */
+.gs-footer__bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+.gs-footer__copyright,
+.gs-footer__credit {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.8125rem;
+}

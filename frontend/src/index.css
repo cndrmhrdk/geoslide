@@ -1,111 +1,233 @@
+/* ============================================================
+   GeoSlide — Global CSS
+   Variabel warna, tipografi, spacing, komponen dasar
+   ============================================================ */
+
+/* ---- CSS Custom Properties (Design Tokens) ---- */
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  /* Palet Warna Utama */
+  --gs-green-dark:    #1a4731;   /* Hijau tua — dominan */
+  --gs-green:         #2d6a4f;   /* Hijau medium */
+  --gs-green-light:   #52b788;   /* Hijau terang / aksen */
+  --gs-green-muted:   #d8f3dc;   /* Hijau sangat muda (bg tipis) */
+  --gs-white:         #ffffff;
+  --gs-gray-50:       #f8f9fa;   /* Abu-abu paling terang */
+  --gs-gray-100:      #f1f3f5;
+  --gs-gray-200:      #e9ecef;
+  --gs-gray-300:      #dee2e6;
+  --gs-gray-500:      #adb5bd;
+  --gs-gray-700:      #495057;
+  --gs-gray-900:      #212529;
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+  /* Warna Semantik */
+  --gs-primary:       var(--gs-green-dark);
+  --gs-secondary:     var(--gs-green);
+  --gs-accent:        var(--gs-green-light);
+  --gs-bg:            var(--gs-white);
+  --gs-bg-subtle:     var(--gs-gray-50);
+  --gs-bg-muted:      var(--gs-green-muted);
+  --gs-text:          var(--gs-gray-700);
+  --gs-text-heading:  var(--gs-gray-900);
+  --gs-text-muted:    var(--gs-gray-500);
+  --gs-border:        var(--gs-gray-200);
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* Tipografi */
+  --gs-font-sans:     'Segoe UI', system-ui, Roboto, 'Helvetica Neue', sans-serif;
+  --gs-font-mono:     ui-monospace, Consolas, 'Courier New', monospace;
+  --gs-font-size-base: 1rem;       /* 16px */
+  --gs-line-height:   1.6;
 
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
+  /* Spacing Scale (8px grid) */
+  --gs-space-1:  0.25rem;   /*  4px */
+  --gs-space-2:  0.5rem;    /*  8px */
+  --gs-space-3:  0.75rem;   /* 12px */
+  --gs-space-4:  1rem;      /* 16px */
+  --gs-space-5:  1.5rem;    /* 24px */
+  --gs-space-6:  2rem;      /* 32px */
+  --gs-space-7:  3rem;      /* 48px */
+  --gs-space-8:  4rem;      /* 64px */
+
+  /* Radius & Shadow */
+  --gs-radius-sm:  4px;
+  --gs-radius:     8px;
+  --gs-radius-lg:  12px;
+  --gs-radius-xl:  20px;
+  --gs-shadow-sm:  0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
+  --gs-shadow:     0 4px 12px rgba(0,0,0,.10), 0 2px 4px rgba(0,0,0,.06);
+  --gs-shadow-lg:  0 10px 30px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.08);
+
+  /* Navbar */
+  --gs-navbar-height: 64px;
+
+  /* Transisi */
+  --gs-transition: 0.2s ease;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
+/* ---- Reset & Base ---- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
+  font-family: var(--gs-font-sans);
+  font-size: var(--gs-font-size-base);
+  line-height: var(--gs-line-height);
+  color: var(--gs-text);
+  background-color: var(--gs-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 #root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  box-sizing: border-box;
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
+/* ---- Tipografi ---- */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--gs-font-sans);
+  font-weight: 700;
+  color: var(--gs-text-heading);
+  line-height: 1.25;
+  margin-top: 0;
 }
 
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
-p {
-  margin: 0;
+h1 { font-size: 2.25rem; }   /* 36px */
+h2 { font-size: 1.75rem; }   /* 28px */
+h3 { font-size: 1.375rem; }  /* 22px */
+h4 { font-size: 1.125rem; }  /* 18px */
+
+@media (min-width: 768px) {
+  h1 { font-size: 2.75rem; }
+  h2 { font-size: 2rem; }
 }
 
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
+a {
+  color: var(--gs-secondary);
+  text-decoration: none;
+  transition: color var(--gs-transition);
+}
+a:hover {
+  color: var(--gs-green-dark);
+  text-decoration: underline;
 }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+/* ---- Tombol (override Bootstrap) ---- */
+.btn-gs-primary {
+  background-color: var(--gs-green-dark);
+  border-color: var(--gs-green-dark);
+  color: var(--gs-white);
+  font-weight: 600;
+  border-radius: var(--gs-radius);
+  padding: var(--gs-space-2) var(--gs-space-5);
+  transition: background-color var(--gs-transition), transform var(--gs-transition), box-shadow var(--gs-transition);
 }
+.btn-gs-primary:hover,
+.btn-gs-primary:focus {
+  background-color: var(--gs-green);
+  border-color: var(--gs-green);
+  color: var(--gs-white);
+  box-shadow: var(--gs-shadow);
+  transform: translateY(-1px);
+}
+
+.btn-gs-secondary {
+  background-color: transparent;
+  border: 2px solid var(--gs-green-dark);
+  color: var(--gs-green-dark);
+  font-weight: 600;
+  border-radius: var(--gs-radius);
+  padding: var(--gs-space-2) var(--gs-space-5);
+  transition: all var(--gs-transition);
+}
+.btn-gs-secondary:hover,
+.btn-gs-secondary:focus {
+  background-color: var(--gs-green-dark);
+  color: var(--gs-white);
+  box-shadow: var(--gs-shadow);
+  transform: translateY(-1px);
+}
+
+.btn-gs-accent {
+  background-color: var(--gs-green-light);
+  border-color: var(--gs-green-light);
+  color: var(--gs-white);
+  font-weight: 600;
+  border-radius: var(--gs-radius);
+  padding: var(--gs-space-2) var(--gs-space-5);
+  transition: all var(--gs-transition);
+}
+.btn-gs-accent:hover {
+  background-color: var(--gs-secondary);
+  border-color: var(--gs-secondary);
+  color: var(--gs-white);
+}
+
+/* ---- Kartu (Card) ---- */
+.gs-card {
+  background: var(--gs-white);
+  border: 1px solid var(--gs-border);
+  border-radius: var(--gs-radius-lg);
+  box-shadow: var(--gs-shadow-sm);
+  padding: var(--gs-space-5);
+  transition: box-shadow var(--gs-transition), transform var(--gs-transition);
+}
+.gs-card:hover {
+  box-shadow: var(--gs-shadow);
+  transform: translateY(-2px);
+}
+.gs-card-header {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--gs-text-heading);
+  margin-bottom: var(--gs-space-3);
+  padding-bottom: var(--gs-space-3);
+  border-bottom: 2px solid var(--gs-green-muted);
+}
+
+/* ---- Badge / Tag ---- */
+.gs-badge {
+  display: inline-block;
+  padding: var(--gs-space-1) var(--gs-space-3);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.gs-badge-green {
+  background-color: var(--gs-green-muted);
+  color: var(--gs-green-dark);
+}
+.gs-badge-danger {
+  background-color: #fce8e8;
+  color: #c0392b;
+}
+
+/* ---- Utility Classes ---- */
+.gs-text-primary   { color: var(--gs-primary) !important; }
+.gs-text-secondary { color: var(--gs-secondary) !important; }
+.gs-text-muted     { color: var(--gs-text-muted) !important; }
+.gs-bg-primary     { background-color: var(--gs-primary) !important; }
+.gs-bg-subtle      { background-color: var(--gs-bg-subtle) !important; }
+.gs-bg-muted       { background-color: var(--gs-bg-muted) !important; }
+
+/* ---- Divider ---- */
+.gs-divider {
+  border: none;
+  border-top: 1px solid var(--gs-border);
+  margin: var(--gs-space-5) 0;
+}
+
+/* ---- Responsif Breakpoints (referensi Bootstrap) ----
+   xs:  < 576px
+   sm:  ≥ 576px
+   md:  ≥ 768px
+   lg:  ≥ 992px
+   xl:  ≥ 1200px
+   xxl: ≥ 1400px
+   ---- */

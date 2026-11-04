@@ -1,0 +1,87 @@
+/* ============================================================
+   PageHeader.css — Style komponen PageHeader
+   ============================================================ */
+
+.gs-page-header {
+  background: linear-gradient(
+    135deg,
+    var(--gs-green-dark) 0%,
+    var(--gs-green) 100%
+  );
+  color: var(--gs-white);
+  padding: var(--gs-space-7) 0 var(--gs-space-6);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Dekorasi latar */
+.gs-page-header::before {
+  content: '';
+  position: absolute;
+  top: -40%;
+  right: -10%;
+  width: 400px;
+  height: 400px;
+  background: rgba(82, 183, 136, 0.12);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.gs-page-header__inner {
+  position: relative;
+  z-index: 1;
+  max-width: 760px;
+}
+
+.gs-page-header--center .gs-page-header__inner {
+  text-align: center;
+  margin: 0 auto;
+}
+
+.gs-page-header__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: var(--gs-radius-lg);
+  font-size: 1.5rem;
+  color: var(--gs-green-light);
+  margin-bottom: var(--gs-space-4);
+}
+
+.gs-page-header__title {
+  color: var(--gs-white);
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 0 var(--gs-space-3);
+  line-height: 1.2;
+}
+
+.gs-page-header__subtitle {
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0;
+  max-width: 600px;
+}
+
+.gs-page-header--center .gs-page-header__subtitle {
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .gs-page-header__title {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .gs-page-header {
+    padding: var(--gs-space-5) 0 var(--gs-space-4);
+  }
+  .gs-page-header__title {
+    font-size: 1.6rem;
+  }
+}
