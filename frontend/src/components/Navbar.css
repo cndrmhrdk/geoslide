@@ -1,5 +1,5 @@
 /* ============================================================
-   Navbar.css — Floating Capsule Navbar Ringan & Modern
+   Navbar.css — Navbar Dual-Mode: Solid (24px) & Overlay (Glass)
    ============================================================ */
 
 /* ---- Wrapper Floating & Sticky ---- */
@@ -8,29 +8,157 @@
   top: 0;
   z-index: 1030;
   width: 100%;
-  padding: 0.85rem 1.25rem 0.25rem;
-  pointer-events: none; /* Klik di luar kapsul dapat tembus ke elemen di bawahnya */
+  pointer-events: none;
+  transition: padding var(--transition), background-color var(--transition);
 }
 
-/* ---- Kapsul Navbar ---- */
+.gs-navbar-wrapper--solid {
+  padding: 0.85rem 1.25rem 0.25rem;
+}
+
+.gs-navbar-wrapper--overlay {
+  padding: 1.1rem 1.5rem 0.25rem;
+}
+
+/* ---- Base Navbar ---- */
 .gs-navbar {
   pointer-events: auto;
-  max-width: 1220px;
+  max-width: 1260px;
   margin: 0 auto;
-  background-color: rgba(255, 255, 255, 0.85);
-  -webkit-backdrop-filter: blur(16px);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.95);
-  border-radius: var(--radius-pill);
-  box-shadow: 0 8px 30px rgba(20, 20, 20, 0.05), 0 1px 3px rgba(20, 20, 20, 0.02);
-  padding: 0.4rem 0.75rem;
+  padding: 0.45rem 0.75rem;
   transition: all var(--transition);
 }
 
-/* ---- Brand / Logo di Kiri ---- */
+/* ============================================================
+   1. Mode Solid: Wadah Abu Terang (--bg) Bersudut Membulat 24px
+   ============================================================ */
+.gs-navbar--solid {
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl); /* 24px */
+  box-shadow: 0 4px 20px rgba(15, 15, 15, 0.04), 0 1px 3px rgba(15, 15, 15, 0.02);
+}
+
+.gs-navbar--solid .gs-navbar__brand {
+  color: var(--ink) !important;
+}
+
+.gs-navbar--solid .gs-navbar__logo-badge {
+  background-color: var(--primary-soft);
+  color: var(--primary);
+}
+
+.gs-navbar--solid .gs-navbar__logo-text {
+  color: var(--ink);
+}
+
+.gs-navbar--solid .gs-navbar__logo-accent {
+  color: var(--primary);
+}
+
+.gs-navbar--solid .gs-navbar__link {
+  color: var(--muted) !important;
+}
+
+.gs-navbar--solid .gs-navbar__link:hover,
+.gs-navbar--solid .gs-navbar__link:focus {
+  color: var(--ink) !important;
+  background-color: rgba(15, 15, 15, 0.04);
+}
+
+@media (min-width: 992px) {
+  .gs-navbar--solid .gs-navbar__link.active {
+    color: var(--ink) !important;
+    font-weight: 600;
+  }
+
+  .gs-navbar--solid .gs-navbar__link.active::after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 22px;
+    height: 2px;
+    background-color: var(--primary);
+    border-radius: var(--radius-pill);
+  }
+}
+
+/* ============================================================
+   2. Mode Overlay: Transparan di Atas Hero, Teks Putih, Kapsul Kaca
+   ============================================================ */
+.gs-navbar--overlay {
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.gs-navbar--overlay .gs-navbar__brand {
+  color: #FFFFFF !important;
+}
+
+.gs-navbar--overlay .gs-navbar__logo-badge {
+  background-color: rgba(255, 255, 255, 0.18);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: #FFFFFF;
+}
+
+.gs-navbar--overlay .gs-navbar__logo-text {
+  color: #FFFFFF;
+}
+
+.gs-navbar--overlay .gs-navbar__logo-accent {
+  color: var(--primary-soft);
+}
+
+/* Wadah Kapsul Kaca Menu di Tengah */
+@media (min-width: 992px) {
+  .gs-navbar--overlay .gs-navbar__menu-container {
+    background-color: rgba(255, 255, 255, 0.14);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    border-radius: var(--radius-pill);
+    padding: 0.25rem 0.65rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  }
+}
+
+.gs-navbar--overlay .gs-navbar__link {
+  color: rgba(255, 255, 255, 0.88) !important;
+}
+
+.gs-navbar--overlay .gs-navbar__link:hover,
+.gs-navbar--overlay .gs-navbar__link:focus {
+  color: #FFFFFF !important;
+  background-color: rgba(255, 255, 255, 0.14);
+}
+
+@media (min-width: 992px) {
+  .gs-navbar--overlay .gs-navbar__link.active {
+    color: #FFFFFF !important;
+    font-weight: 600;
+  }
+
+  .gs-navbar--overlay .gs-navbar__link.active::after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 22px;
+    height: 2px;
+    background-color: #FFFFFF;
+    border-radius: var(--radius-pill);
+  }
+}
+
+/* ---- Brand / Logo Komunal ---- */
 .gs-navbar__brand {
   text-decoration: none !important;
-  color: var(--ink) !important;
   font-weight: 600;
   font-size: 1.15rem;
   letter-spacing: -0.02em;
@@ -42,8 +170,6 @@
   width: 34px;
   height: 34px;
   border-radius: 10px;
-  background-color: var(--primary-soft);
-  color: var(--primary);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -55,21 +181,11 @@
   transform: rotate(-6deg) scale(1.05);
 }
 
-.gs-navbar__logo-text {
-  color: var(--ink);
-}
-
-.gs-navbar__logo-accent {
-  color: var(--primary);
-  font-weight: 700;
-}
-
-/* ---- Nav Links di Tengah ---- */
+/* ---- Nav Links Item ---- */
 .gs-navbar__link {
   position: relative;
   font-size: 0.9125rem;
   font-weight: 450;
-  color: var(--muted) !important;
   padding: 0.5rem 0.95rem !important;
   border-radius: var(--radius-pill);
   background: transparent;
@@ -82,33 +198,6 @@
   transition: color var(--transition), background-color var(--transition);
 }
 
-.gs-navbar__link:hover,
-.gs-navbar__link:focus {
-  color: var(--ink) !important;
-  background-color: rgba(20, 20, 20, 0.04);
-}
-
-/* Menu Aktif: Garis Bawah Halus Berwarna Aksen */
-@media (min-width: 992px) {
-  .gs-navbar__link.active {
-    color: var(--ink) !important;
-    font-weight: 550;
-  }
-
-  .gs-navbar__link.active::after {
-    content: '';
-    position: absolute;
-    bottom: 2px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 22px;
-    height: 2.5px;
-    background-color: var(--primary);
-    border-radius: var(--radius-pill);
-  }
-}
-
-/* Dropdown Toggle Chevron Halus */
 .gs-navbar__link.dropdown-toggle::after {
   display: inline-block;
   margin-left: 0.35em;
@@ -118,23 +207,16 @@
   border-right: 0.3em solid transparent;
   border-bottom: 0;
   border-left: 0.3em solid transparent;
-  opacity: 0.55;
-  transition: transform var(--transition), opacity var(--transition);
-}
-
-.gs-navbar__link.dropdown-toggle:hover::after,
-.gs-navbar__link.dropdown-toggle.active::after {
-  opacity: 1;
+  opacity: 0.65;
+  transition: transform var(--transition);
 }
 
 /* ---- Dropdown Menu Bersudut Membulat ---- */
 .gs-dropdown {
-  background-color: rgba(255, 255, 255, 0.96);
-  -webkit-backdrop-filter: blur(16px);
-  backdrop-filter: blur(16px);
+  background-color: var(--surface);
   border: 1px solid var(--border);
   border-radius: 18px;
-  box-shadow: 0 16px 36px rgba(20, 20, 20, 0.08), 0 2px 8px rgba(20, 20, 20, 0.03);
+  box-shadow: 0 16px 36px rgba(15, 15, 15, 0.08), 0 2px 8px rgba(15, 15, 15, 0.03);
   padding: 0.5rem;
   min-width: 230px;
   margin-top: 0.65rem !important;
@@ -184,53 +266,56 @@
 .gs-dropdown__item.active {
   background-color: var(--primary-soft) !important;
   color: var(--primary) !important;
-  font-weight: 550;
+  font-weight: 600;
 }
 
 .gs-dropdown__item.active i {
   color: var(--primary);
 }
 
-/* ---- Tombol Pill Gelap + Bulat Ikon Panah (Login Admin) ---- */
+/* ---- Tombol Login Admin: Pill Hitam + Lingkaran Putih Kecil Berisi Ikon Panah ---- */
 .gs-navbar__btn-admin {
   display: inline-flex;
   align-items: center;
-  gap: 0.65rem;
+  gap: 0.75rem;
   background-color: var(--ink);
   color: #FFFFFF !important;
   text-decoration: none !important;
-  padding: 0.35rem 0.45rem 0.35rem 1.15rem;
+  padding: 0.36rem 0.45rem 0.36rem 1.25rem;
   border-radius: var(--radius-pill);
-  font-size: 0.865rem;
+  font-size: 0.875rem;
   font-weight: 500;
-  box-shadow: 0 4px 14px rgba(20, 20, 20, 0.12);
+  border: 1px solid var(--ink);
+  box-shadow: 0 4px 14px rgba(15, 15, 15, 0.15);
   transition: transform var(--transition), box-shadow var(--transition), background-color var(--transition);
   white-space: nowrap;
 }
 
 .gs-navbar__btn-admin:hover {
-  background-color: #2b2b2b;
+  background-color: #242424;
+  border-color: #242424;
   transform: translateY(-1px);
   box-shadow: var(--shadow-md);
   color: #FFFFFF !important;
 }
 
+/* Lingkaran Putih Kecil Berisi Ikon Panah */
 .gs-navbar__btn-admin-icon {
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.18);
+  background-color: #FFFFFF;
+  color: var(--ink);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   font-size: 0.825rem;
-  color: #FFFFFF;
-  transition: transform var(--transition), background-color var(--transition);
+  transition: transform var(--transition);
+  flex-shrink: 0;
 }
 
 .gs-navbar__btn-admin:hover .gs-navbar__btn-admin-icon {
-  transform: translateX(2px) translateY(-1px);
-  background-color: rgba(255, 255, 255, 0.28);
+  transform: translate(2px, -1px);
 }
 
 /* ---- Tombol Hamburger Mobile ---- */
@@ -238,7 +323,7 @@
   width: 40px;
   height: 40px;
   border-radius: 12px;
-  background-color: rgba(20, 20, 20, 0.04);
+  background-color: rgba(15, 15, 15, 0.05);
   color: var(--ink);
   display: inline-flex;
   align-items: center;
@@ -249,21 +334,35 @@
   transition: background-color var(--transition), transform var(--transition);
 }
 
+.gs-navbar--overlay .gs-navbar__toggler {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
 .gs-navbar__toggler:hover,
 .gs-navbar__toggler:focus {
-  background-color: rgba(20, 20, 20, 0.08);
-  color: var(--ink);
   transform: scale(1.03);
 }
 
 /* ---- Responsif Mobile (< 992px) ---- */
 @media (max-width: 991.98px) {
-  .gs-navbar-wrapper {
+  .gs-navbar-wrapper--solid,
+  .gs-navbar-wrapper--overlay {
     padding: 0.5rem 0.75rem 0.25rem;
   }
 
-  .gs-navbar {
-    border-radius: 24px;
+  .gs-navbar--solid {
+    border-radius: 20px;
+    padding: 0.55rem 0.95rem;
+  }
+
+  .gs-navbar--overlay {
+    background-color: rgba(15, 25, 18, 0.92);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 20px;
     padding: 0.55rem 0.95rem;
   }
 
@@ -273,20 +372,30 @@
     border-top: 1px solid var(--border);
   }
 
+  .gs-navbar--overlay .navbar-collapse {
+    border-top-color: rgba(255, 255, 255, 0.14);
+  }
+
   .gs-navbar__link {
     padding: 0.65rem 0.95rem !important;
     width: 100%;
     justify-content: flex-start;
   }
 
-  .gs-navbar__link.active {
+  .gs-navbar--solid .gs-navbar__link.active {
     color: var(--primary) !important;
     background-color: var(--primary-soft) !important;
-    font-weight: 550;
+    font-weight: 600;
+  }
+
+  .gs-navbar--overlay .gs-navbar__link.active {
+    color: #FFFFFF !important;
+    background-color: rgba(255, 255, 255, 0.16) !important;
+    font-weight: 600;
   }
 
   .gs-dropdown {
-    background-color: rgba(20, 20, 20, 0.02);
+    background-color: rgba(15, 15, 15, 0.02);
     border: 1px solid var(--border);
     box-shadow: none;
     padding: 0.35rem;
@@ -295,15 +404,28 @@
     border-radius: 16px;
   }
 
-  .gs-dropdown__item {
-    padding: 0.55rem 0.85rem;
+  .gs-navbar--overlay .gs-dropdown {
+    background-color: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.14);
+  }
+
+  .gs-navbar--overlay .gs-dropdown__item {
+    color: #FFFFFF !important;
+  }
+
+  .gs-navbar--overlay .gs-dropdown__item:hover {
+    background-color: rgba(255, 255, 255, 0.16) !important;
   }
 
   .gs-navbar__action {
     display: flex;
     justify-content: stretch;
-    padding-top: 0.5rem;
+    padding-top: 0.75rem;
     border-top: 1px solid var(--border);
+  }
+
+  .gs-navbar--overlay .gs-navbar__action {
+    border-top-color: rgba(255, 255, 255, 0.14);
   }
 
   .gs-navbar__btn-admin {

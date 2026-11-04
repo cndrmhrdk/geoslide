@@ -1,41 +1,48 @@
 /* ============================================================
-   GeoSlide — Modern Organic Global CSS
-   Fondasi Desain: Tenang, Organik, Premium, Bersih
+   GeoSlide — Modern Nature-Cinematic Global CSS
+   Fondasi Desain: Tenang, Sinematik, Bertema Alam, UI Minimal
    ============================================================ */
 
 /* ---- CSS Custom Properties (Design Tokens) ---- */
 :root {
-  /* Palet Utama (Sesuai Panduan Desain GeoSlide) */
-  --bg: #EFEBE4;                      /* Latar utama: netral hangat */
-  --surface: #FFFFFF;                 /* Kartu solid */
-  --glass: rgba(255, 255, 255, 0.65); /* Kartu semi-transparan (glass) */
-  --glass-border: rgba(255, 255, 255, 0.75);
-  --ink: #141414;                     /* Teks utama dan tombol pill gelap */
-  --muted: #6B655D;                   /* Teks sekunder / abu hangat */
-  --primary: #1F4D3A;                 /* Hijau tua: aksen utama, menu aktif, ikon, link, badge */
-  --primary-soft: #DDE8E0;            /* Hijau sangat muda untuk latar badge/hover */
-  --primary-hover: #16382a;           /* Hover untuk aksen hijau */
-  --earth: #8A6E55;                   /* Cokelat tanah: aksen pendukung */
-  --border: rgba(20, 20, 20, 0.08);   /* Border tipis transparan */
-  --border-strong: rgba(20, 20, 20, 0.14);
+  /* Palet Warna Inti (Sesuai Panduan Desain Alam & Sinematik) */
+  --bg: #F2F1EE;                      /* Latar utama: netral hangat */
+  --surface: #FFFFFF;                 /* Latar kartu solid */
+  --ink: #0F0F0F;                     /* Teks utama dan tombol pill hitam */
+  --muted: #6E6E69;                   /* Teks sekunder / abu-abu netral */
+  --primary: #3F7A1A;                 /* Hijau lumut: aksen judul, tombol utama, menu aktif */
+  --primary-hover: #346615;           /* Hover hijau lumut */
+  --primary-soft: #E5EFDF;            /* Hijau lumut sangat muda untuk tag / hover halus */
+  --forest: #1F3D26;                  /* Hijau hutan gelap untuk footer dan overlay sinematik */
+  --forest-dark: #142819;             /* Varian lebih gelap untuk gradien hero placeholder */
+  --gold: #D9A93A;                    /* Emas hangat: aksen detail kecil / lingkaran CTA */
+  --overlay: rgba(10, 14, 10, 0.45);  /* Overlay gelap sinematik di atas foto */
+  --border: rgba(15, 15, 15, 0.08);   /* Border tipis transparan */
+  --border-strong: rgba(15, 15, 15, 0.16);
+
+  /* Variabel Glassmorphism */
+  --glass-bg: rgba(255, 255, 255, 0.14);
+  --glass-border: rgba(255, 255, 255, 0.25);
+  --glass-light-bg: rgba(255, 255, 255, 0.75);
+  --glass-light-border: rgba(255, 255, 255, 0.85);
 
   /* Kompatibilitas Token Lama (--gs-*) */
-  --gs-green-dark: var(--primary);
-  --gs-green: #275e47;
-  --gs-green-light: #3d8063;
+  --gs-green-dark: var(--forest);
+  --gs-green: var(--primary);
+  --gs-green-light: #5ba32b;
   --gs-green-muted: var(--primary-soft);
   --gs-white: #ffffff;
-  --gs-gray-50: #fbfaf7;
-  --gs-gray-100: #f4f0e8;
-  --gs-gray-200: #e8e3d8;
-  --gs-gray-300: #d7d0c3;
+  --gs-gray-50: #fbfaf8;
+  --gs-gray-100: #f4f3ef;
+  --gs-gray-200: #e8e7e2;
+  --gs-gray-300: #d8d7d0;
   --gs-gray-500: var(--muted);
-  --gs-gray-700: #3a3630;
+  --gs-gray-700: #383733;
   --gs-gray-900: var(--ink);
 
   --gs-primary: var(--primary);
-  --gs-secondary: #275e47;
-  --gs-accent: var(--earth);
+  --gs-secondary: var(--forest);
+  --gs-accent: var(--gold);
   --gs-bg: var(--bg);
   --gs-bg-subtle: var(--bg);
   --gs-bg-muted: var(--primary-soft);
@@ -45,29 +52,19 @@
   --gs-border: var(--border);
 
   /* Tipografi */
-  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  --font-sans: 'Manrope', 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   --gs-font-sans: var(--font-sans);
   --gs-font-mono: var(--font-mono);
   --gs-font-size-base: 1rem;          /* 16px */
   --gs-line-height: 1.65;
 
-  /* Spacing Scale (8px rhythm) */
-  --gs-space-1: 0.25rem;   /*  4px */
-  --gs-space-2: 0.5rem;    /*  8px */
-  --gs-space-3: 0.75rem;   /* 12px */
-  --gs-space-4: 1rem;      /* 16px */
-  --gs-space-5: 1.5rem;    /* 24px */
-  --gs-space-6: 2rem;      /* 32px */
-  --gs-space-7: 3rem;      /* 48px */
-  --gs-space-8: 4.5rem;    /* 72px */
-
-  /* Radius (Sangat membulat 16-24px & pill) */
+  /* Radius (Membulat 20-24px & pill) */
   --radius-sm: 8px;
   --radius-md: 14px;
-  --radius-lg: 20px;       /* Standar kartu membulat 16-24px */
-  --radius-xl: 28px;
-  --radius-pill: 9999px;   /* Bentuk pill penuh */
+  --radius-lg: 20px;                  /* Standar kartu 20px */
+  --radius-xl: 24px;                  /* Standar container navbar solid */
+  --radius-pill: 9999px;              /* Bentuk pill penuh */
 
   --gs-radius-sm: var(--radius-sm);
   --gs-radius: var(--radius-md);
@@ -75,17 +72,17 @@
   --gs-radius-xl: var(--radius-xl);
 
   /* Bayangan Halus */
-  --shadow-xs: 0 1px 2px rgba(20, 20, 20, 0.04);
-  --shadow-sm: 0 4px 16px rgba(20, 20, 20, 0.04);
-  --shadow-md: 0 10px 30px rgba(20, 20, 20, 0.06), 0 2px 6px rgba(20, 20, 20, 0.02);
-  --shadow-lg: 0 20px 48px rgba(20, 20, 20, 0.08), 0 4px 12px rgba(20, 20, 20, 0.03);
+  --shadow-xs: 0 1px 2px rgba(15, 15, 15, 0.04);
+  --shadow-sm: 0 4px 18px rgba(15, 15, 15, 0.04);
+  --shadow-md: 0 10px 30px rgba(15, 15, 15, 0.06), 0 2px 6px rgba(15, 15, 15, 0.02);
+  --shadow-lg: 0 20px 48px rgba(15, 15, 15, 0.08), 0 4px 12px rgba(15, 15, 15, 0.03);
 
   --gs-shadow-sm: var(--shadow-sm);
   --gs-shadow: var(--shadow-md);
   --gs-shadow-lg: var(--shadow-lg);
 
-  /* Transisi Halus */
-  --transition: 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  /* Transisi */
+  --transition: 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   --gs-transition: var(--transition);
 }
 
@@ -114,24 +111,48 @@ body {
   background-color: var(--bg);
 }
 
-/* ---- Tipografi ---- */
+/* ---- Tipografi Besar & Rapat ---- */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-sans);
-  font-weight: 550;
+  font-weight: 500;
   color: var(--ink);
-  line-height: 1.25;
-  letter-spacing: -0.02em;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
   margin-top: 0;
 }
 
-h1 { font-size: 2.25rem; font-weight: 550; }  /* 36px */
-h2 { font-size: 1.75rem; font-weight: 550; }  /* 28px */
-h3 { font-size: 1.35rem; font-weight: 550; }  /* 21.6px */
-h4 { font-size: 1.125rem; font-weight: 550; } /* 18px */
+/* Skala Judul Hero & Heading Utama (Clamp 40px sampai 88px) */
+.display-hero,
+.hero-title {
+  font-size: clamp(2.5rem, 5.2vw + 1rem, 5.5rem); /* 40px - 88px */
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+}
 
-@media (min-width: 768px) {
-  h1 { font-size: 2.85rem; }
-  h2 { font-size: 2.15rem; }
+h1 {
+  font-size: clamp(2.25rem, 3.5vw + 1rem, 3.75rem);
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+}
+
+h2 {
+  font-size: clamp(1.75rem, 2.5vw + 0.5rem, 2.6rem);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+h3 {
+  font-size: 1.45rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+h4 {
+  font-size: 1.15rem;
+  font-weight: 500;
 }
 
 p {
@@ -150,7 +171,29 @@ a:hover {
   text-decoration: none;
 }
 
-/* ---- Tombol Pill (Komponen Desain Utama) ---- */
+/* ---- Kelas Aksen Teks (Aksen Frasa Judul) ---- */
+.text-accent {
+  color: var(--primary) !important;
+}
+
+.text-gold {
+  color: var(--gold) !important;
+}
+
+.text-ink {
+  color: var(--ink) !important;
+}
+
+.text-muted-custom,
+.gs-text-muted {
+  color: var(--muted) !important;
+}
+
+.text-forest {
+  color: var(--forest) !important;
+}
+
+/* ---- Gaya Tombol Pill ---- */
 .btn-pill,
 .btn-gs-primary,
 .btn-gs-secondary,
@@ -159,7 +202,7 @@ a:hover {
   font-family: var(--font-sans);
   font-weight: 500;
   font-size: 0.925rem;
-  padding: 0.625rem 1.4rem;
+  padding: 0.65rem 1.45rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -171,45 +214,143 @@ a:hover {
   transition: transform var(--transition), box-shadow var(--transition), background-color var(--transition), color var(--transition), border-color var(--transition);
 }
 
-/* Pill Primary / Dark (Warna --ink) */
-.btn-pill-primary,
+/* 1. Tombol Pill Hitam dengan Lingkaran Ikon Panah Putih */
 .btn-pill-dark,
-.btn-gs-primary {
+.btn-pill-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.38rem 0.5rem 0.38rem 1.35rem;
+  border-radius: var(--radius-pill);
   background-color: var(--ink);
-  border-color: var(--ink);
   color: #FFFFFF !important;
-  box-shadow: 0 4px 14px rgba(20, 20, 20, 0.12);
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none !important;
+  border: 1px solid var(--ink);
+  box-shadow: 0 4px 16px rgba(15, 15, 15, 0.16);
+  transition: transform var(--transition), box-shadow var(--transition), background-color var(--transition);
 }
 
-.btn-pill-primary:hover,
 .btn-pill-dark:hover,
-.btn-gs-primary:hover {
-  background-color: #2b2b2b;
-  border-color: #2b2b2b;
-  color: #FFFFFF !important;
+.btn-pill-action:hover {
+  background-color: #262626;
+  border-color: #262626;
   transform: translateY(-1px);
   box-shadow: var(--shadow-md);
+  color: #FFFFFF !important;
 }
 
-/* Pill Accent (Warna --primary Hijau Tua Aksen) */
+/* Lingkaran Putih Kecil Berisi Ikon Panah */
+.btn-pill-action__icon,
+.btn-pill-dark__icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #FFFFFF;
+  color: var(--ink);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  transition: transform var(--transition), background-color var(--transition);
+  flex-shrink: 0;
+}
+
+.btn-pill-dark:hover .btn-pill-dark__icon,
+.btn-pill-action:hover .btn-pill-action__icon {
+  transform: translate(2px, -1px);
+}
+
+/* 2. Tombol Pill Kaca (Semi-transparan + Blur di atas foto/hero) */
+.btn-pill-glass {
+  background-color: rgba(255, 255, 255, 0.16);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  color: #FFFFFF !important;
+  border-radius: var(--radius-pill);
+  padding: 0.65rem 1.45rem;
+  font-weight: 500;
+  text-decoration: none !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+}
+
+.btn-pill-glass:hover {
+  background-color: rgba(255, 255, 255, 0.28);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: #FFFFFF !important;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+}
+
+/* 3. Tombol Putih Polos dengan Panah (Pill White / Surface) */
+.btn-pill-white,
+.btn-pill-surface {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--ink) !important;
+  border-radius: var(--radius-pill);
+  padding: 0.45rem 0.55rem 0.45rem 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-weight: 500;
+  text-decoration: none !important;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-pill-white:hover,
+.btn-pill-surface:hover {
+  background-color: #FAF8F5;
+  border-color: var(--border-strong);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+  color: var(--ink) !important;
+}
+
+.btn-pill-white__icon,
+.btn-pill-surface__icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: var(--bg);
+  color: var(--ink);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  transition: transform var(--transition);
+}
+
+.btn-pill-white:hover .btn-pill-white__icon,
+.btn-pill-surface:hover .btn-pill-surface__icon {
+  transform: translateX(2px);
+}
+
+/* 4. Tombol Primary Hijau Lumut */
+.btn-pill-primary,
 .btn-pill-accent,
+.btn-gs-primary,
 .btn-gs-accent {
   background-color: var(--primary);
   border-color: var(--primary);
   color: #FFFFFF !important;
-  box-shadow: 0 4px 14px rgba(31, 77, 58, 0.2);
+  box-shadow: 0 4px 16px rgba(63, 122, 26, 0.25);
 }
 
+.btn-pill-primary:hover,
 .btn-pill-accent:hover,
+.btn-gs-primary:hover,
 .btn-gs-accent:hover {
   background-color: var(--primary-hover);
   border-color: var(--primary-hover);
   color: #FFFFFF !important;
   transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 8px 24px rgba(63, 122, 26, 0.32);
 }
 
-/* Pill Secondary / Outline */
+/* Tombol Secondary / Outline */
 .btn-pill-secondary,
 .btn-pill-outline,
 .btn-gs-secondary {
@@ -221,94 +362,34 @@ a:hover {
 .btn-pill-secondary:hover,
 .btn-pill-outline:hover,
 .btn-gs-secondary:hover {
-  background-color: rgba(20, 20, 20, 0.04);
+  background-color: rgba(15, 15, 15, 0.04);
   border-color: var(--ink);
   color: var(--ink) !important;
   transform: translateY(-1px);
 }
 
-/* Pill Surface (Latar Putih Bersih) */
-.btn-pill-surface {
-  background-color: var(--surface);
-  border-color: var(--border);
-  color: var(--ink) !important;
-  box-shadow: var(--shadow-xs);
-}
-
-.btn-pill-surface:hover {
-  background-color: #FAF7F2;
-  border-color: var(--border-strong);
-  color: var(--ink) !important;
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-sm);
-}
-
-/* Pill Soft Green */
-.btn-pill-soft {
-  background-color: var(--primary-soft);
-  border-color: transparent;
-  color: var(--primary) !important;
-}
-
-.btn-pill-soft:hover {
-  background-color: #d1ded4;
-  color: var(--primary-hover) !important;
-  transform: translateY(-1px);
-}
-
-/* Ukuran Tombol Pill */
-.btn-pill-sm {
-  padding: 0.4rem 1rem;
-  font-size: 0.825rem;
-}
-
-.btn-pill-lg {
-  padding: 0.8rem 1.85rem;
-  font-size: 1rem;
-}
-
-/* ---- Tombol Pill dengan Icon Bulat (Pola Hero / Admin) ---- */
-.btn-pill-action {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.4rem 0.5rem 0.4rem 1.25rem;
-  border-radius: var(--radius-pill);
-  background-color: var(--ink);
-  color: #FFFFFF !important;
-  font-size: 0.9rem;
-  font-weight: 500;
-  text-decoration: none;
-  box-shadow: 0 4px 16px rgba(20, 20, 20, 0.12);
-  transition: transform var(--transition), box-shadow var(--transition), background-color var(--transition);
-}
-
-.btn-pill-action:hover {
-  background-color: #2b2b2b;
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
-  color: #FFFFFF !important;
-}
-
-.btn-pill-action__icon {
-  width: 30px;
-  height: 30px;
+/* Aksen Lingkaran CTA Emas */
+.cta-circle-gold {
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.18);
+  background-color: var(--gold);
+  color: var(--ink);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.85rem;
-  color: #FFFFFF;
-  transition: transform var(--transition), background-color var(--transition);
+  font-size: 1.15rem;
+  box-shadow: 0 4px 14px rgba(217, 169, 58, 0.35);
+  transition: transform var(--transition), box-shadow var(--transition);
 }
 
-.btn-pill-action:hover .btn-pill-action__icon {
-  transform: translateX(2px);
-  background-color: rgba(255, 255, 255, 0.28);
+.cta-circle-gold:hover {
+  transform: scale(1.06);
+  box-shadow: 0 6px 20px rgba(217, 169, 58, 0.5);
 }
 
-/* ---- Kartu (Card Solid & Card Glass bersudut 16-24px) ---- */
+/* ---- Gaya Kartu Solid & Glass ---- */
+/* Kartu Putih Bersudut 20px dengan Bayangan Sangat Halus */
 .card-solid,
 .gs-card {
   background: var(--surface);
@@ -326,30 +407,43 @@ a:hover {
   transform: translateY(-2px);
 }
 
-/* Kartu Glass (Semi-transparan + Backdrop Filter Blur) */
+/* Kartu Kaca untuk Elemen yang Melayang di Atas Foto */
 .card-glass {
-  background: var(--glass);
-  -webkit-backdrop-filter: blur(16px);
-  backdrop-filter: blur(16px);
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg); /* 20px */
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.16);
   padding: 1.75rem;
+  color: #FFFFFF;
   transition: transform var(--transition), box-shadow var(--transition);
   position: relative;
 }
 
 .card-glass:hover {
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.22);
   transform: translateY(-2px);
 }
 
-/* Header di dalam Kartu */
+/* Kartu Kaca Terang (di atas latar netral) */
+.card-glass-light {
+  background: var(--glass-light-bg);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-light-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: 1.75rem;
+  color: var(--ink);
+}
+
+/* Header Kartu */
 .card-header-clean,
 .gs-card-header {
   font-weight: 550;
   font-size: 1.15rem;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
   color: var(--ink);
   margin-bottom: 1rem;
   padding-bottom: 0.75rem;
@@ -373,7 +467,6 @@ a:hover {
   line-height: 1;
 }
 
-/* Badge Aksen Hijau Muda */
 .badge-primary-soft,
 .gs-badge-green,
 .gs-badge--soft {
@@ -381,64 +474,52 @@ a:hover {
   color: var(--primary);
 }
 
-/* Badge Tanah (Earth) */
-.badge-earth {
-  background-color: rgba(138, 110, 85, 0.12);
-  color: var(--earth);
+.badge-forest {
+  background-color: rgba(31, 61, 38, 0.12);
+  color: var(--forest);
 }
 
-/* Badge Gelap */
+.badge-gold {
+  background-color: rgba(217, 169, 58, 0.16);
+  color: #8c6712;
+}
+
 .badge-dark {
   background-color: var(--ink);
   color: #FFFFFF;
 }
 
-/* Badge Garis Luar (Outline) */
+.badge-glass {
+  background-color: rgba(255, 255, 255, 0.18);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #FFFFFF;
+}
+
 .badge-outline {
   background-color: transparent;
   border: 1px solid var(--border);
   color: var(--muted);
 }
 
-/* Badge Status / Bahaya */
 .badge-danger,
 .gs-badge-danger {
   background-color: #fde8e8;
   color: #c0392b;
 }
 
-/* Badge Status Peringatan */
-.badge-warning {
-  background-color: #fef3d6;
-  color: #946200;
-}
+/* ---- Background Utility Classes ---- */
+.bg-warm        { background-color: var(--bg) !important; }
+.bg-surface     { background-color: var(--surface) !important; }
+.bg-forest      { background-color: var(--forest) !important; color: #FFFFFF; }
+.bg-primary-moss { background-color: var(--primary) !important; color: #FFFFFF; }
 
-/* ---- Utility Classes ---- */
-.text-ink            { color: var(--ink) !important; }
-.text-muted-custom   { color: var(--muted) !important; }
-.text-primary-accent { color: var(--primary) !important; }
-.text-earth          { color: var(--earth) !important; }
+.gs-bg-primary  { background-color: var(--primary) !important; }
+.gs-bg-subtle   { background-color: var(--bg) !important; }
+.gs-bg-muted    { background-color: var(--primary-soft) !important; }
 
-.gs-text-primary     { color: var(--primary) !important; }
-.gs-text-secondary   { color: var(--primary) !important; }
-.gs-text-muted       { color: var(--muted) !important; }
-
-.bg-surface          { background-color: var(--surface) !important; }
-.bg-warm             { background-color: var(--bg) !important; }
-.bg-primary-soft     { background-color: var(--primary-soft) !important; }
-
-.gs-bg-primary       { background-color: var(--primary) !important; }
-.gs-bg-subtle        { background-color: var(--bg) !important; }
-.gs-bg-muted         { background-color: var(--primary-soft) !important; }
-
-/* Garis Pemisah Halus */
-.gs-divider {
-  border: none;
-  border-top: 1px solid var(--border);
-  margin: var(--gs-space-6) 0;
-}
-
-/* Container Luas / Sempit */
+/* ---- Container & Spacing ---- */
 .container-tight {
   max-width: 920px;
   margin-left: auto;
@@ -446,7 +527,13 @@ a:hover {
 }
 
 .container-wide {
-  max-width: 1280px;
+  max-width: 1320px;
   margin-left: auto;
   margin-right: auto;
+}
+
+.gs-divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 2.5rem 0;
 }

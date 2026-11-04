@@ -1,16 +1,23 @@
 /* ============================================================
-   PageHeader.css — Header Ringan & Organik GeoSlide
+   PageHeader.css — Header Halaman Dalam Ringan & Opsi Gambar
    ============================================================ */
 
 .gs-page-header {
+  position: relative;
+  overflow: hidden;
+  transition: all var(--transition);
+}
+
+/* ============================================================
+   1. Mode Ringan Default (Latar --bg, Judul Besar, Deskripsi --muted)
+   ============================================================ */
+.gs-page-header--light {
   background-color: var(--bg);
   color: var(--ink);
   padding: 3.75rem 0 2.5rem;
-  position: relative;
-  overflow: hidden;
 }
 
-/* ---- Dekorasi Organik Halus ---- */
+/* Dekorasi Organik Halus Latar Belakang */
 .gs-page-header__shape {
   position: absolute;
   border-radius: 50%;
@@ -18,29 +25,53 @@
   z-index: 0;
 }
 
-/* Bentuk organik transparan --primary-soft */
 .gs-page-header__shape--primary {
   width: 420px;
   height: 420px;
-  background: radial-gradient(circle, rgba(221, 232, 224, 0.8) 0%, rgba(221, 232, 224, 0) 70%);
+  background: radial-gradient(circle, rgba(63, 122, 26, 0.12) 0%, rgba(63, 122, 26, 0) 70%);
   top: -140px;
   right: -60px;
   filter: blur(40px);
 }
 
-/* Bentuk pelengkap bernuansa netral hangat */
 .gs-page-header__shape--warm {
   width: 320px;
   height: 320px;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.75) 0%, rgba(255, 255, 255, 0) 70%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 70%);
   bottom: -100px;
   left: 5%;
   filter: blur(35px);
 }
 
-.gs-page-header__inner {
-  position: relative;
+/* ============================================================
+   2. Mode Gambar Latar (Sinematik dengan Overlay Gelap Tipis)
+   ============================================================ */
+.gs-page-header--with-image {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: #FFFFFF;
+  min-height: 380px;
+  display: flex;
+  align-items: center;
+  padding: 5.5rem 0 4rem;
+}
+
+.gs-page-header__overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--overlay);
+  backdrop-filter: blur(1px);
   z-index: 1;
+  pointer-events: none;
+}
+
+.gs-page-header__container {
+  z-index: 2;
+  width: 100%;
+}
+
+.gs-page-header__inner {
   max-width: 820px;
 }
 
@@ -61,27 +92,51 @@
   font-size: 1.35rem;
   color: var(--primary);
   margin-bottom: 1.15rem;
-  box-shadow: 0 2px 8px rgba(31, 77, 58, 0.08);
+  box-shadow: 0 2px 8px rgba(63, 122, 26, 0.08);
 }
 
-/* ---- Judul Header (Regular-Medium Weight) ---- */
+.gs-page-header__icon--glass {
+  background-color: rgba(255, 255, 255, 0.18);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #FFFFFF;
+}
+
+/* ---- Judul Header (Clamp, Regular-Medium Weight, Tight Spacing) ---- */
 .gs-page-header__title {
-  color: var(--ink);
-  font-size: 2.35rem;
-  font-weight: 550;
-  letter-spacing: -0.025em;
+  font-size: clamp(2rem, 3.8vw + 0.5rem, 3.25rem);
+  font-weight: 500;
+  letter-spacing: -0.03em;
   margin: 0 0 0.85rem;
-  line-height: 1.2;
+  line-height: 1.18;
 }
 
-/* ---- Deskripsi Abu-Abu Hangat ---- */
+.gs-page-header--light .gs-page-header__title {
+  color: var(--ink);
+}
+
+.gs-page-header--with-image .gs-page-header__title {
+  color: #FFFFFF;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+}
+
+/* ---- Deskripsi Header ---- */
 .gs-page-header__subtitle {
-  color: var(--muted);
   font-size: 1.05rem;
   font-weight: 400;
   line-height: 1.65;
   margin: 0;
   max-width: 620px;
+}
+
+.gs-page-header--light .gs-page-header__subtitle {
+  color: var(--muted);
+}
+
+.gs-page-header--with-image .gs-page-header__subtitle {
+  color: rgba(255, 255, 255, 0.85);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
 }
 
 .gs-page-header--center .gs-page-header__subtitle {
@@ -91,22 +146,17 @@
 
 /* ---- Responsif ---- */
 @media (min-width: 768px) {
-  .gs-page-header {
-    padding: 4.75rem 0 3.25rem;
-  }
-  .gs-page-header__title {
-    font-size: 2.85rem;
+  .gs-page-header--light {
+    padding: 4.5rem 0 3.25rem;
   }
 }
 
 @media (max-width: 575.98px) {
-  .gs-page-header {
+  .gs-page-header--light {
     padding: 2.5rem 0 1.5rem;
   }
-  .gs-page-header__title {
-    font-size: 1.85rem;
-  }
-  .gs-page-header__subtitle {
-    font-size: 0.95rem;
+  .gs-page-header--with-image {
+    min-height: 300px;
+    padding: 4rem 0 2.5rem;
   }
 }

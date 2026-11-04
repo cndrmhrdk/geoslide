@@ -1,6 +1,6 @@
 /* ============================================================
    Section.css — Style Komponen Section GeoSlide
-   Spasi Lega, Asimetris, Latar Bersih
+   Spasi Lega, Asimetris, Latar Bersih & Bertema Alam
    ============================================================ */
 
 .gs-section {
@@ -21,9 +21,8 @@
   background-color: var(--primary-soft);
 }
 
-/* Dark variant disesuaikan dengan --ink tenang, bukan blok hijau tebal */
 .gs-section--bg-dark {
-  background-color: var(--ink);
+  background-color: var(--forest);
   color: #FFFFFF;
 }
 
@@ -35,7 +34,7 @@
 }
 
 .gs-section--bg-dark p {
-  color: rgba(255, 255, 255, 0.72);
+  color: rgba(255, 255, 255, 0.76);
 }
 
 /* ---- Padding Vertical (Rhythm Luas & Lega) ---- */

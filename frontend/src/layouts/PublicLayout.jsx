@@ -1,34 +1,39 @@
+import { useState, createContext, useContext } from 'react';
 import { Outlet } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import './PublicLayout.css';
 
 /**
- * PublicLayout — Layout utama untuk semua halaman publik GeoSlide.
- *
- * Struktur:
- *   <Navbar />
- *   <main>  ← <Outlet /> (konten halaman yang di-render router)  </main>
- *   <Footer />
- *
- * Cara pakai di router (App.jsx):
- *   <Route element={<PublicLayout />}>
- *     <Route path="/" element={<Beranda />} />
- *     <Route path="/edukasi" element={<Edukasi />} />
- *     ...
- *   </Route>
- *
- * Di halaman (misal Edukasi.jsx), cukup return konten halaman biasa —
- * Navbar dan Footer sudah otomatis disertakan oleh PublicLayout.
+ * NavbarContext
+ * Memungkinkan halaman atau komponen anak (seperti HeroSection)
+ * memilih mode navbar: 'solid' (default) atau 'overlay'.
  */
-export default function PublicLayout() {
+export const NavbarContext = createContext({
+  variant: 'solid',
+  setVariant: () => {},
+});
+
+export const useNavbarVariant = () => useContext(NavbarContext);
+
+/**
+ * PublicLayout — Layout utama halaman publik GeoSlide
+ *
+ * Menggunakan variant="solid" secara default. Halaman dengan HeroSection
+ * atau foto sinematik dapat memanggil setVariant('overlay').
+ */
+export default function PublicLayout({ defaultVariant = 'solid' }) {
+  const [variant, setVariant] = useState(defaultVariant);
+
   return (
-    <div className="gs-layout">
-      <Navbar />
-      <main className="gs-layout__main">
-        <Outlet />
-      </main>
-      <Footer />
-    </div>
+    <NavbarContext.Provider value={{ variant, setVariant }}>
+      <div className={`gs-layout gs-layout--${variant}`}>
+        <Navbar variant={variant} />
+        <main className="gs-layout__main">
+          <Outlet context={{ variant, setVariant }} />
+        </main>
+        <Footer />
+      </div>
+    </NavbarContext.Provider>
   );
 }

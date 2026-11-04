@@ -11,6 +11,13 @@
   overflow-x: hidden;
 }
 
+/* Mode Overlay: Navbar melayang langsung di atas area hero tanpa jarak putih */
+.gs-layout--overlay .gs-navbar-wrapper {
+  margin-bottom: -84px;
+  position: relative;
+  z-index: 1030;
+}
+
 .gs-layout__main {
   flex: 1 0 auto;
   display: flex;

@@ -3,8 +3,12 @@ import './Footer.css';
 
 /**
  * Footer GeoSlide
- * Ringkas, ringan, sudut atas membulat (32-40px), latar bersih/hangat.
- * Kontak darurat tampil jelas tetapi proporsional dan tidak mendominasi.
+ *
+ * Desain Bertema Alam:
+ * - Latar --forest (#1F3D26) dengan tipografi terang yang bersih
+ * - Sudut atas membulat (28px - 36px)
+ * - 4 kolom proporsional dan ringkas
+ * - Kontak darurat (BNPB 117 & Darurat 112) jelas dan elegan tanpa mendominasi
  */
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -14,7 +18,7 @@ export default function Footer() {
       <div className="container">
         <div className="row g-4 g-lg-5 gs-footer__main py-5">
 
-          {/* Kolom 1: Brand & Misi Singkat */}
+          {/* Kolom 1: Brand & Deskripsi */}
           <div className="col-12 col-md-4">
             <Link className="gs-footer__brand d-inline-flex align-items-center gap-2 mb-3" to="/">
               <span className="gs-footer__logo-badge" aria-hidden="true">
@@ -25,9 +29,9 @@ export default function Footer() {
               </span>
             </Link>
             <p className="gs-footer__desc">
-              Platform informasi dan manajemen mitigasi kesiapsiagaan bencana tanah longsor
-              di Indonesia. Membantu masyarakat memperoleh data spasial terpadu,
-              pelaporan cepat, dan edukasi tanggap bencana.
+              Sistem informasi geospasial dan mitigasi bencana tanah longsor Indonesia.
+              Berdedikasi untuk perlindungan ekosistem, kesiapsiagaan warga, dan respons
+              darurat terpadu berkelanjutan.
             </p>
           </div>
 
@@ -52,9 +56,9 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Kolom 4: Kontak Darurat */}
+          {/* Kolom 4: Layanan Darurat */}
           <div className="col-12 col-md-3">
-            <h4 className="gs-footer__heading">Layanan Darurat</h4>
+            <h4 className="gs-footer__heading">Kontak Darurat</h4>
             <div className="gs-footer__emergency-chips d-flex flex-column gap-2">
               <a href="tel:117" className="gs-footer__emergency-pill">
                 <span className="gs-footer__emergency-icon" aria-hidden="true">
