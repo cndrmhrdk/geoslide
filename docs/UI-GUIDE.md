@@ -1,349 +1,253 @@
-# UI Guide — GeoSlide Frontend
+# UI Guide — GeoSlide Frontend (Desain Modern & Organik)
 
-> Panduan ini wajib dibaca sebelum mengembangkan halaman baru.
-> Pastikan semua anggota tim mengikuti konvensi di bawah agar tampilan konsisten.
+> Panduan standar desain visual GeoSlide.  
+> Karakter desain: **Tenang, Organik, Bersih, dan Premium**.  
+> Wajib dibaca oleh seluruh anggota tim sebelum mengembangkan komponen atau halaman baru.
 
 ---
 
 ## Daftar Isi
-1. [Struktur Folder](#1-struktur-folder)
-2. [Cara Membuat Halaman Baru](#2-cara-membuat-halaman-baru)
-3. [Routing](#3-routing)
-4. [Layout & Komponen](#4-layout--komponen)
-5. [Variabel Warna CSS](#5-variabel-warna-css)
-6. [Tipografi & Spacing](#6-tipografi--spacing)
-7. [Kelas Utility](#7-kelas-utility)
-8. [Komponen Reusable](#8-komponen-reusable)
-9. [Konvensi Penamaan](#9-konvensi-penamaan)
-10. [Bootstrap yang Dipakai](#10-bootstrap-yang-dipakai)
-11. [FAQ](#11-faq)
+1. [Prinsip & Karakter Visual](#1-prinsip--karakter-visual)
+2. [Variabel Warna (Design Tokens)](#2-variabel-warna-design-tokens)
+3. [Tipografi & Spacing](#3-tipografi--spacing)
+4. [Komponen Navbar & Footer](#4-komponen-navbar--footer)
+5. [Komponen Inti (PageHeader & Section)](#5-komponen-inti-pageheader--section)
+6. [Kelas Komponen UI Siap Pakai](#6-kelas-komponen-ui-siap-pakai)
+   - [Tombol Pill](#tombol-pill)
+   - [Kartu Solid & Glass](#kartu-solid--glass)
+   - [Badge & Tag](#badge--tag)
+   - [Container & Spacing](#container--spacing)
+7. [Panduan Khusus Halaman Data (Peta & Statistik)](#7-panduan-khusus-halaman-data-peta--statistik)
+8. [Struktur Folder & Alur Kerja](#8-struktur-folder--alur-kerja)
+9. [FAQ](#9-faq)
 
 ---
 
-## 1. Struktur Folder
+## 1. Prinsip & Karakter Visual
 
-```
-frontend/
-└── src/
-    ├── assets/           ← Gambar, logo, aset statis
-    ├── components/       ← Komponen UI yang dapat dipakai ulang
-    │   ├── Navbar.jsx / Navbar.css
-    │   ├── Footer.jsx / Footer.css
-    │   ├── PageHeader.jsx / PageHeader.css
-    │   └── Section.jsx / Section.css
-    ├── layouts/
-    │   └── PublicLayout.jsx  ← Navbar + konten + Footer
-    ├── pages/            ← Satu file per halaman (1 anggota = 1 file)
-    │   ├── Beranda.jsx
-    │   ├── PetaBencana.jsx
-    │   ├── StatistikBencana.jsx
-    │   ├── InformasiOrangHilang.jsx
-    │   ├── LaporkanBencana.jsx
-    │   ├── LaporkanOrangHilang.jsx
-    │   ├── CekStatusLaporan.jsx
-    │   ├── Edukasi.jsx
-    │   ├── LoginAdmin.jsx
-    │   └── NotFound.jsx
-    ├── App.jsx           ← Router root (jangan diubah tanpa koordinasi)
-    ├── App.css           ← Kosong (jangan isi)
-    ├── index.css         ← CSS global & variabel (jangan diubah tanpa koordinasi)
-    └── main.jsx          ← Entry point (jangan diubah)
-docs/
-└── UI-GUIDE.md           ← File ini
-```
-
-> **Aturan penting:** Setiap anggota hanya mengedit file halaman miliknya di `pages/`.
-> Jangan mengubah `App.jsx`, `index.css`, komponen di `components/`, atau `layouts/`
-> tanpa koordinasi dengan seluruh tim.
+- **Suasana Tenang & Organik:** Menggunakan latar belakang netral hangat (`--bg: #EFEBE4`) dan kartu putih bersih (`--surface: #FFFFFF`).
+- **Aksen Hijau Terukur:** Hijau tua (`--primary: #1F4D3A`) hanya digunakan sebagai **aksen** (menu aktif, ikon, link, badge). **Hindari blok hijau tua besar dari tepi ke tepi.**
+- **Bentuk Membulat Halus:** Seluruh tombol berbentuk pill penuh (`border-radius: 9999px`) dan kartu bersudut sangat membulat (16–24px).
+- **Elemen Glassmorphism:** Elemen mengambang menggunakan kartu glass semi-transparan (`--glass`) dengan efek `backdrop-filter: blur()`.
+- **Komposisi Bernapas:** Ruang kosong (whitespace) lega, bayangan halus (`box-shadow` bertingkat lembut), tanpa border tebal kaku.
 
 ---
 
-## 2. Cara Membuat Halaman Baru
+## 2. Variabel Warna (Design Tokens)
 
-Jika kamu perlu membuat halaman tambahan yang belum ada:
+Didefinisikan di `frontend/src/index.css`. **Gunakan variabel CSS berikut, jangan hardcode kode hex:**
 
-### Langkah 1 — Buat file halaman
-```jsx
-// src/pages/NamaHalaman.jsx
-import PageHeader from '../components/PageHeader';
-import Section from '../components/Section';
-
-export default function NamaHalaman() {
-  return (
-    <>
-      <PageHeader
-        title="Judul Halaman"
-        subtitle="Deskripsi singkat halaman ini"
-        icon="bi-nama-ikon"   // nama ikon dari Bootstrap Icons
-      />
-      <Section bg="white" py="lg">
-        {/* Konten halaman kamu di sini */}
-      </Section>
-    </>
-  );
-}
-```
-
-### Langkah 2 — Daftarkan di App.jsx
-```jsx
-// src/App.jsx — tambahkan import dan <Route> baru
-import NamaHalaman from './pages/NamaHalaman';
-
-// Di dalam <Route element={<PublicLayout />}>:
-<Route path="/rute-baru" element={<NamaHalaman />} />
-```
-
-### Langkah 3 — Tambah link di Navbar (opsional)
-Edit `src/components/Navbar.jsx` jika menu baru perlu ditampilkan.
-
----
-
-## 3. Routing
-
-| Menu | Rute |
-|---|---|
-| Beranda | `/` |
-| Peta Bencana | `/data-bencana/peta` |
-| Statistik Bencana | `/data-bencana/statistik` |
-| Informasi Orang Hilang | `/informasi-orang-hilang` |
-| Laporkan Bencana | `/pelaporan/laporkan-bencana` |
-| Laporkan Orang Hilang | `/pelaporan/laporkan-orang-hilang` |
-| Cek Status Laporan | `/pelaporan/cek-status` |
-| Edukasi | `/edukasi` |
-| Login Admin | `/login-admin` |
-
-Gunakan komponen `<Link to="/rute">` atau `<NavLink to="/rute">` dari `react-router-dom` (bukan `<a href>`).
-
----
-
-## 4. Layout & Komponen
-
-### PublicLayout
-Semua halaman publik sudah otomatis dibungkus `PublicLayout` (Navbar + Footer).
-**Kamu tidak perlu menambahkan Navbar/Footer secara manual** di file halamanmu.
-
-```
-PublicLayout
-├── <Navbar />
-├── <main>
-│    └── <Outlet />  ← konten halamanmu render di sini
-└── <Footer />
-```
-
----
-
-## 5. Variabel Warna CSS
-
-Gunakan variabel CSS berikut (jangan hardcode nilai hex):
-
-| Variabel | Nilai | Penggunaan |
+| Variabel CSS | Nilai Hex / RGBA | Peruntukan & Penggunaan |
 |---|---|---|
-| `--gs-green-dark` | `#1a4731` | Warna dominan, navbar, footer |
-| `--gs-green` | `#2d6a4f` | Warna primer medium |
-| `--gs-green-light` | `#52b788` | Aksen, hover, highlight |
-| `--gs-green-muted` | `#d8f3dc` | Background tipis hijau |
-| `--gs-white` | `#ffffff` | Putih murni |
-| `--gs-gray-50` | `#f8f9fa` | Background paling terang |
-| `--gs-gray-100` | `#f1f3f5` | Background terang |
-| `--gs-gray-200` | `#e9ecef` | Border tipis |
-| `--gs-gray-300` | `#dee2e6` | Border normal |
-| `--gs-gray-500` | `#adb5bd` | Teks muted/placeholder |
-| `--gs-gray-700` | `#495057` | Teks body |
-| `--gs-gray-900` | `#212529` | Teks heading |
-| `--gs-primary` | alias `--gs-green-dark` | Warna brand utama |
-| `--gs-secondary` | alias `--gs-green` | Warna brand sekunder |
-| `--gs-accent` | alias `--gs-green-light` | Aksen/highlight |
-| `--gs-bg` | `#ffffff` | Background halaman |
-| `--gs-bg-subtle` | `--gs-gray-50` | Background section abu-abu |
-| `--gs-bg-muted` | `--gs-green-muted` | Background section hijau muda |
-| `--gs-text` | `--gs-gray-700` | Teks body |
-| `--gs-text-heading` | `--gs-gray-900` | Teks heading |
-| `--gs-text-muted` | `--gs-gray-500` | Teks sekunder/placeholder |
-| `--gs-border` | `--gs-gray-200` | Warna border |
+| `--bg` | `#EFEBE4` | Latar belakang utama aplikasi (netral hangat) |
+| `--surface` | `#FFFFFF` | Latar kartu solid, dropdown, dan footer |
+| `--glass` | `rgba(255, 255, 255, 0.65)` | Kartu semi-transparan dengan backdrop blur |
+| `--ink` | `#141414` | Teks utama, judul, dan tombol pill gelap |
+| `--muted` | `#6B655D` | Teks sekunder, deskripsi, caption (abu hangat) |
+| `--primary` | `#1F4D3A` | Hijau tua (aksen utama: menu aktif, ikon, link) |
+| `--primary-soft` | `#DDE8E0` | Hijau sangat muda (latar badge, efek hover) |
+| `--earth` | `#8A6E55` | Cokelat tanah (aksen pendukung mitigasi/geologi) |
+| `--border` | `rgba(20, 20, 20, 0.08)` | Border halus transparan antar elemen |
 
-**Contoh penggunaan:**
-```css
-.elemen-saya {
-  color: var(--gs-green-dark);
-  background-color: var(--gs-bg-subtle);
-  border: 1px solid var(--gs-border);
-}
-```
+*Catatan Kompatibilitas:* Variabel lama seperti `--gs-green-dark`, `--gs-green-muted`, `--gs-bg`, dll. telah dipetakan secara otomatis ke palet baru di atas sehingga kode lama tetap berjalan selaras.
 
 ---
 
-## 6. Tipografi & Spacing
+## 3. Tipografi & Spacing
 
-### Tipografi
-| Variabel | Nilai |
-|---|---|
-| `--gs-font-sans` | `'Segoe UI', system-ui, Roboto, ...` |
-| `--gs-font-mono` | `ui-monospace, Consolas, ...` |
-| `--gs-font-size-base` | `1rem` (16px) |
-| `--gs-line-height` | `1.6` |
+### Tipografi (Plus Jakarta Sans)
+- Dimuat langsung via Google Fonts di `index.html`.
+- **Judul (Headings):** Berbobot `regular-medium` (`font-weight: 550`), letter-spacing halus `-0.02em`, warna `--ink`.
+- **Deskripsi / Subtitle:** Warna abu hangat `--muted` (`#6B655D`), line-height `1.65`.
 
-### Spacing (8px grid)
-| Variabel | Nilai |
-|---|---|
-| `--gs-space-1` | `0.25rem` (4px) |
-| `--gs-space-2` | `0.5rem` (8px) |
-| `--gs-space-3` | `0.75rem` (12px) |
-| `--gs-space-4` | `1rem` (16px) |
-| `--gs-space-5` | `1.5rem` (24px) |
-| `--gs-space-6` | `2rem` (32px) |
-| `--gs-space-7` | `3rem` (48px) |
-| `--gs-space-8` | `4rem` (64px) |
-
-### Border Radius & Shadow
-| Variabel | Nilai |
-|---|---|
-| `--gs-radius-sm` | `4px` |
-| `--gs-radius` | `8px` |
-| `--gs-radius-lg` | `12px` |
-| `--gs-shadow-sm` | Shadow tipis |
-| `--gs-shadow` | Shadow normal |
-| `--gs-shadow-lg` | Shadow tebal |
+### Skala Spacing & Radius
+- **Radius Pill:** `border-radius: 9999px;` (untuk tombol dan badge)
+- **Radius Kartu:** `border-radius: 20px;` (standar 16–24px)
+- **Radius Dropdown:** `border-radius: 18px;`
 
 ---
 
-## 7. Kelas Utility
+## 4. Komponen Navbar & Footer
 
-Kelas CSS khusus GeoSlide (didefinisikan di `index.css`):
+### Navbar (`src/components/Navbar.jsx`)
+- **Sticky & Floating Capsule:** Melayang di atas halaman dengan `backdrop-filter: blur(16px)`, latar semi-transparan, dan bayangan tipis.
+- **Logo di Kiri:** Simbol `bi-geo-alt-fill` dalam badge lembut hijau muda + tipografi `GeoSlide`.
+- **Menu di Tengah:** Teks tipis/medium. Menu aktif ditandai secara elegan dengan **garis bawah halus berwarna aksen** (`--primary`).
+- **Tombol Kanan ("Login Admin"):** Tombol pill gelap (`--ink`) dengan lingkaran kecil berisi ikon panah (`bi-arrow-up-right`).
+- **Dropdown:** Sudut membulat `18px`, bayangan lembut, hover berlatar `--primary-soft`.
+- **Responsif Mobile:** Pada layar `< 992px`, otomatis bertransformasi menjadi rounded collapse menu yang rapi.
 
-| Kelas | Fungsi |
-|---|---|
-| `.gs-text-primary` | Warna teks hijau tua |
-| `.gs-text-secondary` | Warna teks hijau medium |
-| `.gs-text-muted` | Warna teks abu-abu muted |
-| `.gs-bg-primary` | Background hijau tua |
-| `.gs-bg-subtle` | Background abu-abu terang |
-| `.gs-bg-muted` | Background hijau muda |
-| `.gs-card` | Card dengan border, shadow, hover effect |
-| `.gs-card-header` | Header dalam gs-card |
-| `.gs-badge` | Badge/tag dasar |
-| `.gs-badge-green` | Badge warna hijau |
-| `.gs-badge-danger` | Badge warna merah |
-| `.gs-divider` | Garis pemisah horizontal |
-| `.btn-gs-primary` | Tombol hijau tua (utama) |
-| `.btn-gs-secondary` | Tombol outline hijau |
-| `.btn-gs-accent` | Tombol hijau terang |
-
-**Contoh penggunaan:**
-```jsx
-<div className="gs-card">
-  <div className="gs-card-header">Judul Kartu</div>
-  <p className="gs-text-muted">Deskripsi konten</p>
-  <button className="btn btn-gs-primary">Simpan</button>
-</div>
-```
+### Footer (`src/components/Footer.jsx`)
+- **Ringan & Bersih:** Menggunakan latar putih `--surface` dengan sudut atas membulat (`border-radius: 36px 36px 0 0`) di atas latar `--bg`.
+- **4 Kolom Proporsional:** Brand & Misi, Data Bencana, Pelaporan & Edukasi, Layanan Darurat.
+- **Info Kontak Darurat (BNPB 117 & Darurat 112):** Tampil jelas dalam format chips/mini-pill elegan tanpa warna peringatan yang mengganggu keindahan desain.
 
 ---
 
-## 8. Komponen Reusable
+## 5. Komponen Inti (PageHeader & Section)
 
 ### `<PageHeader />`
-
-Header standar di bagian atas halaman (gradient hijau tua).
+Menggantikan hero hijau tebal dengan header yang ringan, bersih, dan lapang:
+- Latar netral hangat `--bg`.
+- Bentuk organik halus transparan berwarna `--primary-soft` di latar belakang (`filter: blur`).
+- Judul besar berbobot `regular-medium`.
 
 ```jsx
 import PageHeader from '../components/PageHeader';
 
 <PageHeader
-  title="Judul Halaman"       // wajib
-  subtitle="Deskripsi..."     // opsional
-  icon="bi-map"               // opsional — nama kelas Bootstrap Icons
-  center={false}              // opsional — rata tengah (default: false)
+  badge="Sistem Informasi Spasial"   // opsional — badge kecil di atas judul
+  title="Peta Sebaran Bencana"       // wajib
+  subtitle="Deskripsi ringkas..."    // opsional
+  icon="bi-map"                      // opsional — ikon dari Bootstrap Icons
+  center={false}                     // opsional — rata tengah (default: false)
 />
 ```
 
----
-
 ### `<Section />`
-
-Container pembungkus konten section halaman.
+Container pembungkus konten halaman dengan rhythm vertikal lega:
 
 ```jsx
 import Section from '../components/Section';
 
 <Section
-  bg="white"    // 'white' | 'subtle' | 'muted' | 'dark'   (default: 'white')
-  py="lg"       // 'sm' | 'md' | 'lg' | 'xl'               (default: 'lg')
-  fluid={false} // true = container-fluid                    (default: false)
-  id="anchor"   // ID untuk anchor link                      (opsional)
+  bg="white"     // 'white' (surface putih) | 'subtle' (latar --bg) | 'muted' (soft green)
+  py="lg"        // 'sm' (1.75rem) | 'md' (3rem) | 'lg' (4.5rem) | 'xl' (6.5rem)
+  fluid={false}  // true = container-fluid (default: false)
+  id="target-id" // ID HTML untuk anchor link (opsional)
 >
   {/* Konten section */}
 </Section>
 ```
 
-**Contoh pattern tipikal:**
-```jsx
-export default function HalamanSaya() {
-  return (
-    <>
-      <PageHeader title="Judul" subtitle="Deskripsi" icon="bi-star" />
-
-      <Section bg="white" py="lg">
-        <h2>Konten Utama</h2>
-        {/* ... */}
-      </Section>
-
-      <Section bg="subtle" py="md">
-        <h2>Konten Sekunder</h2>
-        {/* ... */}
-      </Section>
-    </>
-  );
-}
-```
-
 ---
 
-## 9. Konvensi Penamaan
+## 6. Kelas Komponen UI Siap Pakai
 
-| Item | Konvensi | Contoh |
-|---|---|---|
-| File komponen | PascalCase | `PageHeader.jsx` |
-| File CSS komponen | Sama dengan komponen | `PageHeader.css` |
-| File halaman | PascalCase | `PetaBencana.jsx` |
-| Kelas CSS custom | `gs-` prefix, kebab-case | `.gs-card`, `.gs-btn-primary` |
-| Props komponen | camelCase | `icon`, `subtitle`, `center` |
+Semua kelas di bawah tersedia secara global di `index.css` dan dapat langsung digunakan:
 
----
-
-## 10. Bootstrap yang Dipakai
-
-Bootstrap 5.3 dimuat via CDN di `index.html`. Semua kelas Bootstrap (`container`, `row`, `col-*`, `d-flex`, `mb-*`, dll.) tersedia.
-
-**Bootstrap Icons** juga tersedia. Referensi ikon: [https://icons.getbootstrap.com](https://icons.getbootstrap.com)
+### Tombol Pill
 
 ```jsx
-// Contoh penggunaan Bootstrap Icons
-<i className="bi bi-map"></i>
-<i className="bi bi-exclamation-triangle text-warning"></i>
+{/* 1. Tombol Pill Gelap (Primary / Utama) */}
+<button className="btn-pill btn-pill-primary">
+  Simpan Data
+</button>
+
+{/* 2. Tombol Pill Action (Dengan Bulat Ikon Panah) */}
+<Link to="/rute" className="btn-pill-action">
+  <span>Jelajahi Data</span>
+  <span className="btn-pill-action__icon">
+    <i className="bi bi-arrow-up-right"></i>
+  </span>
+</Link>
+
+{/* 3. Tombol Pill Aksen Hijau */}
+<button className="btn-pill btn-pill-accent">
+  <i className="bi bi-check2 me-1"></i> Konfirmasi Laporan
+</button>
+
+{/* 4. Tombol Pill Outline (Secondary) */}
+<button className="btn-pill btn-pill-secondary">
+  Kembali
+</button>
+
+{/* 5. Tombol Pill Surface Putih */}
+<button className="btn-pill btn-pill-surface">
+  <i className="bi bi-funnel me-1"></i> Filter
+</button>
 ```
 
-> **Jangan** install framework CSS atau library animasi tambahan (Tailwind, Ant Design, Framer Motion, dsb.) tanpa koordinasi tim.
+### Kartu Solid & Glass
+
+```jsx
+{/* Kartu Solid Putih (Standar Konten & Data) */}
+<div className="card-solid">
+  <div className="card-header-clean">
+    <span>Judul Kartu</span>
+    <span className="badge-pill badge-primary-soft">Aktif</span>
+  </div>
+  <p className="gs-text-muted">Isi konten kartu dengan sudut membulat 20px.</p>
+</div>
+
+{/* Kartu Glass (Semi-transparan untuk elemen mengambang / highlight) */}
+<div className="card-glass">
+  <h4 className="mb-2">Sorotan Khusus</h4>
+  <p className="gs-text-muted">Kartu dengan efek blur modern.</p>
+</div>
+```
+
+### Badge & Tag
+
+```jsx
+{/* Badge Hijau Lembut */}
+<span className="badge-pill badge-primary-soft">
+  <i className="bi bi-check-circle me-1"></i> Terverifikasi
+</span>
+
+{/* Badge Cokelat Tanah */}
+<span className="badge-pill badge-earth">
+  Zona Geologi
+</span>
+
+{/* Badge Outline */}
+<span className="badge-pill badge-outline">
+  Filter: 2026
+</span>
+
+{/* Badge Peringatan / Bahaya */}
+<span className="badge-pill badge-danger">
+  Risiko Tinggi
+</span>
+```
+
+### Container & Spacing
+
+- `.container-tight`: Lebar maksimal 920px (cocok untuk halaman form, login, atau artikel).
+- `.container-wide`: Lebar maksimal 1280px.
+- `.gs-divider`: Garis pemisah horizontal tipis netral.
 
 ---
 
-## 11. FAQ
+## 7. Panduan Khusus Halaman Data (Peta & Statistik)
 
-**Q: Di mana saya meletakkan style khusus untuk halaman saya?**
-A: Buat file CSS dengan nama yang sama: `NamaHalaman.css`, lalu import di `NamaHalaman.jsx`. Gunakan prefix kelas agar tidak bentrok, contoh: `.peta-bencana__map { ... }`.
+Untuk halaman **Peta Bencana** (`/data-bencana/peta`) dan **Statistik Bencana** (`/data-bencana/statistik`):
 
-**Q: Bagaimana cara navigasi antar halaman?**
-A: Gunakan `<Link to="/rute">` atau `<NavLink to="/rute">` dari `react-router-dom`. Jangan gunakan `<a href>` untuk navigasi internal.
+1. **Prioritaskan Keterbacaan (High Legibility):**
+   - Gunakan selalu `.card-solid` (latar putih bersih) untuk kanvas peta, grafik, tabel, dan kartu KPI.
+   - Jangan gunakan kartu glass untuk area pembacaan data intensif agar teks dan grafik tidak kehilangan kontras.
+2. **Animasi Minimal:**
+   - Gunakan hanya transisi halus pada hover tombol dan kartu (`transform: translateY(-2px)`).
+   - Hindari animasi berulang yang mengganggu fokus pengguna saat menganalisis data spasial.
+3. **Filter & Toolbar:**
+   - Kemas filter, dropdown pencarian, dan tombol aksi dalam satu baris `.card-solid` yang teratur.
 
-**Q: Bagaimana mengambil data dari backend?**
-A: Gunakan `fetch` atau install `axios`. Panggil API di dalam `useEffect`. Backend berjalan di `http://localhost:5000` (sesuaikan dengan konfigurasi backend).
+---
 
-**Q: Saya perlu install library baru (Leaflet, Recharts, dsb.). Caranya?**
-A: Jalankan `npm install nama-library` di dalam folder `frontend/`. Konfirmasi ke anggota lain sebelum install agar tidak ada konflik.
+## 8. Struktur Folder & Alur Kerja
 
-**Q: Bagaimana cara menjalankan frontend?**
-A:
-```bash
-cd frontend
-npm install   # pertama kali saja
-npm run dev   # server berjalan di http://localhost:5173
 ```
+frontend/src/
+├── components/
+│   ├── Navbar.jsx & Navbar.css     ← Floating capsule navbar
+│   ├── Footer.jsx & Footer.css     ← Footer sudut membulat
+│   ├── PageHeader.jsx & PageHeader.css ← Header ringan & dekorasi halus
+│   └── Section.jsx & Section.css   ← Pembungkus section
+├── layouts/
+│   └── PublicLayout.jsx            ← Template utama (Navbar + Page + Footer)
+├── pages/                          ← Tempat kerja masing-masing anggota tim
+└── index.css                       ← Design tokens, kelas tombol pill, kartu, & badge
+```
+
+---
+
+## 9. FAQ
+
+**Q: Apakah saya boleh menambahkan library CSS lain seperti Tailwind?**  
+A: Tidak. Proyek menggunakan Bootstrap 5 + CSS sendiri dengan sistem variabel di atas agar seragam, ringan, dan tidak menimbulkan konflik.
+
+**Q: Bagaimana cara membuat tombol pill di form saya?**  
+A: Cukup beri kelas `btn-pill btn-pill-primary` (untuk tombol utama) atau `btn-pill btn-pill-secondary` (untuk tombol batal/kembali).
+
+**Q: Di mana saya meletakkan styling spesifik untuk halaman saya?**  
+A: Buat file CSS tersendiri (misal: `PetaBencana.css`) di folder `src/pages/`, import di `PetaBencana.jsx`, dan gunakan token CSS yang tersedia (`var(--surface)`, `var(--primary)`, dll.).

@@ -1,159 +1,314 @@
 /* ============================================================
-   Navbar.css — Style khusus komponen Navbar GeoSlide
+   Navbar.css — Floating Capsule Navbar Ringan & Modern
    ============================================================ */
 
-/* ---- Base Navbar ---- */
+/* ---- Wrapper Floating & Sticky ---- */
+.gs-navbar-wrapper {
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+  width: 100%;
+  padding: 0.85rem 1.25rem 0.25rem;
+  pointer-events: none; /* Klik di luar kapsul dapat tembus ke elemen di bawahnya */
+}
+
+/* ---- Kapsul Navbar ---- */
 .gs-navbar {
-  background-color: var(--gs-green-dark);
-  min-height: var(--gs-navbar-height);
-  padding-top: 0;
-  padding-bottom: 0;
-  border-bottom: 3px solid var(--gs-green-light);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
+  pointer-events: auto;
+  max-width: 1220px;
+  margin: 0 auto;
+  background-color: rgba(255, 255, 255, 0.85);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  border-radius: var(--radius-pill);
+  box-shadow: 0 8px 30px rgba(20, 20, 20, 0.05), 0 1px 3px rgba(20, 20, 20, 0.02);
+  padding: 0.4rem 0.75rem;
+  transition: all var(--transition);
 }
 
-/* ---- Brand / Logo ---- */
+/* ---- Brand / Logo di Kiri ---- */
 .gs-navbar__brand {
-  color: var(--gs-white) !important;
-  font-size: 1.35rem;
-  font-weight: 700;
-  letter-spacing: -0.01em;
   text-decoration: none !important;
-}
-.gs-navbar__logo-icon {
-  font-size: 1.5rem;
-  color: var(--gs-green-light);
-  line-height: 1;
-}
-.gs-navbar__logo-text {
-  color: var(--gs-white);
-}
-.gs-navbar__logo-accent {
-  color: var(--gs-green-light);
+  color: var(--ink) !important;
+  font-weight: 600;
+  font-size: 1.15rem;
+  letter-spacing: -0.02em;
+  padding: 0.25rem 0.5rem;
+  margin-right: 1.25rem;
 }
 
-/* ---- Nav Links ---- */
-.gs-navbar__link {
-  color: rgba(255, 255, 255, 0.85) !important;
-  font-weight: 500;
-  font-size: 0.9375rem;    /* 15px */
-  padding: 0.5rem 0.75rem !important;
-  border-radius: var(--gs-radius);
-  border: none;
-  background: none;
-  cursor: pointer;
-  transition: color var(--gs-transition), background-color var(--gs-transition);
-  white-space: nowrap;
+.gs-navbar__logo-badge {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background-color: var(--primary-soft);
+  color: var(--primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.05rem;
+  transition: transform var(--transition);
 }
+
+.gs-navbar__brand:hover .gs-navbar__logo-badge {
+  transform: rotate(-6deg) scale(1.05);
+}
+
+.gs-navbar__logo-text {
+  color: var(--ink);
+}
+
+.gs-navbar__logo-accent {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+/* ---- Nav Links di Tengah ---- */
+.gs-navbar__link {
+  position: relative;
+  font-size: 0.9125rem;
+  font-weight: 450;
+  color: var(--muted) !important;
+  padding: 0.5rem 0.95rem !important;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: color var(--transition), background-color var(--transition);
+}
+
 .gs-navbar__link:hover,
 .gs-navbar__link:focus {
-  color: var(--gs-white) !important;
-  background-color: rgba(255, 255, 255, 0.10);
-}
-.gs-navbar__link.active {
-  color: var(--gs-white) !important;
-  background-color: rgba(82, 183, 136, 0.25);
-  font-weight: 600;
+  color: var(--ink) !important;
+  background-color: rgba(20, 20, 20, 0.04);
 }
 
-/* ---- Tombol Login Admin ---- */
-.gs-navbar__btn-login {
-  font-size: 0.875rem;
-  padding: 0.4rem 1rem;
-  border-radius: 999px;
-  white-space: nowrap;
-  color: var(--gs-white) !important;
+/* Menu Aktif: Garis Bawah Halus Berwarna Aksen */
+@media (min-width: 992px) {
+  .gs-navbar__link.active {
+    color: var(--ink) !important;
+    font-weight: 550;
+  }
+
+  .gs-navbar__link.active::after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 22px;
+    height: 2.5px;
+    background-color: var(--primary);
+    border-radius: var(--radius-pill);
+  }
 }
 
-/* ---- Dropdown Menu ---- */
+/* Dropdown Toggle Chevron Halus */
+.gs-navbar__link.dropdown-toggle::after {
+  display: inline-block;
+  margin-left: 0.35em;
+  vertical-align: 0.15em;
+  content: "";
+  border-top: 0.3em solid;
+  border-right: 0.3em solid transparent;
+  border-bottom: 0;
+  border-left: 0.3em solid transparent;
+  opacity: 0.55;
+  transition: transform var(--transition), opacity var(--transition);
+}
+
+.gs-navbar__link.dropdown-toggle:hover::after,
+.gs-navbar__link.dropdown-toggle.active::after {
+  opacity: 1;
+}
+
+/* ---- Dropdown Menu Bersudut Membulat ---- */
 .gs-dropdown {
-  border: 1px solid var(--gs-border);
-  border-radius: var(--gs-radius-lg);
-  box-shadow: var(--gs-shadow-lg);
+  background-color: rgba(255, 255, 255, 0.96);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: 0 16px 36px rgba(20, 20, 20, 0.08), 0 2px 8px rgba(20, 20, 20, 0.03);
   padding: 0.5rem;
-  min-width: 200px;
-  margin-top: 0.5rem !important;
+  min-width: 230px;
+  margin-top: 0.65rem !important;
+  animation: gsFadeDown 0.18s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+@keyframes gsFadeDown {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .gs-dropdown__item {
-  border-radius: var(--gs-radius);
-  color: var(--gs-text) !important;
-  font-size: 0.9rem;
-  padding: 0.5rem 0.875rem;
-  transition: background-color var(--gs-transition), color var(--gs-transition);
+  border-radius: 12px;
+  color: var(--ink) !important;
+  font-size: 0.8875rem;
+  font-weight: 450;
+  padding: 0.55rem 0.85rem;
   display: flex;
   align-items: center;
+  gap: 0.5rem;
+  transition: background-color var(--transition), color var(--transition);
 }
+
+.gs-dropdown__item i {
+  color: var(--muted);
+  font-size: 0.95rem;
+  transition: color var(--transition);
+}
+
 .gs-dropdown__item:hover,
 .gs-dropdown__item:focus {
-  background-color: var(--gs-green-muted) !important;
-  color: var(--gs-green-dark) !important;
-}
-.gs-dropdown__item.active,
-.gs-dropdown__item:active {
-  background-color: var(--gs-green-muted) !important;
-  color: var(--gs-green-dark) !important;
-  font-weight: 600;
+  background-color: var(--primary-soft) !important;
+  color: var(--primary) !important;
 }
 
-/* ---- Hamburger / Toggler ---- */
+.gs-dropdown__item:hover i,
+.gs-dropdown__item:focus i {
+  color: var(--primary);
+}
+
+.gs-dropdown__item.active {
+  background-color: var(--primary-soft) !important;
+  color: var(--primary) !important;
+  font-weight: 550;
+}
+
+.gs-dropdown__item.active i {
+  color: var(--primary);
+}
+
+/* ---- Tombol Pill Gelap + Bulat Ikon Panah (Login Admin) ---- */
+.gs-navbar__btn-admin {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  background-color: var(--ink);
+  color: #FFFFFF !important;
+  text-decoration: none !important;
+  padding: 0.35rem 0.45rem 0.35rem 1.15rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.865rem;
+  font-weight: 500;
+  box-shadow: 0 4px 14px rgba(20, 20, 20, 0.12);
+  transition: transform var(--transition), box-shadow var(--transition), background-color var(--transition);
+  white-space: nowrap;
+}
+
+.gs-navbar__btn-admin:hover {
+  background-color: #2b2b2b;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+  color: #FFFFFF !important;
+}
+
+.gs-navbar__btn-admin-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.18);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.825rem;
+  color: #FFFFFF;
+  transition: transform var(--transition), background-color var(--transition);
+}
+
+.gs-navbar__btn-admin:hover .gs-navbar__btn-admin-icon {
+  transform: translateX(2px) translateY(-1px);
+  background-color: rgba(255, 255, 255, 0.28);
+}
+
+/* ---- Tombol Hamburger Mobile ---- */
 .gs-navbar__toggler {
-  border: 1.5px solid rgba(255, 255, 255, 0.4);
-  border-radius: var(--gs-radius);
-  color: var(--gs-white);
-  font-size: 1.4rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background-color: rgba(20, 20, 20, 0.04);
+  color: var(--ink);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-size: 1.35rem;
   line-height: 1;
-  padding: 0.3rem 0.5rem;
-  transition: border-color var(--gs-transition);
+  transition: background-color var(--transition), transform var(--transition);
 }
+
+.gs-navbar__toggler:hover,
 .gs-navbar__toggler:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(82, 183, 136, 0.5);
-  border-color: var(--gs-green-light);
+  background-color: rgba(20, 20, 20, 0.08);
+  color: var(--ink);
+  transform: scale(1.03);
 }
 
-/* ---- Mobile Collapse Menu ---- */
+/* ---- Responsif Mobile (< 992px) ---- */
 @media (max-width: 991.98px) {
+  .gs-navbar-wrapper {
+    padding: 0.5rem 0.75rem 0.25rem;
+  }
+
   .gs-navbar {
-    min-height: auto;
-    padding: 0.75rem 0;
+    border-radius: 24px;
+    padding: 0.55rem 0.95rem;
   }
 
-  #gsNavbarCollapse {
-    padding: 0.75rem 0 0.5rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.12);
+  .gs-navbar .navbar-collapse {
+    padding: 1rem 0.25rem 0.5rem;
     margin-top: 0.5rem;
-  }
-
-  .navbar-nav {
-    gap: 0.15rem !important;
+    border-top: 1px solid var(--border);
   }
 
   .gs-navbar__link {
-    padding: 0.6rem 0.75rem !important;
-    border-radius: var(--gs-radius);
+    padding: 0.65rem 0.95rem !important;
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .gs-navbar__link.active {
+    color: var(--primary) !important;
+    background-color: var(--primary-soft) !important;
+    font-weight: 550;
   }
 
   .gs-dropdown {
-    background-color: rgba(255,255,255,0.05);
-    border: none;
+    background-color: rgba(20, 20, 20, 0.02);
+    border: 1px solid var(--border);
     box-shadow: none;
-    padding: 0 0.5rem;
-    margin-top: 0 !important;
+    padding: 0.35rem;
+    margin-top: 0.25rem !important;
+    margin-bottom: 0.5rem;
+    border-radius: 16px;
   }
 
   .gs-dropdown__item {
-    color: rgba(255, 255, 255, 0.78) !important;
-    padding-left: 1.5rem;
-  }
-  .gs-dropdown__item:hover,
-  .gs-dropdown__item:focus {
-    background-color: rgba(255,255,255,0.1) !important;
-    color: var(--gs-white) !important;
+    padding: 0.55rem 0.85rem;
   }
 
-  .gs-navbar__btn-login {
-    display: inline-block;
-    margin-top: 0.4rem;
-    text-align: center;
+  .gs-navbar__action {
+    display: flex;
+    justify-content: stretch;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .gs-navbar__btn-admin {
+    width: 100%;
+    justify-content: space-between;
+    padding: 0.5rem 0.6rem 0.5rem 1.25rem;
   }
 }

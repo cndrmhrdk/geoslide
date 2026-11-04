@@ -1,48 +1,71 @@
 /* ============================================================
-   Section.css — Style komponen Section
+   Section.css — Style Komponen Section GeoSlide
+   Spasi Lega, Asimetris, Latar Bersih
    ============================================================ */
 
 .gs-section {
   width: 100%;
+  position: relative;
 }
 
 /* ---- Background Variants ---- */
+.gs-section--bg-white {
+  background-color: var(--surface);
+}
+
 .gs-section--bg-subtle {
-  background-color: var(--gs-bg-subtle);
+  background-color: var(--bg);
 }
+
 .gs-section--bg-muted {
-  background-color: var(--gs-bg-muted);
+  background-color: var(--primary-soft);
 }
+
+/* Dark variant disesuaikan dengan --ink tenang, bukan blok hijau tebal */
 .gs-section--bg-dark {
-  background-color: var(--gs-green-dark);
-  color: var(--gs-white);
+  background-color: var(--ink);
+  color: #FFFFFF;
 }
 
-/* ---- Padding Vertical ---- */
+.gs-section--bg-dark h1,
+.gs-section--bg-dark h2,
+.gs-section--bg-dark h3,
+.gs-section--bg-dark h4 {
+  color: #FFFFFF;
+}
+
+.gs-section--bg-dark p {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+/* ---- Padding Vertical (Rhythm Luas & Lega) ---- */
 .gs-section--py-sm {
-  padding-top: var(--gs-space-5);
-  padding-bottom: var(--gs-space-5);
-}
-.gs-section--py-md {
-  padding-top: var(--gs-space-6);
-  padding-bottom: var(--gs-space-6);
-}
-.gs-section--py-lg {
-  padding-top: var(--gs-space-7);
-  padding-bottom: var(--gs-space-7);
-}
-.gs-section--py-xl {
-  padding-top: var(--gs-space-8);
-  padding-bottom: var(--gs-space-8);
+  padding-top: 1.75rem;
+  padding-bottom: 1.75rem;
 }
 
-@media (max-width: 575.98px) {
+.gs-section--py-md {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+.gs-section--py-lg {
+  padding-top: 4.5rem;
+  padding-bottom: 4.5rem;
+}
+
+.gs-section--py-xl {
+  padding-top: 6.5rem;
+  padding-bottom: 6.5rem;
+}
+
+@media (max-width: 767.98px) {
   .gs-section--py-lg {
-    padding-top: var(--gs-space-6);
-    padding-bottom: var(--gs-space-6);
+    padding-top: 3rem;
+    padding-bottom: 3rem;
   }
   .gs-section--py-xl {
-    padding-top: var(--gs-space-7);
-    padding-bottom: var(--gs-space-7);
+    padding-top: 4.25rem;
+    padding-bottom: 4.25rem;
   }
 }

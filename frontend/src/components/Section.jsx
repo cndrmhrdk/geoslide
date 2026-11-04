@@ -1,7 +1,7 @@
 import './Section.css';
 
 /**
- * Section — Container section halaman standar
+ * Section — Container section halaman standar GeoSlide
  *
  * Props:
  *   children    {ReactNode} — Konten section
@@ -14,7 +14,7 @@ import './Section.css';
  *   id          {string}    — ID HTML untuk anchor link (opsional)
  *
  * Contoh penggunaan:
- *   <Section bg="subtle" py="lg" id="daftar-kejadian">
+ *   <Section bg="white" py="lg" id="daftar-kejadian">
  *     <h2>Daftar Kejadian</h2>
  *     ...
  *   </Section>
@@ -28,11 +28,11 @@ export default function Section({
   id,
 }) {
   const bgClass = {
-    white:  '',
+    white:  'gs-section--bg-white',
     subtle: 'gs-section--bg-subtle',
     muted:  'gs-section--bg-muted',
     dark:   'gs-section--bg-dark',
-  }[bg] ?? '';
+  }[bg] ?? 'gs-section--bg-white';
 
   const pyClass = {
     sm: 'gs-section--py-sm',

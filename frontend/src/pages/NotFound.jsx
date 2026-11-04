@@ -8,31 +8,33 @@ import Section from '../components/Section';
 export default function NotFound() {
   return (
     <Section bg="subtle" py="xl">
-      <div className="text-center py-5">
-        <div
-          style={{
-            fontSize: '5rem',
-            color: 'var(--gs-green-light)',
-            lineHeight: 1,
-            marginBottom: '1.5rem',
-          }}
-          aria-hidden="true"
-        >
-          <i className="bi bi-exclamation-circle"></i>
+      <div className="container-tight py-4">
+        <div className="card-solid text-center py-5 px-4">
+          <div
+            style={{
+              fontSize: '4.5rem',
+              color: 'var(--primary)',
+              lineHeight: 1,
+              marginBottom: '1.25rem',
+            }}
+            aria-hidden="true"
+          >
+            <i className="bi bi-compass"></i>
+          </div>
+          <span className="badge-pill badge-primary-soft mb-3">Kesalahan 404</span>
+          <h1 className="mb-2" style={{ fontSize: '2.5rem', fontWeight: 600 }}>
+            Halaman Tidak Ditemukan
+          </h1>
+          <p className="gs-text-muted mb-4 mx-auto" style={{ maxWidth: '440px' }}>
+            Rute atau halaman yang Anda cari mungkin telah dipindahkan, diubah namanya, atau tidak tersedia.
+          </p>
+          <div>
+            <Link to="/" className="btn-pill btn-pill-primary">
+              <i className="bi bi-arrow-left me-1"></i>
+              Kembali ke Beranda
+            </Link>
+          </div>
         </div>
-        <h1 style={{ fontSize: '4rem', fontWeight: 800, color: 'var(--gs-green-dark)' }}>
-          404
-        </h1>
-        <h2 className="mb-3" style={{ color: 'var(--gs-gray-700)' }}>
-          Halaman Tidak Ditemukan
-        </h2>
-        <p className="gs-text-muted mb-4">
-          Halaman yang Anda cari tidak ada atau telah dipindahkan.
-        </p>
-        <Link to="/" className="btn btn-gs-primary">
-          <i className="bi bi-house me-2"></i>
-          Kembali ke Beranda
-        </Link>
       </div>
     </Section>
   );
