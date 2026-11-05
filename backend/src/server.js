@@ -3,11 +3,13 @@ const cors = require("cors");
 require("dotenv").config();
 
 const db = require("./config/database");
+const dataBencanaRoutes = require("./modules/data-bencana");
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use("/api/data-bencana", dataBencanaRoutes);
 
 // Halaman utama API
 app.get("/", (req, res) => {

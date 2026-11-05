@@ -1,111 +1,165 @@
+import { useEffect, useState } from 'react';
+import { CircleMarker, MapContainer, Popup, TileLayer } from 'react-leaflet';
 import PageHeader from '../components/PageHeader';
 import Section from '../components/Section';
+import { getKejadian } from '../services/dataBencana';
+import 'leaflet/dist/leaflet.css';
+import './PetaBencana.css';
 
-/**
- * Halaman: Peta Bencana
- * Halaman data geospasial: latar bersih, kartu solid kontras tinggi,
- * sangat mudah dibaca, dengan animasi minimal (hover & transisi halus).
- */
+const initialFilters = { year: 'all', search: '' };
+
+function formatDate(value) {
+  const date = String(value).slice(0, 10);
+  return new Intl.DateTimeFormat('id-ID', { dateStyle: 'long', timeZone: 'UTC' }).format(
+    new Date(`${date}T00:00:00Z`),
+  );
+}
+
 export default function PetaBencana() {
+  const [filters, setFilters] = useState(initialFilters);
+  const [appliedFilters, setAppliedFilters] = useState(initialFilters);
+  const [result, setResult] = useState({ data: [], count: 0, hasMore: false, availableYears: [] });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [reloadKey, setReloadKey] = useState(0);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    getKejadian(appliedFilters, controller.signal)
+      .then(setResult)
+      .catch((requestError) => {
+        if (requestError.name !== 'AbortError') setError(requestError.message);
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) setLoading(false);
+      });
+
+    return () => controller.abort();
+  }, [appliedFilters, reloadKey]);
+
+  const availableYears = [...new Set(result.availableYears)].sort((a, b) => b - a);
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    setLoading(true);
+    setError('');
+    setAppliedFilters({ ...filters, search: filters.search.trim() });
+  }
+
   return (
     <>
       <PageHeader
-        badge="Sistem Informasi Spasial"
-        title="Peta Sebaran Bencana Tanah Longsor"
-        subtitle="Visualisasi persebaran kejadian dan zona kerentanan tanah longsor di seluruh wilayah Indonesia."
+        badge="Data kejadian terverifikasi"
+        title="Peta Kejadian Tanah Longsor"
+        subtitle="Jelajahi titik kejadian yang tercatat. Lokasi pada peta mewakili kabupaten/kota, bukan koordinat longsor yang presisi."
         icon="bi-map"
       />
 
       <Section bg="white" py="md">
-        {/* Bilah Filter & Pencarian Bersih */}
-        <div className="card-solid p-3 mb-4">
-          <div className="row g-3 align-items-center">
-            <div className="col-12 col-md-5">
-              <div className="input-group">
-                <span className="input-group-text bg-transparent border-end-0">
-                  <i className="bi bi-search text-muted"></i>
-                </span>
-                <input
-                  type="text"
-                  className="form-control border-start-0 ps-0"
-                  placeholder="Cari provinsi, kota, atau kecamatan..."
-                  aria-label="Cari wilayah"
-                />
-              </div>
+        <form className="card-solid p-3 mb-4" onSubmit={handleSubmit}>
+          <div className="row g-3 align-items-end">
+            <div className="col-12 col-md-6">
+              <label className="form-label" htmlFor="event-search">Cari kejadian atau wilayah</label>
+              <input
+                id="event-search"
+                className="form-control"
+                type="search"
+                value={filters.search}
+                onChange={(event) => setFilters({ ...filters, search: event.target.value })}
+                placeholder="Nama kejadian, provinsi, kabupaten..."
+              />
             </div>
-            <div className="col-6 col-md-3">
-              <select className="form-select" aria-label="Tahun kejadian">
-                <option value="2026">Tahun 2026 (Semua)</option>
-                <option value="2025">Tahun 2025</option>
-                <option value="2024">Tahun 2024</option>
+            <div className="col-12 col-sm-6 col-md-3">
+              <label className="form-label" htmlFor="event-year">Tahun kejadian</label>
+              <select
+                id="event-year"
+                className="form-select"
+                value={filters.year}
+                onChange={(event) => setFilters({ ...filters, year: event.target.value })}
+              >
+                <option value="all">Semua tahun</option>
+                {availableYears.map((year) => <option key={year} value={year}>{year}</option>)}
+                {!availableYears.includes(filters.year) && filters.year !== 'all' && (
+                  <option value={filters.year}>{filters.year}</option>
+                )}
               </select>
             </div>
-            <div className="col-6 col-md-4 d-flex justify-content-md-end gap-2">
-              <button className="btn-pill btn-pill-surface btn-pill-sm" type="button">
-                <i className="bi bi-funnel me-1"></i> Filter Zona
+            <div className="col-12 col-sm-6 col-md-3 d-flex gap-2">
+              <button className="btn-pill btn-pill-primary btn-pill-sm" type="submit">
+                Terapkan
               </button>
-              <button className="btn-pill btn-pill-primary btn-pill-sm" type="button">
-                <i className="bi bi-arrow-clockwise me-1"></i> Perbarui
+              <button
+                className="btn-pill btn-pill-surface btn-pill-sm"
+                type="button"
+                onClick={() => {
+                  setLoading(true);
+                  setError('');
+                  setReloadKey((key) => key + 1);
+                }}
+                disabled={loading}
+              >
+                Perbarui
               </button>
             </div>
           </div>
-        </div>
+        </form>
 
-        {/* Kontainer Area Peta (Bersih & Mudah Dibaca) */}
         <div className="card-solid p-0 overflow-hidden mb-4">
-          {/* Header Info Peta */}
-          <div className="p-3 border-bottom d-flex flex-wrap align-items-center justify-content-between gap-2 bg-warm">
-            <div className="d-flex align-items-center gap-2">
-              <span className="badge-pill badge-primary-soft">
-                <i className="bi bi-geo-alt me-1"></i> Peta Interaktif
-              </span>
-              <span className="gs-text-muted" style={{ fontSize: '0.85rem' }}>
-                Koordinat EPSG:4326 &bull; WGS 84
-              </span>
-            </div>
-            {/* Legenda Tingkat Kerentanan */}
-            <div className="d-flex align-items-center gap-3" style={{ fontSize: '0.8rem' }}>
-              <span className="d-flex align-items-center gap-1">
-                <span style={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: '#c0392b' }}></span>
-                Tinggi
-              </span>
-              <span className="d-flex align-items-center gap-1">
-                <span style={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: '#d97706' }}></span>
-                Sedang
-              </span>
-              <span className="d-flex align-items-center gap-1">
-                <span style={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: '#1F4D3A' }}></span>
-                Rendah
-              </span>
-            </div>
+          <div className="p-3 d-flex flex-wrap justify-content-between align-items-center gap-2">
+            <h2 className="h5 mb-0">Sebaran titik kejadian</h2>
+            <p className="mb-0 gs-text-muted" aria-live="polite">
+              {loading ? 'Memuat data...' : `${result.count} titik${result.hasMore ? ' (dibatasi)' : ''}`}
+            </p>
           </div>
 
-          {/* Area Kanvas Peta / Placeholder Bersih */}
-          <div
-            className="d-flex flex-column align-items-center justify-content-center text-center p-5"
-            style={{
-              minHeight: '440px',
-              backgroundColor: '#FAF8F5',
-            }}
-          >
-            <div
-              className="d-inline-flex p-3 rounded-circle mb-3"
-              style={{ backgroundColor: 'var(--primary-soft)', color: 'var(--primary)' }}
-            >
-              <i className="bi bi-map fs-2"></i>
+          {error ? (
+            <div className="alert alert-danger m-3" role="alert">
+              {error} Pastikan backend dan koneksi database aktif, lalu coba perbarui.
             </div>
-            <h3 className="mb-2" style={{ fontSize: '1.25rem', fontWeight: 600 }}>
-              Area Kanvas Peta Interaktif
-            </h3>
-            <p className="gs-text-muted mb-3 mx-auto" style={{ maxWidth: '460px', fontSize: '0.9rem' }}>
-              Modul Leaflet akan diintegrasikan di area ini oleh tim pengembang data spasial.
-              Kontainer sudah siap dengan rasio bersih dan kontras tinggi.
+          ) : (
+            <MapContainer
+              className="disaster-map"
+              center={[-2.5, 118]}
+              zoom={5}
+              scrollWheelZoom
+              aria-label="Peta kejadian tanah longsor Indonesia"
+            >
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              {result.data.map((event) => (
+                <CircleMarker
+                  key={event.id}
+                  center={[event.latitude, event.longitude]}
+                  radius={8}
+                  pathOptions={{ color: '#ffffff', weight: 2, fillColor: '#b33b32', fillOpacity: 0.9 }}
+                >
+                  <Popup>
+                    <div className="disaster-map__popup">
+                      <strong>{event.title}</strong>
+                      <span>{formatDate(event.event_date)}</span>
+                      <span>{[event.regency, event.province].filter(Boolean).join(', ')}</span>
+                      <span>Lokasi perkiraan tingkat kabupaten/kota</span>
+                      <span>Korban meninggal: {Number(event.deaths).toLocaleString('id-ID')}</span>
+                    </div>
+                  </Popup>
+                </CircleMarker>
+              ))}
+            </MapContainer>
+          )}
+
+          {!loading && !error && result.count === 0 && (
+            <p className="p-3 mb-0 gs-text-muted">
+              Tidak ada kejadian terverifikasi dengan koordinat valid untuk filter ini.
             </p>
-            <span className="badge-pill badge-outline">
-              Leaflet / OpenStreetMap Ready
-            </span>
-          </div>
+          )}
         </div>
+
+        <p className="small gs-text-muted mb-0">
+          Peta ini menampilkan kejadian terverifikasi yang memiliki koordinat. Data zona rawan berupa area/poligon belum terhubung; titik kejadian tidak menunjukkan batas zona risiko.
+        </p>
       </Section>
     </>
   );

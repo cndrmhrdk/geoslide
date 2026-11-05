@@ -1,0 +1,25 @@
+.disaster-map {
+  height: min(68vh, 620px);
+  min-height: 390px;
+  width: 100%;
+  background: #e8e7e2;
+  z-index: 0;
+}
+
+.disaster-map__popup {
+  display: grid;
+  gap: 0.3rem;
+  max-width: 240px;
+}
+
+.disaster-map__popup span:last-child {
+  color: #6e6e69;
+  font-size: 0.8rem;
+}
+
+@media (max-width: 575.98px) {
+  .disaster-map {
+    min-height: 340px;
+    height: 58vh;
+  }
+}
