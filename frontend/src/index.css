@@ -26,6 +26,16 @@
   --glass-light-bg: rgba(255, 255, 255, 0.75);
   --glass-light-border: rgba(255, 255, 255, 0.85);
 
+  /* Warna Indikator Dampak Bencana */
+  --coral: #E05A47;                   /* Koral untuk dampak tinggi */
+  --coral-soft: #FDEBE8;              /* Koral muda untuk latar badge */
+  --impact-low: var(--gs-green-light); /* Hijau muda (#5ba32b) */
+  --impact-low-soft: var(--primary-soft);
+  --impact-medium: var(--gold);        /* Kuning emas (#D9A93A) */
+  --impact-medium-soft: rgba(217, 169, 58, 0.18);
+  --impact-high: var(--coral);         /* Koral (#E05A47) */
+  --impact-high-soft: var(--coral-soft);
+
   /* Kompatibilitas Token Lama (--gs-*) */
   --gs-green-dark: var(--forest);
   --gs-green: var(--primary);

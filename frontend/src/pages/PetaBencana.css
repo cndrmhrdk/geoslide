@@ -1,25 +1,838 @@
-.disaster-map {
-  height: min(68vh, 620px);
-  min-height: 390px;
-  width: 100%;
-  background: #e8e7e2;
+/* ============================================================
+   PetaBencana.css — Peta interaktif: panel kaca melayang, marker
+   berdenyut, popup dan kontrol Leaflet yang di-restyle.
+   Skala warna dampak (rendah/sedang/tinggi) adalah pengecualian
+   khusus data dan hanya dipakai di halaman data.
+   ============================================================ */
+
+.gs-map-shell {
+  --lv-low: var(--impact-low);
+  --lv-mid: var(--impact-medium);
+  --lv-high: var(--impact-high);
+  --gs-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  position: relative;
+  isolation: isolate; /* mengurung z-index Leaflet agar tidak menimpa navbar */
   z-index: 0;
+  height: min(78vh, 760px);
+  min-height: 560px;
+  border-radius: 28px;
+  overflow: hidden;
+  border: 1px solid var(--border, rgba(15, 15, 15, 0.08));
+  background: #e9e8e3;
+  box-shadow: 0 18px 50px rgba(15, 15, 15, 0.08);
 }
 
-.disaster-map__popup {
+.gs-map-shell .gs-map-tiles {
+  filter: grayscale(0.85) contrast(0.92) brightness(1.06);
+}
+
+.gs-map-stage {
+  position: absolute;
+  inset: 0;
+}
+
+.gs-map-stage .leaflet-container,
+.gs-map {
+  width: 100%;
+  height: 100%;
+  font: inherit;
+  background: #e9e8e3;
+}
+
+/* ---------- Panel kaca ---------- */
+.gs-glass {
+  background: var(--glass-light-bg, rgba(255, 255, 255, 0.75));
+  -webkit-backdrop-filter: blur(18px) saturate(1.25);
+  backdrop-filter: blur(18px) saturate(1.25);
+  border: 1px solid var(--glass-light-border, rgba(255, 255, 255, 0.85));
+  border-radius: 22px;
+  box-shadow: 0 12px 40px rgba(15, 15, 15, 0.1);
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .gs-glass {
+    background: rgba(255, 255, 255, 0.95);
+  }
+}
+
+.gs-reveal {
+  animation: gsReveal 0.5s var(--gs-ease) backwards;
+  animation-delay: calc(var(--i, 0) * 80ms);
+}
+
+/* ---------- Panel filter ---------- */
+.gs-map-filter {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 1100;
+  width: 380px;
+  max-width: calc(100% - 32px);
+  padding: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.gs-map-search {
+  position: relative;
+}
+
+.gs-map-search i {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted, #6e6e69);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.gs-map-filter .form-control,
+.gs-map-filter .form-select {
+  min-height: 42px;
+  border-radius: 999px;
+  border: 1px solid rgba(15, 15, 15, 0.08);
+  background-color: rgba(255, 255, 255, 0.88);
+  font-size: 0.9rem;
+  box-shadow: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.gs-map-search .form-control {
+  padding-left: 2.5rem;
+}
+
+.gs-map-filter .form-control:focus,
+.gs-map-filter .form-select:focus {
+  border-color: var(--primary, #3f7a1a);
+  box-shadow: 0 0 0 3px rgba(63, 122, 26, 0.15);
+}
+
+.gs-map-filter__row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.gs-map-filter__row .form-select {
+  flex: 1;
+  min-width: 0;
+}
+
+.gs-map-filter .btn-pill {
+  min-height: 42px;
+  padding: 0 1.25rem;
+}
+
+.gs-map-iconbtn {
+  width: 40px;
+  height: 40px;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid rgba(15, 15, 15, 0.08);
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--ink, #0f0f0f);
+  transition: transform 0.25s var(--gs-ease), background-color 0.2s ease;
+}
+
+.gs-map-iconbtn:hover:not(:disabled) {
+  background: #fff;
+  transform: scale(1.06);
+}
+
+.gs-map-iconbtn:focus-visible {
+  outline: 2px solid var(--primary, #3f7a1a);
+  outline-offset: 2px;
+}
+
+.gs-map-iconbtn.is-spinning i {
+  animation: gsSpin 0.9s linear infinite;
+}
+
+/* ---------- Panel daftar kejadian ---------- */
+.gs-map-list {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  bottom: 40px; /* menyisakan ruang untuk atribusi peta */
+  z-index: 1100;
+  width: 340px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: transform 0.5s var(--gs-ease), opacity 0.35s ease;
+}
+
+.gs-map-list__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.95rem 1rem 0.6rem;
+}
+
+.gs-map-list__title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--ink, #0f0f0f);
+}
+
+.gs-map-list__count {
+  margin: 0.1rem 0 0;
+  font-size: 0.78rem;
+  color: var(--muted, #6e6e69);
+}
+
+.gs-map-stats {
   display: grid;
-  gap: 0.3rem;
-  max-width: 240px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  padding: 0 1rem 0.8rem;
 }
 
-.disaster-map__popup span:last-child {
-  color: #6e6e69;
+.gs-map-stat {
+  background: rgba(255, 255, 255, 0.78);
+  border-radius: 16px;
+  padding: 0.55rem 0.7rem;
+}
+
+.gs-map-stat__value {
+  display: block;
+  font-size: 1.35rem;
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink, #0f0f0f);
+}
+
+.gs-map-stat__label {
+  font-size: 0.7rem;
+  color: var(--muted, #6e6e69);
+}
+
+.gs-map-list__scroll {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  margin: 0;
+  padding: 0.25rem 0.5rem 0.75rem;
+  list-style: none;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(15, 15, 15, 0.2) transparent;
+}
+
+.gs-map-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.6rem 0.7rem;
+  border: 0;
+  border-radius: 16px;
+  background: transparent;
+  text-align: left;
+  transition: background-color 0.2s ease, box-shadow 0.25s ease;
+  animation: gsReveal 0.45s var(--gs-ease) backwards;
+  animation-delay: calc(var(--i, 0) * 30ms);
+}
+
+.gs-map-item:hover {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.gs-map-item:focus-visible {
+  outline: 2px solid var(--primary, #3f7a1a);
+  outline-offset: 1px;
+}
+
+.gs-map-item.is-active {
+  background: #fff;
+  box-shadow: 0 6px 18px rgba(15, 15, 15, 0.08);
+}
+
+.gs-map-item__dot {
+  width: 10px;
+  height: 10px;
+  flex: none;
+  border-radius: 50%;
+}
+
+.gs-map-item__dot--low,
+.gs-map-legend__dot--low {
+  background: var(--lv-low);
+}
+.gs-map-item__dot--mid,
+.gs-map-legend__dot--mid {
+  background: var(--lv-mid);
+}
+.gs-map-item__dot--high,
+.gs-map-legend__dot--high {
+  background: var(--lv-high);
+}
+
+.gs-map-item__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.gs-map-item__name {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--ink, #0f0f0f);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gs-map-item__meta {
+  font-size: 0.75rem;
+  color: var(--muted, #6e6e69);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gs-map-item__badge {
+  flex: none;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+.gs-map-item__badge--mid {
+  background: rgba(226, 169, 59, 0.2);
+  color: #7a5410;
+}
+
+.gs-map-item__badge--high {
+  background: rgba(220, 90, 60, 0.16);
+  color: #8f2f18;
+}
+
+.gs-skeleton-row {
+  height: 52px;
+  margin: 0.25rem 0.2rem;
+  border-radius: 16px;
+  background: linear-gradient(
+    90deg,
+    rgba(15, 15, 15, 0.05) 25%,
+    rgba(15, 15, 15, 0.1) 50%,
+    rgba(15, 15, 15, 0.05) 75%
+  );
+  background-size: 200% 100%;
+  animation: gsShimmer 1.4s linear infinite;
+}
+
+/* Tombol buka daftar (muncul saat daftar disembunyikan, hanya desktop) */
+.gs-map-toggle {
+  display: none;
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 1100;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.05rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--ink, #0f0f0f);
+  animation: gsReveal 0.4s var(--gs-ease) backwards;
+  transition: transform 0.25s var(--gs-ease);
+}
+
+.gs-map-toggle:hover {
+  transform: translateY(-2px);
+}
+
+/* ---------- Legenda ---------- */
+.gs-map-legend {
+  position: absolute;
+  left: 64px;
+  bottom: 12px;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.9rem;
+  padding: 0.55rem 1rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  color: var(--ink, #0f0f0f);
+}
+
+.gs-map-legend__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.gs-map-legend__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.gs-map-legend__hint {
+  color: var(--muted, #6e6e69);
+}
+
+/* ---------- Pesan kosong / galat, dan bilah pemuatan ---------- */
+.gs-map-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 1200;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.gs-map-loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 40%;
+  background: linear-gradient(90deg, transparent, var(--primary, #3f7a1a), transparent);
+  animation: gsBar 1.1s ease-in-out infinite;
+}
+
+.gs-map-message-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 1100;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 16px 16px 72px;
+  pointer-events: none;
+}
+
+.gs-map-message-wrap--center {
+  align-items: center;
+  padding: 16px;
+}
+
+.gs-map-message {
+  pointer-events: auto;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1.2rem;
+  text-align: center;
+  font-size: 0.88rem;
+  color: var(--ink, #0f0f0f);
+  animation: gsReveal 0.4s var(--gs-ease) backwards;
+}
+
+/* ---------- Marker ---------- */
+.gs-map-shell .gs-marker {
+  background: transparent;
+  border: 0;
+}
+
+.gs-dot {
+  --c: var(--lv-mid);
+  position: relative;
+  display: block;
+  box-sizing: border-box;
+  width: var(--s);
+  height: var(--s);
+  border-radius: 50%;
+  background: var(--c);
+  border: 2px solid #fff;
+  box-shadow: 0 3px 10px rgba(15, 15, 15, 0.28);
+  cursor: pointer;
+  transition: transform 0.25s var(--gs-ease), box-shadow 0.25s ease;
+  animation: gsDotIn 0.5s var(--gs-ease) backwards;
+  animation-delay: var(--d, 0ms);
+}
+
+.gs-dot--low {
+  --c: var(--lv-low);
+}
+.gs-dot--mid {
+  --c: var(--lv-mid);
+}
+.gs-dot--high {
+  --c: var(--lv-high);
+}
+
+.gs-dot--high::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  background: var(--c);
+  opacity: 0.45;
+  pointer-events: none;
+  animation: gsPulse 2.2s ease-out infinite;
+}
+
+.gs-map-shell .gs-marker:focus {
+  outline: none;
+}
+
+.gs-map-shell .gs-marker:focus-visible .gs-dot {
+  box-shadow: 0 0 0 4px rgba(63, 122, 26, 0.35), 0 6px 16px rgba(15, 15, 15, 0.32);
+}
+
+.gs-marker:hover .gs-dot {
+  transform: scale(1.22);
+  box-shadow: 0 6px 16px rgba(15, 15, 15, 0.32);
+}
+
+.gs-marker.is-selected .gs-dot {
+  transform: scale(1.3);
+  box-shadow: 0 0 0 5px rgba(15, 15, 15, 0.12), 0 6px 16px rgba(15, 15, 15, 0.32);
+}
+
+/* ---------- Tooltip kapsul gelap ---------- */
+.gs-map-shell .leaflet-tooltip.gs-tooltip {
+  padding: 0.3rem 0.75rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--ink, #0f0f0f);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 500;
+  box-shadow: 0 8px 20px rgba(15, 15, 15, 0.25);
+}
+
+.gs-map-shell .leaflet-tooltip.gs-tooltip::before {
+  display: none;
+}
+
+/* ---------- Popup ---------- */
+.gs-map-shell .leaflet-popup-content-wrapper {
+  padding: 0;
+  border-radius: 22px;
+  background: var(--surface, #fff);
+  box-shadow: 0 18px 44px rgba(15, 15, 15, 0.2);
+  animation: gsPopIn 0.3s var(--gs-ease);
+}
+
+.gs-map-shell .leaflet-popup-content {
+  margin: 16px 18px;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.gs-map-shell .leaflet-popup-tip {
+  box-shadow: none;
+}
+
+.gs-map-shell a.leaflet-popup-close-button {
+  top: 10px;
+  right: 10px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(15, 15, 15, 0.05);
+  color: var(--ink, #0f0f0f);
+  font-size: 18px;
+  line-height: 25px;
+  transition: background-color 0.2s ease;
+}
+
+.gs-map-shell a.leaflet-popup-close-button:hover {
+  background: rgba(15, 15, 15, 0.1);
+  color: var(--ink, #0f0f0f);
+}
+
+.gs-popup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.gs-popup__head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding-right: 1.6rem;
+}
+
+.gs-popup__badge {
+  padding: 0.18rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.gs-popup__badge--low {
+  background: rgba(111, 176, 74, 0.2);
+  color: #35601f;
+}
+.gs-popup__badge--mid {
+  background: rgba(226, 169, 59, 0.2);
+  color: #7a5410;
+}
+.gs-popup__badge--high {
+  background: rgba(220, 90, 60, 0.16);
+  color: #8f2f18;
+}
+
+.gs-popup__date {
+  font-size: 0.75rem;
+  color: var(--muted, #6e6e69);
+}
+
+.gs-popup__title {
+  margin-top: 0.1rem;
+  font-size: 1.05rem;
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--ink, #0f0f0f);
+}
+
+.gs-popup__loc {
+  font-size: 0.82rem;
+  color: var(--muted, #6e6e69);
+}
+
+.gs-popup__stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.4rem;
+  margin: 0.5rem 0 0.2rem;
+}
+
+.gs-popup__stat {
+  padding: 0.45rem 0.2rem;
+  border-radius: 12px;
+  background: var(--bg, #f2f1ee);
+  text-align: center;
+}
+
+.gs-popup__stat strong {
+  display: block;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.1;
+  color: var(--ink, #0f0f0f);
+}
+
+.gs-popup__stat span {
+  font-size: 0.62rem;
+  color: var(--muted, #6e6e69);
+}
+
+.gs-popup__row {
   font-size: 0.8rem;
 }
 
-@media (max-width: 575.98px) {
-  .disaster-map {
-    min-height: 340px;
+.gs-popup__desc {
+  margin-top: 0.15rem;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.gs-popup__note {
+  font-size: 0.7rem;
+  color: var(--muted, #6e6e69);
+}
+
+/* ---------- Kontrol Leaflet ---------- */
+.gs-map-shell .leaflet-bar {
+  border: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(15, 15, 15, 0.14);
+}
+
+.gs-map-shell .leaflet-bar a {
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  font-size: 1.25rem;
+  color: var(--ink, #0f0f0f);
+  background: rgba(255, 255, 255, 0.92);
+  border-bottom: 1px solid rgba(15, 15, 15, 0.08);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.gs-map-shell .leaflet-bar a:last-child {
+  border-bottom: 0;
+}
+
+.gs-map-shell .leaflet-bar a:hover {
+  background: #fff;
+  color: var(--primary, #3f7a1a);
+}
+
+.gs-map-shell .leaflet-control-attribution {
+  padding: 2px 8px;
+  border-radius: 12px 0 0 0;
+  background: rgba(255, 255, 255, 0.78);
+  font-size: 10.5px;
+}
+
+/* ---------- Keyframes ---------- */
+@keyframes gsReveal {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes gsDotIn {
+  from {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes gsPulse {
+  from {
+    transform: scale(1);
+    opacity: 0.45;
+  }
+  to {
+    transform: scale(2.3);
+    opacity: 0;
+  }
+}
+
+@keyframes gsPopIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes gsShimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes gsBar {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(250%);
+  }
+}
+
+@keyframes gsSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- Desktop: daftar bisa disembunyikan ---------- */
+@media (min-width: 992px) {
+  .gs-map-list--closed {
+    transform: translateX(calc(100% + 24px));
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .gs-map-toggle {
+    display: inline-flex;
+  }
+}
+
+/* ---------- Mobile: panel ditumpuk di luar peta ---------- */
+@media (max-width: 991.98px) {
+  .gs-map-shell {
+    height: auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    border: 0;
+    border-radius: 0;
+    overflow: visible;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .gs-map-stage {
+    position: relative;
+    inset: auto;
+    order: 2;
     height: 58vh;
+    min-height: 360px;
+    border: 1px solid var(--border, rgba(15, 15, 15, 0.08));
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 12px 32px rgba(15, 15, 15, 0.08);
+  }
+
+  .gs-map-filter {
+    position: static;
+    order: 1;
+    width: 100%;
+    max-width: none;
+  }
+
+  .gs-map-legend {
+    position: static;
+    order: 3;
+    justify-content: center;
+    border-radius: 18px;
+  }
+
+  .gs-map-list {
+    position: static;
+    order: 4;
+    width: 100%;
+    max-height: 420px;
+  }
+
+  .gs-map-list__hide {
+    display: none;
+  }
+
+  .gs-map-message-wrap {
+    padding-bottom: 16px;
+  }
+}
+
+/* ---------- Hormati preferensi kurangi gerak ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .gs-map-shell *,
+  .gs-map-shell *::before,
+  .gs-map-shell *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
   }
 }
