@@ -10,9 +10,17 @@ import './PetaBencana.css';
 
 const INITIAL_FILTERS = { year: 'all', search: '' };
 
+// Zoom otomatis: saat titik diklik atau hasil pencarian hanya satu (FOCUS_ZOOM),
+// dan batas zoom maksimum saat beberapa hasil dipas ke layar (FIT_MAX_ZOOM).
+const FOCUS_ZOOM = 10;
+const FIT_MAX_ZOOM = 10;
+
 const TILE_URL = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-const TILE_ATTRIBUTION =
-  '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+const TILE_ATTRIBUTION = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+const INDONESIA_BOUNDS = [
+  [-13, 93],
+  [8, 143],
+];
 
 const LEVELS = {
   low: { label: 'Rendah' },
@@ -66,14 +74,42 @@ function MapController({ focus, fitFor, points, markerRefs }) {
   const map = useMap();
 
   useEffect(() => {
-    if (!fitFor || points.length === 0) return;
+    if (!fitFor || points.length === 0) return undefined;
+    const reduceMotion = prefersReducedMotion();
+
+    // Satu hasil (mis. pencarian spesifik): zoom dekat ke titik itu lalu buka popup-nya.
+    if (points.length === 1) {
+      const only = points[0];
+      const target = [only.latitude, only.longitude];
+      const openPopup = () => {
+        const marker = markerRefs.current.get(only.id);
+        if (marker?.getElement()) marker.openPopup();
+      };
+
+      if (map.getCenter().distanceTo(target) < 50 && map.getZoom() >= FOCUS_ZOOM) {
+        openPopup();
+        return undefined;
+      }
+
+      map.once('moveend', openPopup);
+      if (reduceMotion) {
+        map.setView(target, FOCUS_ZOOM, { animate: false });
+        setTimeout(openPopup, 0);
+      } else {
+        map.flyTo(target, FOCUS_ZOOM, { duration: 1.2 });
+      }
+      return () => map.off('moveend', openPopup);
+    }
+
+    // Beberapa hasil: pas ke semua titik.
     const bounds = L.latLngBounds(points.map((point) => [point.latitude, point.longitude]));
-    const options = { padding: [70, 70], maxZoom: 9 };
-    if (prefersReducedMotion()) {
+    const options = { padding: [70, 70], maxZoom: FIT_MAX_ZOOM };
+    if (reduceMotion) {
       map.fitBounds(bounds, { ...options, animate: false });
     } else {
       map.flyToBounds(bounds, { ...options, duration: 1.1 });
     }
+    return undefined;
     // Hanya dijalankan saat filter yang diterapkan berubah.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fitFor, map]);
@@ -82,7 +118,7 @@ function MapController({ focus, fitFor, points, markerRefs }) {
     if (!focus) return undefined;
     const { event } = focus;
     const target = [event.latitude, event.longitude];
-    const zoom = Math.max(map.getZoom(), 9);
+    const zoom = Math.max(map.getZoom(), FOCUS_ZOOM);
     const openPopup = () => markerRefs.current.get(event.id)?.openPopup();
 
     const alreadyThere = map.getCenter().distanceTo(target) < 50 && map.getZoom() >= zoom;
@@ -237,6 +273,11 @@ export default function PetaBencana() {
     });
   }, [selectedId, markers]);
 
+  // Hanya satu hasil: tandai di daftar (peta zoom otomatis lewat MapController).
+  useEffect(() => {
+    if (markers.length === 1) setSelectedId(markers[0].event.id);
+  }, [markers]);
+
   // Menggulung daftar ke item terpilih.
   useEffect(() => {
     if (selectedId == null) return;
@@ -271,10 +312,10 @@ export default function PetaBencana() {
     setReloadKey((key) => key + 1);
   }
 
-  function handleSelect(event) {
+  function handleSelect(event, { scroll = true } = {}) {
     setSelectedId(event.id);
     setFocus({ event });
-    if (window.matchMedia('(max-width: 991.98px)').matches) {
+    if (scroll && window.matchMedia('(max-width: 991.98px)').matches) {
       stageRef.current?.scrollIntoView({
         behavior: prefersReducedMotion() ? 'auto' : 'smooth',
         block: 'center',
@@ -305,7 +346,9 @@ export default function PetaBencana() {
               className="gs-map"
               center={[-2.5, 118]}
               zoom={5}
-              minZoom={4}
+              minZoom={1}
+              maxBounds={INDONESIA_BOUNDS}
+              maxBoundsViscosity={1}
               zoomControl={false}
               scrollWheelZoom
             >
@@ -328,10 +371,10 @@ export default function PetaBencana() {
                     else markerRefs.current.delete(event.id);
                   }}
                   eventHandlers={{
-                    click: () => setSelectedId(event.id),
+                    click: () => handleSelect(event, { scroll: false }),
+                    popupopen: (leafletEvent) => leafletEvent.target.closeTooltip(),
                     popupclose: () =>
                       setSelectedId((current) => (current === event.id ? null : current)),
-                    popupopen: (leafletEvent) => leafletEvent.target.closeTooltip(),
                   }}
                 >
                   <Tooltip direction="top" offset={[0, -impact.size / 2]} className="gs-tooltip">

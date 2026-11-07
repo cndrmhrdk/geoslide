@@ -1,56 +1,523 @@
-.stats-metric {
+/* ===== Halaman Statistik Bencana =====
+   Semua kelas diawali `st-` agar tidak bentrok dengan halaman lain.
+   Gaya: papan dashboard berkabut, kartu bulat besar, angka besar + pill. */
+
+/* ---- Papan ---- */
+.st-board {
+  padding: clamp(1rem, 2.6vw, 2rem);
+  border: 1px solid var(--border);
+  border-radius: 32px;
+  background:
+    radial-gradient(110% 80% at 0% 0%, color-mix(in srgb, var(--primary) 13%, transparent), transparent 62%),
+    radial-gradient(90% 70% at 100% 100%, color-mix(in srgb, var(--gold, #c9a24a) 11%, transparent), transparent 58%),
+    var(--surface, #fff);
+}
+
+.st-board__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem 2rem;
+  margin-bottom: clamp(1.25rem, 3vw, 2rem);
+}
+.st-board__title {
+  margin: 0 0 0.25rem;
   color: var(--ink);
-  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-size: clamp(1.6rem, 3.4vw, 2.3rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.st-year .form-select {
+  min-width: 11rem;
+  border-radius: 999px;
+  background-color: color-mix(in srgb, var(--surface, #fff) 80%, transparent);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* ---- KPI di kanan atas ---- */
+.st-kpis {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem clamp(1.25rem, 3vw, 2.5rem);
+  transition: opacity 0.25s ease;
+}
+.st-kpi {
+  animation: stReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+.st-kpi:nth-child(2) { animation-delay: 80ms; }
+.st-kpi:nth-child(3) { animation-delay: 160ms; }
+.st-kpi__label {
+  margin: 0 0 0.25rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+.st-kpi__value {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
   font-weight: 700;
   line-height: 1.1;
+  letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
 }
-
-.stats-month-chart {
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: clamp(0.25rem, 1.2vw, 0.75rem);
-  align-items: end;
-  min-height: 210px;
-  padding-top: 1rem;
+.st-pill {
+  padding: 0.22rem 0.6rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ink) 7%, transparent);
+  color: var(--ink);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  white-space: nowrap;
 }
+.st-kpis.is-loading { opacity: 0.55; }
 
-.stats-month-chart__item {
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  min-width: 0;
-  height: 190px;
-  text-align: center;
+/* ---- Isi: redup halus saat memuat ulang ---- */
+.st-body { transition: opacity 0.25s ease; }
+.st-body.is-loading { opacity: 0.55; pointer-events: none; }
+
+/* ---- Kartu ---- */
+.st-card {
+  height: 100%;
+  padding: 1.25rem 1.4rem 1.4rem;
+  border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+  border-radius: 26px;
+  background: color-mix(in srgb, var(--surface, #fff) 86%, transparent);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 18px 40px -30px rgba(15, 15, 15, 0.35);
+  animation: stReveal 0.7s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation-delay: calc(var(--i, 0) * 90ms + 120ms);
 }
-
-.stats-month-chart__value,
-.stats-month-chart__label {
+.st-card__title {
+  margin: 0 0 0.2rem;
+  color: var(--ink);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+.st-card__sub {
+  margin: 0 0 1.1rem;
   color: var(--muted);
-  font-size: clamp(0.65rem, 1.2vw, 0.8rem);
+  font-size: 0.82rem;
 }
-
-.stats-month-chart__track {
+.st-card__bar {
   display: flex;
-  align-items: end;
-  justify-content: center;
-  min-height: 0;
-  margin: 0.35rem 0;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+}
+.st-chip {
+  display: inline-flex;
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  background: var(--primary-soft);
+  color: var(--forest, var(--primary));
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
 }
 
-.stats-month-chart__bar {
+/* ---- Korban: bar horizontal ---- */
+.st-cas { display: grid; gap: 1.25rem; }
+.st-cas__total { display: grid; gap: 0.2rem; }
+.st-cas__num {
+  color: var(--ink);
+  font-size: clamp(2.2rem, 4.6vw, 3rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.st-cas__cap { color: var(--muted); font-size: 0.82rem; }
+.st-cas__list {
+  display: grid;
+  gap: 1.1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.st-cas__list li {
+  animation: stReveal 0.55s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation-delay: calc(0.3s + var(--k, 0) * 90ms);
+}
+.st-cas__row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin-bottom: 0.45rem;
+}
+.st-cas__row .st-dot { align-self: center; }
+.st-cas__name { flex: 1; color: var(--ink); font-weight: 600; font-size: 0.92rem; }
+.st-cas__value {
+  color: var(--ink);
+  font-size: 1.1rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.st-cas__pct {
+  min-width: 2.6rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.st-cas__track {
+  height: 12px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ink) 6%, transparent);
+  overflow: hidden;
+}
+.st-cas__bar {
   display: block;
-  width: min(100%, 28px);
-  min-height: 0;
-  background: var(--primary);
+  height: 100%;
+  border-radius: inherit;
+  transform-origin: left center;
+  animation: stBar 1s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation-delay: calc(0.4s + var(--k, 0) * 90ms);
+}
+.st-cas__bar--high { background: var(--impact-high, #c2410c); }
+.st-cas__bar--medium { background: var(--impact-medium, #b7791f); }
+.st-cas__bar--low { background: var(--primary); }
+
+.st-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex: none;
+}
+.st-dot--high { background: var(--impact-high, #c2410c); }
+.st-dot--medium { background: var(--impact-medium, #b7791f); }
+.st-dot--low { background: var(--primary); }
+
+/* ---- Chart ---- */
+.st-chart { height: 300px; margin-top: 0.75rem; }
+.st-chart .recharts-wrapper,
+.st-chart .recharts-surface { outline: none; }
+
+.st-tooltip {
+  display: grid;
+  gap: 0.1rem;
+  padding: 0.5rem 0.85rem;
+  border-radius: 14px;
+  background: var(--ink, #0f0f0f);
+  box-shadow: 0 14px 30px -14px rgba(15, 15, 15, 0.6);
+  font-size: 0.82rem;
+  animation: stPop 0.18s ease-out;
+}
+.st-tooltip strong { color: #fff; }
+.st-tooltip span { color: rgba(255, 255, 255, 0.72); }
+
+/* ---- Skala warna grafik tren ---- */
+.st-scale {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-top: 0.6rem;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+.st-scale__bar {
+  width: 110px;
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--impact-low, #2fff00), var(--impact-medium, #ff8000), var(--impact-high, #c20c0c));
+}
+
+.st-scale__bar--map {
+  background: linear-gradient(90deg, #2fff00, #ffea00, #ff8000, #d71f1f);
+}
+
+/* ---- Wilayah teratas: podium + daftar ---- */
+.st-insight {
+  margin: 0 0 1.25rem;
+  padding: 0.8rem 1rem;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--ink) 5%, transparent);
+  color: var(--ink);
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+.st-insight strong { font-weight: 700; }
+
+.st-top3 {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 768px) {
+  .st-top3 { grid-template-columns: 1.3fr 1fr 1fr; }
+}
+.st-podium {
+  position: relative;
+  overflow: hidden;
+  padding: 1.1rem 1.2rem 1.2rem;
+  border: 1px solid color-mix(in srgb, var(--tone) 38%, transparent);
+  border-radius: 22px;
+  background:
+    radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, var(--tone) 20%, transparent), transparent 65%),
+    var(--surface, #fff);
+  animation: stReveal 0.65s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation-delay: calc(0.35s + var(--i, 1) * 90ms);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.st-podium:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 36px -22px color-mix(in srgb, var(--tone) 70%, #000);
+}
+.st-podium__rank {
+  position: absolute;
+  top: -0.35rem;
+  right: 0.9rem;
+  color: var(--tone);
+  font-size: 4.4rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  opacity: 0.17;
+  pointer-events: none;
+}
+.st-podium__badge {
+  display: inline-block;
+  margin: 0 0 0.7rem;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--tone) 18%, transparent);
+  color: var(--ink);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+.st-podium__name {
+  margin: 0;
+  color: var(--ink);
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+.st-podium__prov { margin: 0.15rem 0 0.9rem; color: var(--muted); font-size: 0.82rem; }
+.st-podium__count {
+  margin: 0 0 0.6rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+.st-podium__count span {
+  color: var(--ink);
+  font-size: clamp(2rem, 3.6vw, 2.8rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+.st-podium--1 .st-podium__count span { font-size: clamp(2.5rem, 4.6vw, 3.6rem); }
+.st-podium__track {
+  height: 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--tone) 18%, transparent);
+  overflow: hidden;
+}
+.st-podium__track span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--tone);
+  transform-origin: left center;
+  animation: stBar 1s cubic-bezier(0.22, 1, 0.36, 1) 0.6s backwards;
+}
+.st-podium__share { margin: 0.5rem 0 0; color: var(--muted); font-size: 0.78rem; }
+
+.st-tail {
+  display: grid;
+  gap: 1rem 3rem;
+  margin: 1.4rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+@media (min-width: 992px) {
+  .st-tail {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(var(--rows, 4), auto);
+    grid-auto-flow: column;
+  }
+}
+.st-tail__item {
+  display: grid;
+  grid-template-columns: 1.7rem 1fr;
+  gap: 0.75rem;
+  align-items: start;
+  animation: stReveal 0.55s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation-delay: calc(0.7s + var(--i, 0) * 55ms);
+}
+.st-tail__no {
+  display: grid;
+  place-items: center;
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--tone) 22%, transparent);
+  color: var(--ink);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+.st-tail__main { min-width: 0; }
+.st-tail__top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+.st-tail__name {
+  overflow: hidden;
+  color: var(--ink);
+  font-size: 0.92rem;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.st-tail__total {
+  color: var(--ink);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.st-tail__total small {
+  margin-left: 0.4rem;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 500;
+}
+.st-tail__prov { display: block; color: var(--muted); font-size: 0.78rem; }
+.st-tail__track {
+  height: 6px;
+  margin-top: 0.4rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--tone) 16%, transparent);
+  overflow: hidden;
+}
+.st-tail__track span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--tone);
+  transform-origin: left center;
+  animation: stBar 0.9s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation-delay: calc(0.8s + var(--i, 0) * 55ms);
+}
+
+/* ---- Error ---- */
+.st-error {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid color-mix(in srgb, var(--impact-high, #c2410c) 35%, transparent);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--impact-high, #c2410c) 8%, var(--surface, #fff));
+  color: var(--ink);
+}
+
+/* ---- Skeleton ---- */
+.st-skel { position: relative; overflow: hidden; animation: none; }
+.st-skel--tall { height: 380px; }
+.st-skel--wide { height: 260px; }
+.st-skel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 20%, rgba(255, 255, 255, 0.65) 50%, transparent 80%);
+  transform: translateX(-100%);
+  animation: stShimmer 1.4s infinite;
+}
+
+/* ---- Keyframes ---- */
+@keyframes stReveal {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes stBar {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+@keyframes stShimmer {
+  to { transform: translateX(100%); }
+}
+@keyframes stPop {
+  from { opacity: 0; transform: translateY(4px) scale(0.97); }
+  to { opacity: 1; transform: none; }
 }
 
 @media (max-width: 575.98px) {
-  .stats-month-chart {
-    gap: 0.15rem;
-    overflow-x: auto;
-  }
+  .st-board { border-radius: 24px; }
+  .st-card { border-radius: 22px; }
+  .st-chart { height: 250px; }
+  .st-year .form-select { width: 100%; }
+  .st-board__intro { width: 100%; }
+}
 
-  .stats-month-chart__item {
-    min-width: 22px;
+@media (prefers-reduced-motion: reduce) {
+  .st-kpi,
+  .st-card,
+  .st-podium,
+  .st-podium__track span,
+  .st-tail__item,
+  .st-tail__track span,
+  .st-cas__list li,
+  .st-cas__bar,
+  .st-tooltip,
+  .st-skel::after {
+    animation: none !important;
   }
+  .st-body,
+  .st-kpis { transition: none; }
+}
+
+/* ---- Peta sebaran: siluet Indonesia + heat ---- */
+.st-card--map { display: block; height: auto; }
+.st-map-wrap {
+  padding: clamp(0.5rem, 2vw, 1.25rem);
+  border-radius: 22px;
+  background: #fff;
+}
+.st-ina { position: relative; }
+.st-ina svg { display: block; width: 100%; height: auto; overflow: visible; }
+.st-ina__land {
+  fill: #dcebd3;
+}
+.st-ina__blob { animation: stBlob 1.1s ease-out backwards; transform-box: fill-box; transform-origin: center; }
+.st-ina__dot {
+  fill: #fff;
+  stroke: var(--ink, #0f0f0f);
+  stroke-width: 1.4;
+  pointer-events: none;
+}
+.st-ina__hit { fill: transparent; cursor: pointer; outline: none; }
+.st-ina__hit:focus-visible { stroke: var(--ink, #0f0f0f); stroke-width: 2; }
+.st-ina__tip {
+  position: absolute;
+  z-index: 2;
+  transform: translate(-50%, calc(-100% - 12px));
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.st-map-note {
+  margin: 0.6rem 0 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+  text-align: center;
+}
+
+@keyframes stBlob {
+  from { opacity: 0; transform: scale(0.4); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .st-ina__blob { animation: none; }
 }
