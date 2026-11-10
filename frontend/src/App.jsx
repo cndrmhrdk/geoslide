@@ -8,6 +8,7 @@ import Beranda              from './pages/Beranda';
 import PetaBencana          from './pages/PetaBencana';
 import StatistikBencana     from './pages/StatistikBencana';
 import InformasiOrangHilang from './pages/InformasiOrangHilang';
+import InformasiOrangHilangDetail from './pages/InformasiOrangHilangDetail';
 import LaporkanBencana      from './pages/LaporkanBencana';
 import LaporkanOrangHilang  from './pages/LaporkanOrangHilang';
 import CekStatusLaporan     from './pages/CekStatusLaporan';
@@ -35,6 +36,7 @@ function App() {
           <Route path="/data-bencana/peta"               element={<PetaBencana />} />
           <Route path="/data-bencana/statistik"          element={<StatistikBencana />} />
           <Route path="/informasi-orang-hilang"          element={<InformasiOrangHilang />} />
+          <Route path="/informasi-orang-hilang/:id"      element={<InformasiOrangHilangDetail />} />
           <Route path="/pelaporan/laporkan-bencana"      element={<LaporkanBencana />} />
           <Route path="/pelaporan/laporkan-orang-hilang" element={<LaporkanOrangHilang />} />
           <Route path="/pelaporan/cek-status"            element={<CekStatusLaporan />} />

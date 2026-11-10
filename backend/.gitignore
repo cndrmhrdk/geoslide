@@ -1,0 +1,3 @@
+# Foto orang hilang tidak ikut di-commit (data pribadi)
+uploads/*
+!uploads/.gitkeep
