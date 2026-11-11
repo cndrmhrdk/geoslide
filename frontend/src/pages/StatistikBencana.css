@@ -28,12 +28,7 @@
   font-weight: 700;
   letter-spacing: -0.02em;
 }
-.st-year .form-select {
-  min-width: 11rem;
-  border-radius: 999px;
-  background-color: color-mix(in srgb, var(--surface, #fff) 80%, transparent);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
+.st-year { min-width: 11rem; }
 
 /* ---- KPI di kanan atas ---- */
 .st-kpis {
@@ -227,11 +222,11 @@
   width: 110px;
   height: 8px;
   border-radius: 999px;
-  background: linear-gradient(90deg, var(--impact-low, #2fff00), var(--impact-medium, #ff8000), var(--impact-high, #c20c0c));
+  background: linear-gradient(90deg, var(--impact-low, #3f7a1a), var(--impact-medium, #c98a1b), var(--impact-high, #c2410c));
 }
 
 .st-scale__bar--map {
-  background: linear-gradient(90deg, #2fff00, #ffea00, #ff8000, #d71f1f);
+  background: linear-gradient(90deg, #4fae3a, #efc83a, #f28c28, #d7351f);
 }
 
 /* ---- Wilayah teratas: podium + daftar ---- */
@@ -458,7 +453,7 @@
   .st-board { border-radius: 24px; }
   .st-card { border-radius: 22px; }
   .st-chart { height: 250px; }
-  .st-year .form-select { width: 100%; }
+  .st-year { width: 100%; }
   .st-board__intro { width: 100%; }
 }
 

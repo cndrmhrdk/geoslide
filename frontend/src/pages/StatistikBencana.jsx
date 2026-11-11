@@ -10,6 +10,7 @@ import {
   YAxis,
 } from 'recharts';
 import PageHeader from '../components/PageHeader';
+import YearSelect from '../components/YearSelect';
 import Section from '../components/Section';
 import useCountUp from '../hooks/useCountUp';
 import shape from '../data/indonesiaShape.json';
@@ -369,10 +370,10 @@ export default function StatistikBencana() {
   const periodLabel = year === 'all' ? 'Seluruh periode kejadian' : `Periode kejadian ${year}`;
   const showSkeleton = loading && !statistics;
 
-  const handleYearChange = (event) => {
+  const handleYearChange = (value) => {
     setLoading(true);
     setError('');
-    setYear(event.target.value);
+    setYear(value);
   };
 
   return (
@@ -391,18 +392,19 @@ export default function StatistikBencana() {
               <h2 className="st-board__title">Ringkasan data</h2>
               <p className="gs-text-muted mb-3" aria-live="polite">{periodLabel}</p>
               <div className="st-year">
-                <label className="visually-hidden" htmlFor="statistics-year">Periode kejadian</label>
-                <select
+                <YearSelect
                   id="statistics-year"
-                  className="form-select"
+                  label="Periode kejadian"
                   value={year}
                   onChange={handleYearChange}
-                >
-                  <option value="all">Semua tahun</option>
-                  {availableYears.map((availableYear) => (
-                    <option key={availableYear} value={availableYear}>{availableYear}</option>
-                  ))}
-                </select>
+                  options={[
+                    { value: 'all', label: 'Semua tahun' },
+                    ...availableYears.map((availableYear) => ({
+                      value: availableYear,
+                      label: availableYear,
+                    })),
+                  ]}
+                />
               </div>
             </div>
 

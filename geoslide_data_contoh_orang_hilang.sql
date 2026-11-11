@@ -1,9 +1,3 @@
--- DATA CONTOH untuk mencoba halaman Informasi Orang Hilang.
--- OPSIONAL: jalankan SETELAH geoslide_schema_baru.sql. Semua nama dan kejadian adalah fiktif.
--- Catatan: laporan 'approved' di bawah ikut terhitung di statistik orang hilang milik modul Data Bencana.
--- Untuk menghapus data contoh, jalankan bagian "HAPUS DATA CONTOH" di paling bawah.
-
--- Kejadian contoh (status 'unverified' agar TIDAK muncul di Peta/Statistik Bencana)
 INSERT INTO `disaster_events`
   (`data_source_id`, `external_id`, `title`, `event_date`, `province`, `regency`, `district`, `village`,
    `latitude`, `longitude`, `description`, `deaths`, `missing`, `injured`, `displaced`, `houses_damaged`,

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import L from 'leaflet';
 import { MapContainer, Marker, Popup, TileLayer, Tooltip, ZoomControl, useMap } from 'react-leaflet';
 import PageHeader from '../components/PageHeader';
+import YearSelect from '../components/YearSelect';
 import Section from '../components/Section';
 import useCountUp from '../hooks/useCountUp';
 import { getKejadian } from '../services/dataBencana';
@@ -15,12 +16,14 @@ const INITIAL_FILTERS = { year: 'all', search: '' };
 const FOCUS_ZOOM = 10;
 const FIT_MAX_ZOOM = 10;
 
-const TILE_URL = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-const TILE_ATTRIBUTION = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+// Batas geser peta: [selatan-barat, utara-timur] — mencakup Sabang sampai Merauke
 const INDONESIA_BOUNDS = [
   [-13, 93],
   [8, 143],
 ];
+const TILE_URL ='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+const TILE_ATTRIBUTION =
+  '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 
 const LEVELS = {
   low: { label: 'Rendah' },
@@ -346,7 +349,7 @@ export default function PetaBencana() {
               className="gs-map"
               center={[-2.5, 118]}
               zoom={5}
-              minZoom={1}
+              minZoom={5}
               maxBounds={INDONESIA_BOUNDS}
               maxBoundsViscosity={1}
               zoomControl={false}
@@ -432,23 +435,17 @@ export default function PetaBencana() {
               />
             </div>
             <div className="gs-map-filter__row">
-              <label className="visually-hidden" htmlFor="event-year">
-                Tahun kejadian
-              </label>
-              <select
+              <YearSelect
                 id="event-year"
-                className="form-select"
-                value={filters.year}
-                onChange={handleYearChange}
-              >
-                <option value="all">Semua tahun</option>
-                {availableYears.map((year) => (
-                  <option key={year} value={year}>
-                    {year}
-                  </option>
-                ))}
-                {yearIsMissing && <option value={filters.year}>{filters.year}</option>}
-              </select>
+                label="Tahun kejadian"
+                value={String(filters.year)}
+                onChange={(value) => handleYearChange({ target: { value } })}
+                options={[
+                  { value: 'all', label: 'Semua tahun' },
+                  ...availableYears.map((year) => ({ value: String(year), label: String(year) })),
+                  ...(yearIsMissing ? [{ value: String(filters.year), label: String(filters.year) }] : []),
+                ]}
+              />
               <button className="btn-pill btn-pill-primary btn-pill-sm" type="submit">
                 Terapkan
               </button>
