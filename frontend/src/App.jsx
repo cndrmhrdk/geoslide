@@ -15,6 +15,7 @@ import CekStatusLaporan     from './pages/CekStatusLaporan';
 import Edukasi              from './pages/Edukasi';
 import LoginAdmin           from './pages/LoginAdmin';
 import NotFound             from './pages/NotFound';
+import EdukasiModel3D from './pages/EdukasiModel3D';
 
 /**
  * App.jsx — Root Routing GeoSlide
@@ -42,6 +43,7 @@ function App() {
           <Route path="/pelaporan/cek-status"            element={<CekStatusLaporan />} />
           <Route path="/edukasi"                         element={<Edukasi />} />
           <Route path="/login-admin"                     element={<LoginAdmin />} />
+          <Route path="/edukasi/model-3d" element={<EdukasiModel3D />} />
 
           {/* 404 — harus selalu di paling bawah */}
           <Route path="*" element={<NotFound />} />

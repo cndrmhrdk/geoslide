@@ -1,25 +1,22 @@
+import { lazy, Suspense } from 'react';
 import PageHeader from '../components/PageHeader';
 import Section from '../components/Section';
 
-/**
- * Halaman: Edukasi
- * File ini milik: [nama anggota]
- *
- * Konten edukasi dan informasi tentang tanah longsor, mitigasi, dan kesiapsiagaan.
- */
-export default function Edukasi() {
+const LandslideModel3D = lazy(() => import('../components/LandSlideModel3d'));
+
+export default function EdukasiModel3D() {
   return (
     <>
       <PageHeader
-        title="Edukasi"
-        subtitle="Informasi, panduan mitigasi, dan tips kesiapsiagaan menghadapi bencana tanah longsor"
-        icon="bi-book"
+        badge="Edukasi"
+        title="Bagaimana Longsor Terjadi?"
+        subtitle="Putar penampang lereng, naikkan hujan, lalu lihat apa yang terjadi."
+        icon="bi-layers"
       />
-      <Section bg="white" py="lg">
-        {/* TODO: Isi konten edukasi (artikel, infografis, dsb.) di sini */}
-        <p className="gs-text-muted text-center">
-          Halaman Edukasi — konten akan dikembangkan oleh anggota tim.
-        </p>
+      <Section bg="subtle" py="md">
+        <Suspense fallback={<p>Memuat model 3D...</p>}>
+          <LandslideModel3D />
+        </Suspense>
       </Section>
     </>
   );

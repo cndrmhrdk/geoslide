@@ -1,0 +1,165 @@
+/* LandslideModel3D — kelas diawali ls3d- agar tidak bentrok dengan halaman lain */
+.ls3d-root { display: grid; gap: 1.25rem; }
+
+.ls3d-stage {
+  position: relative;
+  height: clamp(520px, 76vh, 700px);
+  border-radius: 28px;
+  background: linear-gradient(180deg, #eef3e8 0%, #e2eaee 100%);
+  overflow: hidden;
+  cursor: grab;
+}
+.ls3d-stage:active { cursor: grabbing; }
+.ls3d-stage canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+
+/* ---- Label yang menempel pada model ---- */
+.ls3d-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  padding: 0.2rem 0.6rem 0.2rem 1.1rem;
+  border-radius: 999px;
+  background: rgba(15, 15, 15, 0.82);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  margin: -0.7rem 0 0 -0.2rem;
+}
+.ls3d-label::before {
+  content: '';
+  position: absolute;
+  left: 0.4rem;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #fff;
+  transform: translateY(-50%);
+}
+.ls3d-label--bidang { background: rgba(190, 40, 20, 0.92); }
+.ls3d-label--air { background: rgba(40, 120, 190, 0.92); }
+
+/* ---- Legenda & status ---- */
+.ls3d-legend {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 3;
+  display: grid;
+  gap: 0.3rem;
+  margin: 0;
+  padding: 0.6rem 0.8rem;
+  list-style: none;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.78);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  font-size: 0.74rem;
+  color: var(--ink, #0f0f0f);
+  pointer-events: none;
+}
+.ls3d-legend li { display: flex; align-items: center; gap: 0.45rem; }
+.ls3d-legend span { width: 10px; height: 10px; border-radius: 3px; }
+
+.ls3d-status {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 3;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #fff;
+  background: #3f7a1a;
+  transition: background-color 0.3s ease;
+}
+.ls3d-status--mid { background: #b7791f; }
+.ls3d-status--high { background: #c2410c; }
+
+.ls3d-drag {
+  position: absolute;
+  right: 16px;
+  bottom: 150px;
+  z-index: 3;
+  margin: 0;
+  color: rgba(15, 15, 15, 0.45);
+  font-size: 0.74rem;
+  pointer-events: none;
+}
+
+/* ---- Panel kontrol ---- */
+.ls3d-panel {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  z-index: 3;
+  width: min(640px, calc(100% - 28px));
+  padding: 0.85rem 1rem 0.75rem;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.86);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 14px 40px -18px rgba(15, 15, 15, 0.4);
+  transform: translateX(-50%);
+  cursor: default;
+}
+.ls3d-rain { display: grid; gap: 0.3rem; margin: 0; font-size: 0.85rem; color: var(--ink, #0f0f0f); }
+.ls3d-rain strong { font-variant-numeric: tabular-nums; }
+.ls3d-rain input[type='range'] { width: 100%; accent-color: #3b9ad9; }
+
+.ls3d-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.ls3d-btn {
+  padding: 0.42rem 0.95rem;
+  border: 1px solid rgba(15, 15, 15, 0.12);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ink, #0f0f0f);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+.ls3d-btn:hover:not(:disabled) { transform: translateY(-1px); background: #f4f4f1; }
+.ls3d-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.ls3d-btn--danger { border-color: transparent; background: #c2410c; color: #fff; }
+.ls3d-btn--danger:hover:not(:disabled) { background: #a8370a; }
+.ls3d-btn:focus-visible,
+.ls3d-rain input:focus-visible { outline: 2px solid #3f7a1a; outline-offset: 2px; }
+.ls3d-check { display: inline-flex; align-items: center; gap: 0.4rem; margin-left: auto; font-size: 0.8rem; color: var(--ink, #0f0f0f); }
+.ls3d-hint { margin: 0.5rem 0 0; color: var(--muted, #6e6e69); font-size: 0.78rem; }
+
+/* ---- Kartu penjelasan ---- */
+.ls3d-info { display: grid; gap: 1rem; grid-template-columns: 1fr; }
+@media (min-width: 768px) { .ls3d-info { grid-template-columns: repeat(3, 1fr); } }
+.ls3d-info article {
+  padding: 1.1rem 1.2rem;
+  border: 1px solid var(--border, rgba(15, 15, 15, 0.08));
+  border-radius: 22px;
+  background: var(--surface, #fff);
+}
+.ls3d-info h3 { margin: 0 0 0.4rem; font-size: 1rem; font-weight: 700; color: var(--ink, #0f0f0f); }
+.ls3d-info p { margin: 0; color: var(--muted, #6e6e69); font-size: 0.88rem; line-height: 1.6; }
+
+.ls3d-fallback { padding: 1.5rem; border-radius: 22px; background: #f2f1ee; color: #6e6e69; text-align: center; }
+
+@media (max-width: 575.98px) {
+  .ls3d-stage { height: 560px; }
+  .ls3d-legend { display: none; }
+  .ls3d-drag { display: none; }
+  .ls3d-check { margin-left: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ls3d-label, .ls3d-btn, .ls3d-status { transition: none; }
+}
