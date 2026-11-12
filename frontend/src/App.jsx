@@ -15,7 +15,7 @@ import CekStatusLaporan     from './pages/CekStatusLaporan';
 import Edukasi              from './pages/Edukasi';
 import LoginAdmin           from './pages/LoginAdmin';
 import NotFound             from './pages/NotFound';
-import EdukasiModel3D from './pages/EdukasiModel3D';
+import EdukasiModel3D from './pages/Edukasi';
 
 /**
  * App.jsx — Root Routing GeoSlide
