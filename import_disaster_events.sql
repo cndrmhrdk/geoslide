@@ -116,5 +116,3 @@ INSERT INTO `disaster_events` (`id`, `data_source_id`, `external_id`, `title`, `
 (108, 1, 'd12ad1eb-2425-4d02-a3b9-d817af15796a', 'Tanah Longsor', '2026-01-04', 'Jawa Barat', 'Kabupaten Karawang', -6.3227303, 107.3375791, 0, 0, 0, 20, 6),
 (109, 1, 'e923c4c7-24b3-4625-84d9-78c72b35305f', 'Tanah Longsor', '2026-01-01', 'Jawa Tengah', 'Kabupaten Banjarnegara', -7.4027060, 109.6813960, 0, 0, 1, 221, 11),
 (110, 1, '07662d5a-d2d6-483a-ae7c-ae8756a9fa3a', 'Gerakan Tanah', '2026-01-01', 'Jawa Tengah', 'Kabupaten Banjarnegara', -7.4027060, 109.6813960, 0, 0, 0, 206, 11);
-
-COMMIT;
