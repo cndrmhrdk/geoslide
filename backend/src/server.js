@@ -6,7 +6,8 @@ require("dotenv").config();
 const db = require("./config/database");
 const dataBencanaRoutes = require("./modules/data-bencana");
 const orangHilangRoutes = require("./modules/orang-hilang");
-const authRoutes = require("./modules/auth");
+const authRoutes        = require("./modules/auth");
+const adminRoutes       = require("./modules/admin");
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use("/api/data-bencana", dataBencanaRoutes);
 app.use("/api/orang-hilang", orangHilangRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/admin", adminRoutes);
 
 // Foto orang hilang (path hanya dikirim API bila ada izin publikasi)
 app.use("/uploads", express.static(path.join(__dirname, "..", process.env.UPLOAD_DIR || "uploads")));
