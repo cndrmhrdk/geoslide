@@ -75,7 +75,8 @@ export default function AdminOrangHilang() {
   async function verify(row, status) {
     setSaving(true);
     try {
-      const body = { status };
+      // Backend expects 'verification_status', not 'status'
+      const body = { verification_status: status };
       if (status === 'rejected' && rejReason) body.rejection_reason = rejReason;
       if (adminNote) body.admin_note = adminNote;
       const res = await authFetch(`/api/orang-hilang/admin/${row.id}/verification`, {
@@ -98,6 +99,8 @@ export default function AdminOrangHilang() {
       });
       if (!res.ok) { const e = await res.json(); throw new Error(e.message || 'Gagal.'); }
       setAlert({ type: 'success', text: 'Status pencarian diperbarui.' });
+      // Update selected in-place so modal reflects new status immediately
+      setSelected(prev => prev && prev.id === row.id ? { ...prev, search_status: status } : prev);
       load();
     } catch (err) {
       setAlert({ type: 'error', text: err.message });

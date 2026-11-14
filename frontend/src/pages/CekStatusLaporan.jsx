@@ -47,7 +47,12 @@ export default function CekStatusLaporan() {
     setError('');
 
     try {
-      const res  = await fetch(`/api/laporan-bencana/${encodeURIComponent(trimmed)}`);
+      // Pilih endpoint berdasarkan prefix kode: OH- = orang hilang, GS- = laporan bencana
+      const url = trimmed.startsWith('OH-')
+        ? `/api/orang-hilang/tracking/${encodeURIComponent(trimmed)}`
+        : `/api/laporan-bencana/${encodeURIComponent(trimmed)}`;
+
+      const res  = await fetch(url);
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || 'Kode tidak ditemukan.');
       setResult(data);
@@ -86,8 +91,9 @@ export default function CekStatusLaporan() {
             </div>
             <h2 className="csl-search-card__title">Lacak Laporan Anda</h2>
             <p className="csl-search-card__sub">
-              Kode pelacakan dikirimkan setelah laporan berhasil dikirim,{' '}
-              contoh: <code className="csl-code-example">GS-20261113-A3B2C1</code>
+              Kode pelacakan dikirimkan setelah laporan berhasil dikirim.{' '}
+              Laporan bencana: <code className="csl-code-example">GS-YYYYMMDD-XXXXXX</code>{' '}
+              · Orang hilang: <code className="csl-code-example">OH-YYYYMMDD-XXXXXX</code>
             </p>
 
             <form className="csl-form" onSubmit={handleCheck}>
@@ -99,7 +105,7 @@ export default function CekStatusLaporan() {
                     type="text"
                     value={code}
                     onChange={e => { setCode(e.target.value.toUpperCase()); setError(''); setResult(null); }}
-                    placeholder="GS-YYYYMMDD-XXXXXX"
+                    placeholder="GS- atau OH-YYYYMMDD-XXXXXX"
                     maxLength={30}
                     autoComplete="off"
                     spellCheck={false}
@@ -141,22 +147,51 @@ export default function CekStatusLaporan() {
 
               {/* Detail grid */}
               <div className="csl-detail-grid">
+                {/* Kode & Jenis */}
                 <div className="csl-detail-item">
                   <span className="csl-detail-item__key"><i className="bi bi-ticket me-1"></i>Kode Laporan</span>
                   <span className="csl-detail-item__val csl-detail-item__val--mono">{result.tracking_code}</span>
                 </div>
                 <div className="csl-detail-item">
-                  <span className="csl-detail-item__key"><i className="bi bi-geo-alt me-1"></i>Lokasi</span>
-                  <span className="csl-detail-item__val">{result.location}</span>
-                </div>
-                <div className="csl-detail-item">
-                  <span className="csl-detail-item__key"><i className="bi bi-calendar-event me-1"></i>Tanggal Kejadian</span>
+                  <span className="csl-detail-item__key"><i className="bi bi-tag me-1"></i>Jenis Laporan</span>
                   <span className="csl-detail-item__val">
-                    {result.event_date
-                      ? new Date(result.event_date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
-                      : '—'}
+                    {result.jenis === 'orang_hilang' ? 'Orang Hilang' : 'Kejadian Bencana'}
                   </span>
                 </div>
+
+                {/* Lokasi — label berbeda tergantung jenis */}
+                <div className="csl-detail-item">
+                  <span className="csl-detail-item__key">
+                    <i className="bi bi-geo-alt me-1"></i>
+                    {result.jenis === 'orang_hilang' ? 'Lokasi Terakhir Terlihat' : 'Lokasi'}
+                  </span>
+                  <span className="csl-detail-item__val">{result.location || '—'}</span>
+                </div>
+
+                {/* Tanggal kejadian (hanya untuk laporan bencana) */}
+                {result.jenis !== 'orang_hilang' && (
+                  <div className="csl-detail-item">
+                    <span className="csl-detail-item__key"><i className="bi bi-calendar-event me-1"></i>Tanggal Kejadian</span>
+                    <span className="csl-detail-item__val">
+                      {result.event_date
+                        ? new Date(result.event_date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
+                        : '—'}
+                    </span>
+                  </div>
+                )}
+
+                {/* Status pencarian (hanya untuk orang hilang) */}
+                {result.jenis === 'orang_hilang' && (
+                  <div className="csl-detail-item">
+                    <span className="csl-detail-item__key"><i className="bi bi-search me-1"></i>Status Pencarian</span>
+                    <span className="csl-detail-item__val">
+                      {result.search_status === 'searching' ? '🔍 Sedang Dicari'
+                        : result.search_status === 'found' ? '✅ Ditemukan'
+                        : '📁 Kasus Ditutup'}
+                    </span>
+                  </div>
+                )}
+
                 <div className="csl-detail-item">
                   <span className="csl-detail-item__key"><i className="bi bi-clock me-1"></i>Dikirim Pada</span>
                   <span className="csl-detail-item__val">{result.submitted_at || '—'}</span>
