@@ -1,4 +1,6 @@
-const model = require("./orang-hilang.model");
+const model  = require("./orang-hilang.model");
+const crypto = require("crypto");
+const fs     = require("fs");
 
 const SEARCH_STATUSES = ["searching", "found", "closed"];
 const VERIFICATIONS = ["pending", "approved", "rejected"];
@@ -111,6 +113,66 @@ exports.getById = async (req, res) => {
         res.json({ data: toPublic(row) });
     } catch (error) {
         serverError(res, error);
+    }
+};
+
+// ---------- Publik: kirim laporan baru ----------
+exports.createPublic = async (req, res) => {
+    const {
+        name, age, gender, physical_description,
+        last_seen_location, last_seen_at,
+        reporter_name, reporter_contact,
+        public_contact_note, public_consent,
+    } = req.body || {};
+
+    const missing = [];
+    if (!name?.trim())               missing.push("Nama orang hilang");
+    if (!last_seen_location?.trim()) missing.push("Lokasi terakhir terlihat");
+    if (!reporter_name?.trim())      missing.push("Nama pelapor");
+    if (!reporter_contact?.trim())   missing.push("Kontak pelapor");
+    if (missing.length) {
+        (req.files || []).forEach(f => fs.unlink(f.path, () => {}));
+        return res.status(400).json({ message: `Field wajib belum diisi: ${missing.join(", ")}.` });
+    }
+
+    // Buat kode pelacakan
+    let tracking_code;
+    let tries = 0;
+    const db = require("../../config/database");
+    do {
+        const today  = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+        const suffix = crypto.randomBytes(3).toString("hex").toUpperCase();
+        tracking_code = `OH-${today}-${suffix}`;
+        const [[{ n }]] = await db.query(
+            "SELECT COUNT(*) AS n FROM missing_persons WHERE tracking_code = ?", [tracking_code]
+        );
+        if (n === 0) break;
+    } while (++tries < 10);
+
+    try {
+        const id = await model.createReport({
+            tracking_code,
+            name:                 name.trim(),
+            age:                  age ? Number(age) : null,
+            gender:               ["male","female","unknown"].includes(gender) ? gender : "unknown",
+            physical_description: physical_description?.trim() || null,
+            last_seen_location:   last_seen_location.trim(),
+            last_seen_at:         last_seen_at || null,
+            reporter_name:        reporter_name.trim(),
+            reporter_contact:     reporter_contact.trim(),
+            public_contact_note:  public_contact_note?.trim() || null,
+            public_consent:       public_consent === "true" || public_consent === "1" ? 1 : 0,
+        }, req.files || []);
+
+        res.status(201).json({
+            message:       "Laporan berhasil dikirim. Simpan kode pelacakan Anda.",
+            tracking_code,
+            id,
+        });
+    } catch (err) {
+        (req.files || []).forEach(f => fs.unlink(f.path, () => {}));
+        console.error("[orang-hilang createPublic]", err);
+        res.status(500).json({ message: "Gagal menyimpan laporan. Coba lagi." });
     }
 };
 
