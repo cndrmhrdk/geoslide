@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 13 Nov 2026 pada 18.18
+-- Waktu pembuatan: 14 Nov 2026 pada 15.26
 -- Versi server: 10.4.32-MariaDB
 -- Versi PHP: 8.2.12
 
@@ -309,6 +309,19 @@ CREATE TABLE `missing_persons` (
   `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data untuk tabel `missing_persons`
+--
+
+INSERT INTO `missing_persons` (`id`, `disaster_event_id`, `reviewed_by`, `tracking_code`, `name`, `age`, `gender`, `physical_description`, `last_seen_location`, `last_seen_at`, `search_status`, `verification_status`, `reporter_name`, `reporter_contact`, `public_contact_note`, `public_consent`, `admin_note`, `rejection_reason`, `reviewed_at`, `created_at`, `updated_at`) VALUES
+(1, 112, NULL, 'IMP-BNA-001', 'Saminem', NULL, 'unknown', NULL, 'Dusun Situkung, Desa Pandanarum, Kecamatan Pandanarum, Kabupaten Banjarnegara, Jawa Tengah', NULL, 'closed', 'approved', 'Data publik: BPBD Provinsi Jawa Tengah', '-', 'Operasi SAR resmi ditutup 25 Nov 2025. Status akhir belum dipastikan.', 0, 'Tercantum dalam daftar korban dalam pencarian per 20 Nov 2025 (25 orang hilang saat itu). Operasi SAR ditutup 25 Nov 2025 dengan 17 ditemukan dan 11 hilang; belum diketahui apakah orang ini termasuk yang ditemukan. Sumber: https://www.detik.com/jateng/berita/d-8219423/korban-tewas-longsor-pandanarum-banjarnegara-bertambah-jadi-3-orang', NULL, '2026-11-14 21:18:46', '2026-11-14 14:18:46', '2026-11-14 14:18:46'),
+(2, 112, NULL, 'IMP-BNA-002', 'Kaswanto', NULL, 'unknown', NULL, 'Dusun Situkung, Desa Pandanarum, Kecamatan Pandanarum, Kabupaten Banjarnegara, Jawa Tengah', NULL, 'closed', 'approved', 'Data publik: BPBD Provinsi Jawa Tengah', '-', 'Operasi SAR resmi ditutup 25 Nov 2025. Status akhir belum dipastikan.', 0, 'Tercantum dalam daftar korban dalam pencarian per 20 Nov 2025. Status akhir belum dipastikan. Sumber: https://www.detik.com/jateng/berita/d-8219423/korban-tewas-longsor-pandanarum-banjarnegara-bertambah-jadi-3-orang', NULL, '2026-11-14 21:18:46', '2026-11-14 14:18:46', '2026-11-14 14:18:46'),
+(3, 112, NULL, 'IMP-BNA-003', 'Aminah', NULL, 'unknown', NULL, 'Dusun Situkung, Desa Pandanarum, Kecamatan Pandanarum, Kabupaten Banjarnegara, Jawa Tengah', NULL, 'closed', 'approved', 'Data publik: BPBD Provinsi Jawa Tengah', '-', 'Operasi SAR resmi ditutup 25 Nov 2025. Status akhir belum dipastikan.', 0, 'Tercantum dalam daftar korban dalam pencarian per 20 Nov 2025. Status akhir belum dipastikan. Sumber: https://www.detik.com/jateng/berita/d-8219423/korban-tewas-longsor-pandanarum-banjarnegara-bertambah-jadi-3-orang', NULL, '2026-11-14 21:18:46', '2026-11-14 14:18:46', '2026-11-14 14:18:46'),
+(4, 112, NULL, 'IMP-BNA-004', 'Wanto', NULL, 'unknown', NULL, 'Dusun Situkung, Desa Pandanarum, Kecamatan Pandanarum, Kabupaten Banjarnegara, Jawa Tengah', NULL, 'closed', 'approved', 'Data publik: BPBD Provinsi Jawa Tengah', '-', 'Operasi SAR resmi ditutup 25 Nov 2025. Status akhir belum dipastikan.', 0, 'Tercantum dalam daftar korban dalam pencarian per 20 Nov 2025. Status akhir belum dipastikan. Sumber: https://www.detik.com/jateng/berita/d-8219423/korban-tewas-longsor-pandanarum-banjarnegara-bertambah-jadi-3-orang', NULL, '2026-11-14 21:18:46', '2026-11-14 14:18:46', '2026-11-14 14:18:46'),
+(5, 112, NULL, 'IMP-BNA-005', 'Kasno', NULL, 'unknown', NULL, 'Dusun Situkung, Desa Pandanarum, Kecamatan Pandanarum, Kabupaten Banjarnegara, Jawa Tengah', NULL, 'closed', 'approved', 'Data publik: BPBD Provinsi Jawa Tengah', '-', 'Operasi SAR resmi ditutup 25 Nov 2025. Status akhir belum dipastikan.', 0, 'Tercantum dalam daftar korban dalam pencarian per 20 Nov 2025. Status akhir belum dipastikan. Sumber: https://www.detik.com/jateng/berita/d-8219423/korban-tewas-longsor-pandanarum-banjarnegara-bertambah-jadi-3-orang', NULL, '2026-11-14 21:18:46', '2026-11-14 14:18:46', '2026-11-14 14:18:46'),
+(6, 112, NULL, 'IMP-BNA-006', 'Dangseng', NULL, 'unknown', NULL, 'Dusun Situkung, Desa Pandanarum, Kecamatan Pandanarum, Kabupaten Banjarnegara, Jawa Tengah', NULL, 'closed', 'approved', 'Data publik: BPBD Provinsi Jawa Tengah', '-', 'Operasi SAR resmi ditutup 25 Nov 2025. Status akhir belum dipastikan.', 0, 'Tercantum dalam daftar korban dalam pencarian per 20 Nov 2025. Status akhir belum dipastikan. Sumber: https://www.detik.com/jateng/berita/d-8219423/korban-tewas-longsor-pandanarum-banjarnegara-bertambah-jadi-3-orang', NULL, '2026-11-14 21:18:46', '2026-11-14 14:18:46', '2026-11-14 14:18:46'),
+(7, 112, NULL, 'IMP-BNA-007', 'Faiz', NULL, 'unknown', NULL, 'Dusun Situkung, Desa Pandanarum, Kecamatan Pandanarum, Kabupaten Banjarnegara, Jawa Tengah', NULL, 'closed', 'approved', 'Data publik: BPBD Provinsi Jawa Tengah', '-', 'Operasi SAR resmi ditutup 25 Nov 2025. Status akhir belum dipastikan.', 0, 'Tercantum dalam daftar korban dalam pencarian per 20 Nov 2025. Status akhir belum dipastikan. Sumber: https://www.detik.com/jateng/berita/d-8219423/korban-tewas-longsor-pandanarum-banjarnegara-bertambah-jadi-3-orang', NULL, '2026-11-14 21:18:46', '2026-11-14 14:18:46', '2026-11-14 14:18:46');
+
 -- --------------------------------------------------------
 
 --
@@ -468,7 +481,7 @@ ALTER TABLE `import_logs`
 -- AUTO_INCREMENT untuk tabel `missing_persons`
 --
 ALTER TABLE `missing_persons`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT untuk tabel `missing_person_documents`

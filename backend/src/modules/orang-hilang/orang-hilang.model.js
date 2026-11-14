@@ -1,5 +1,4 @@
-const db   = require("../../config/database");
-const path = require("path");
+const db = require("../../config/database");
 
 // Tanggal diformat langsung di SQL agar tidak bergantung pada pengaturan zona waktu pool.
 const SELECT_PUBLIC = `
@@ -70,6 +69,17 @@ const clean = (v) => {
   return s === "" ? null : s;
 };
 
+const BULAN = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+
+// Label dropdown yang membedakan satu kejadian dari yang lain,
+// misalnya "Tanah Longsor — Kab. Banjarnegara, 15 Nov 2025 (7 laporan)".
+function buatLabel(k) {
+  const [y, m, d] = String(k.tanggal).split("-");
+  const tgl = `${Number(d)} ${BULAN[Number(m) - 1]} ${y}`;
+  const wilayah = String(k.kabupaten || "").replace(/^Kabupaten /, "Kab. ");
+  return `${k.judul} — ${wilayah}, ${tgl} (${k.jumlah_laporan} laporan)`;
+}
+
 /**
  * Merapikan pilihan pengguna supaya tidak saling bertentangan.
  * - Jika kejadian dipilih, provinsi & kabupaten ikut kejadian itu.
@@ -130,12 +140,16 @@ async function normalizeSelection({ province, regency, eventId, status }) {
 
 /**
  * filter: { province, regency, eventId, status, hanyaLaporan }
- * hanyaLaporan = true/"1"/"true" -> hanya tampilkan wilayah/kejadian yang punya laporan.
- * Tanpa itu, semua kejadian terverifikasi tetap muncul (dengan jumlah_laporan bisa 0).
+ * Provinsi & kabupaten selalu dari semua kejadian terverifikasi (kecuali hanyaLaporan=1).
+ * Kejadian: default hanya yang punya laporan orang hilang; semuaKejadian=1 menampilkan semuanya.
+ * Tiap kejadian membawa `label` (judul + kabupaten + tanggal + jumlah laporan) untuk teks dropdown.
  */
 exports.findFilterOptions = async (filter = {}) => {
   const sel = await normalizeSelection(filter);
   const onlyReports = ["1", "true", true].includes(filter.hanyaLaporan);
+  // Dropdown kejadian: secara default hanya kejadian yang punya laporan orang hilang.
+  // Kirim semuaKejadian=1 untuk menampilkan semua kejadian terverifikasi.
+  const semuaKejadian = ["1", "true", true].includes(filter.semuaKejadian);
 
   const statusJoin = sel.status ? " AND mp.search_status = ?" : "";
   const statusParams = sel.status ? [sel.status] : [];
@@ -186,7 +200,7 @@ exports.findFilterOptions = async (filter = {}) => {
             ON mp.disaster_event_id = de.id AND mp.verification_status = 'approved'${statusJoin}
      WHERE ${evWhere.join(" AND ")}
      GROUP BY de.id, de.title, de.regency, de.province, de.event_date
-     ${onlyReports ? "HAVING COUNT(mp.id) > 0" : ""}
+     ${onlyReports || !semuaKejadian ? "HAVING COUNT(mp.id) > 0" : ""}
      ORDER BY de.event_date DESC, de.id DESC
      LIMIT 500`,
     evParams
@@ -210,53 +224,14 @@ exports.findFilterOptions = async (filter = {}) => {
   return {
     provinsi: provinsiRows.map((p) => p.provinsi),
     kabupaten,
-    kejadian: kejadianRows.map((k) => ({ ...k, jumlah_laporan: Number(k.jumlah_laporan) })),
+    kejadian: kejadianRows.map((k) => {
+      const item = { ...k, jumlah_laporan: Number(k.jumlah_laporan) };
+      return { ...item, label: buatLabel(item) };
+    }),
     status: SEARCH_STATUSES.map((s) => ({ ...s, jumlah: statusCount[s.nilai] || 0 })),
     // Pilihan yang sudah dirapikan; frontend sebaiknya menyetel dropdown sesuai nilai ini.
     terpilih: sel,
   };
-};
-
-// ---------- Publik: buat laporan baru ----------
-exports.createReport = async (data, files) => {
-  const conn = await db.getConnection();
-  try {
-    await conn.beginTransaction();
-
-    const [result] = await conn.query(
-      `INSERT INTO missing_persons
-         (tracking_code, name, age, gender, physical_description,
-          last_seen_location, last_seen_at,
-          reporter_name, reporter_contact,
-          public_contact_note, public_consent,
-          verification_status, search_status)
-       VALUES (?,?,?,?,?,?,?,?,?,?,?,'pending','searching')`,
-      [
-        data.tracking_code, data.name, data.age, data.gender,
-        data.physical_description, data.last_seen_location, data.last_seen_at,
-        data.reporter_name, data.reporter_contact,
-        data.public_contact_note, data.public_consent,
-      ]
-    );
-
-    const personId = result.insertId;
-
-    for (const file of files) {
-      const relPath = `orang-hilang/${file.filename}`;
-      await conn.query(
-        "INSERT INTO missing_person_documents (missing_person_id, file_path, file_type) VALUES (?,?,?)",
-        [personId, relPath, file.mimetype]
-      );
-    }
-
-    await conn.commit();
-    return personId;
-  } catch (err) {
-    await conn.rollback();
-    throw err;
-  } finally {
-    conn.release();
-  }
 };
 
 // ---------- Admin ----------
