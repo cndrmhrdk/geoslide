@@ -1,4 +1,5 @@
-const db = require("../../config/database");
+const db   = require("../../config/database");
+const path = require("path");
 
 // Tanggal diformat langsung di SQL agar tidak bergantung pada pengaturan zona waktu pool.
 const SELECT_PUBLIC = `
@@ -214,6 +215,48 @@ exports.findFilterOptions = async (filter = {}) => {
     // Pilihan yang sudah dirapikan; frontend sebaiknya menyetel dropdown sesuai nilai ini.
     terpilih: sel,
   };
+};
+
+// ---------- Publik: buat laporan baru ----------
+exports.createReport = async (data, files) => {
+  const conn = await db.getConnection();
+  try {
+    await conn.beginTransaction();
+
+    const [result] = await conn.query(
+      `INSERT INTO missing_persons
+         (tracking_code, name, age, gender, physical_description,
+          last_seen_location, last_seen_at,
+          reporter_name, reporter_contact,
+          public_contact_note, public_consent,
+          verification_status, search_status)
+       VALUES (?,?,?,?,?,?,?,?,?,?,?,'pending','searching')`,
+      [
+        data.tracking_code, data.name, data.age, data.gender,
+        data.physical_description, data.last_seen_location, data.last_seen_at,
+        data.reporter_name, data.reporter_contact,
+        data.public_contact_note, data.public_consent,
+      ]
+    );
+
+    const personId = result.insertId;
+
+    for (const file of files) {
+      const relPath = `orang-hilang/${file.filename}`;
+      await conn.query(
+        "INSERT INTO missing_person_documents (missing_person_id, file_path, file_type) VALUES (?,?,?)",
+        [personId, relPath, file.mimetype]
+      );
+    }
+
+    await conn.commit();
+    return personId;
+  } catch (err) {
+    await conn.rollback();
+    throw err;
+  } finally {
+    conn.release();
+  }
 };
 
 // ---------- Admin ----------

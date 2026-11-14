@@ -1,3 +1,6 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAdminAuth } from '../hooks/useAdminAuth';
 import PageHeader from '../components/PageHeader';
 import Section from '../components/Section';
 
@@ -6,6 +9,18 @@ import Section from '../components/Section';
  * Halaman otentikasi administrator GeoSlide dengan kartu bersih dan tombol pill.
  */
 export default function LoginAdmin() {
+  const { login, loading, error } = useAdminAuth();
+  const navigate = useNavigate();
+  const [email, setEmail]       = useState('');
+  const [password, setPassword] = useState('');
+  const [showPw, setShowPw]     = useState(false);
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const ok = await login(email, password);
+    if (ok) navigate('/admin/dashboard');
+  }
+
   return (
     <>
       <PageHeader
@@ -32,16 +47,30 @@ export default function LoginAdmin() {
               </p>
             </div>
 
-            <form onSubmit={(e) => e.preventDefault()}>
+            {error && (
+              <div
+                className="mb-3 d-flex align-items-center gap-2 p-3 rounded-3"
+                style={{ background: '#FFF1F2', color: '#9F1239', border: '1px solid #FECDD3', fontSize: '0.84rem' }}
+              >
+                <i className="bi bi-exclamation-circle-fill"></i>
+                <span>{error}</span>
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit}>
               <div className="mb-3">
                 <label className="form-label fw-medium" style={{ fontSize: '0.875rem' }}>
-                  Email / Username
+                  Email
                 </label>
                 <input
-                  type="text"
+                  type="email"
                   className="form-control rounded-pill px-3 py-2"
                   placeholder="admin@geoslide.id"
                   autoComplete="username"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  required
+                  disabled={loading}
                 />
               </div>
 
@@ -49,21 +78,44 @@ export default function LoginAdmin() {
                 <label className="form-label fw-medium" style={{ fontSize: '0.875rem' }}>
                   Kata Sandi
                 </label>
-                <input
-                  type="password"
-                  className="form-control rounded-pill px-3 py-2"
-                  placeholder="••••••••"
-                  autoComplete="current-password"
-                />
+                <div style={{ position: 'relative' }}>
+                  <input
+                    type={showPw ? 'text' : 'password'}
+                    className="form-control rounded-pill px-3 py-2"
+                    placeholder="••••••••"
+                    autoComplete="current-password"
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    required
+                    disabled={loading}
+                    style={{ paddingRight: '2.75rem' }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPw(v => !v)}
+                    style={{
+                      position: 'absolute', right: '14px', top: '50%', transform: 'translateY(-50%)',
+                      background: 'none', border: 'none', cursor: 'pointer',
+                      color: 'var(--muted)', fontSize: '0.95rem',
+                    }}
+                    tabIndex={-1}
+                  >
+                    <i className={`bi bi-eye${showPw ? '-slash' : ''}`}></i>
+                  </button>
+                </div>
               </div>
 
               <button
                 type="submit"
                 className="btn-pill-action w-100 justify-content-between py-2 px-3"
+                disabled={loading}
               >
-                <span>Masuk ke Dasbor</span>
+                <span>{loading ? 'Memverifikasi…' : 'Masuk ke Dasbor'}</span>
                 <span className="btn-pill-action__icon" aria-hidden="true">
-                  <i className="bi bi-arrow-right"></i>
+                  {loading
+                    ? <span className="spinner-border spinner-border-sm" style={{ width: '14px', height: '14px' }}></span>
+                    : <i className="bi bi-arrow-right"></i>
+                  }
                 </span>
               </button>
             </form>
