@@ -72,9 +72,175 @@ function buildIcon(level, size, delay) {
   });
 }
 
+// ---------- Panel melayang di atas peta ----------
+// Panel filter, daftar, legenda, dan tombol zoom menutupi sebagian peta. Fungsi di bawah
+// mengukur panel yang benar-benar menimpa peta (di mobile panel ada di luar peta, jadi diabaikan)
+// supaya popup dan "pas ke semua titik" tidak berakhir di bawah panel.
+const OVERLAY_SELECTOR = '.gs-map-filter, .gs-map-list, .gs-map-legend, .gs-map-toggle, .leaflet-control-zoom';
+const EDGE_GAP = 12;
+const ATTRIBUTION_SPACE = 36;
+
+function getObstacles(map) {
+  const stage = map.getContainer().getBoundingClientRect();
+  const root = map.getContainer().closest('.gs-map-shell') || document;
+  return Array.from(root.querySelectorAll(OVERLAY_SELECTOR))
+    .map((node) => node.getBoundingClientRect())
+    .filter(
+      (rect) =>
+        rect.width > 0 &&
+        rect.height > 0 &&
+        rect.right > stage.left &&
+        rect.left < stage.right &&
+        rect.bottom > stage.top &&
+        rect.top < stage.bottom,
+    );
+}
+
+function overlaps(a, b, gap) {
+  return (
+    a.left < b.right + gap && a.right > b.left - gap && a.top < b.bottom + gap && a.bottom > b.top - gap
+  );
+}
+
+// Menghitung berapa piksel popup (beserta marker-nya) harus digeser agar utuh, di dalam peta,
+// dan tidak tertimpa panel. Mengembalikan [dx, dy] dalam arah layar.
+function computePopupShift(map, popup) {
+  const element = popup.getElement();
+  if (!element) return [0, 0];
+
+  const stage = map.getContainer().getBoundingClientRect();
+  const parts = [element.getBoundingClientRect()];
+  const markerEl = popup._source?.getElement?.();
+  if (markerEl) parts.push(markerEl.getBoundingClientRect());
+
+  const box = {
+    left: Math.min(...parts.map((p) => p.left)),
+    top: Math.min(...parts.map((p) => p.top)),
+    right: Math.max(...parts.map((p) => p.right)),
+    bottom: Math.max(...parts.map((p) => p.bottom)),
+  };
+  const safe = {
+    left: stage.left + EDGE_GAP,
+    top: stage.top + EDGE_GAP,
+    right: stage.right - EDGE_GAP,
+    bottom: stage.bottom - ATTRIBUTION_SPACE,
+  };
+  const obstacles = getObstacles(map);
+  const inside = (b) =>
+    b.left >= safe.left && b.top >= safe.top && b.right <= safe.right && b.bottom <= safe.bottom;
+  const moved = (b, dx, dy) => ({
+    left: b.left + dx,
+    top: b.top + dy,
+    right: b.right + dx,
+    bottom: b.bottom + dy,
+  });
+
+  let dx = 0;
+  let dy = 0;
+  for (let pass = 0; pass < 4; pass += 1) {
+    const current = moved(box, dx, dy);
+    const blocker = obstacles.find((rect) => overlaps(current, rect, EDGE_GAP));
+    if (!blocker) break;
+
+    const options = [
+      [0, blocker.bottom + EDGE_GAP - current.top], // turun di bawah panel
+      [0, blocker.top - EDGE_GAP - current.bottom], // naik di atas panel
+      [blocker.right + EDGE_GAP - current.left, 0], // geser ke kanan panel
+      [blocker.left - EDGE_GAP - current.right, 0], // geser ke kiri panel
+    ]
+      .filter(([ox, oy]) => inside(moved(current, ox, oy)))
+      .sort((a, b) => Math.abs(a[0]) + Math.abs(a[1]) - (Math.abs(b[0]) + Math.abs(b[1])));
+
+    if (options.length === 0) break;
+    dx += options[0][0];
+    dy += options[0][1];
+  }
+
+  // Terakhir, pastikan tetap di dalam tepi peta.
+  const final = moved(box, dx, dy);
+  if (final.left < safe.left) dx += safe.left - final.left;
+  else if (final.right > safe.right) dx -= final.right - safe.right;
+  if (final.top < safe.top) dy += safe.top - final.top;
+  else if (final.bottom > safe.bottom) dy -= final.bottom - safe.bottom;
+
+  return [Math.round(dx), Math.round(dy)];
+}
+
+// Padding untuk "pas ke semua titik" agar titik tidak berada di bawah panel daftar / filter.
+function getFitPadding(map) {
+  const stage = map.getContainer().getBoundingClientRect();
+  let top = 70;
+  let right = 70;
+  let bottom = 70;
+  let left = 70;
+  getObstacles(map).forEach((rect) => {
+    if (rect.width > stage.width * 0.7) return; // panel selebar peta diabaikan
+    const centerX = (rect.left + rect.right) / 2 - stage.left;
+    if (rect.height > stage.height * 0.5 && centerX > stage.width / 2) {
+      right = Math.max(right, stage.right - rect.left + EDGE_GAP * 2); // daftar di kanan
+    } else if (rect.top - stage.top < stage.height * 0.4 && centerX < stage.width / 2) {
+      top = Math.max(top, rect.bottom - stage.top + EDGE_GAP * 2); // filter di kiri atas
+    }
+  });
+  return { paddingTopLeft: [left, top], paddingBottomRight: [right, bottom] };
+}
+
 // Mengatur kamera peta: menyesuaikan batas saat filter berubah dan terbang ke kejadian terpilih.
 function MapController({ focus, fitFor, points, markerRefs }) {
   const map = useMap();
+
+  // Menjaga popup tetap utuh: batas geser peta dilonggarkan selama popup terbuka
+  // (kalau tidak, peta dikembalikan ke batas Indonesia dan popup tetap terpotong),
+  // lalu popup digeser ke area peta yang tidak tertutup panel.
+  useEffect(() => {
+    let restoreTimer;
+    let pending = false;
+    let moving = false; // peta sedang bergerak (terbang/geser): tunggu sampai berhenti
+
+    const keepVisible = () => {
+      const popup = map._popup;
+      if (!pending || moving || !popup || !map.hasLayer(popup)) return;
+      pending = false;
+      const [dx, dy] = computePopupShift(map, popup);
+      if (dx || dy) {
+        map.panBy([-dx, -dy], { animate: !prefersReducedMotion(), duration: 0.35 });
+      }
+    };
+
+    const handleOpen = () => {
+      window.clearTimeout(restoreTimer);
+      map.setMaxBounds(null);
+      pending = true;
+      requestAnimationFrame(() => requestAnimationFrame(keepVisible));
+    };
+
+    const handleClose = () => {
+      pending = false;
+      window.clearTimeout(restoreTimer);
+      restoreTimer = window.setTimeout(() => map.setMaxBounds(INDONESIA_BOUNDS), 150);
+    };
+
+    const handleMoveStart = () => {
+      moving = true;
+    };
+
+    const handleMoveEnd = () => {
+      moving = false;
+      keepVisible();
+    };
+
+    map.on('popupopen', handleOpen);
+    map.on('popupclose', handleClose);
+    map.on('movestart', handleMoveStart);
+    map.on('moveend', handleMoveEnd);
+    return () => {
+      window.clearTimeout(restoreTimer);
+      map.off('popupopen', handleOpen);
+      map.off('popupclose', handleClose);
+      map.off('movestart', handleMoveStart);
+      map.off('moveend', handleMoveEnd);
+    };
+  }, [map]);
 
   useEffect(() => {
     if (!fitFor || points.length === 0) return undefined;
@@ -106,7 +272,7 @@ function MapController({ focus, fitFor, points, markerRefs }) {
 
     // Beberapa hasil: pas ke semua titik.
     const bounds = L.latLngBounds(points.map((point) => [point.latitude, point.longitude]));
-    const options = { padding: [70, 70], maxZoom: FIT_MAX_ZOOM };
+    const options = { ...getFitPadding(map), maxZoom: FIT_MAX_ZOOM };
     if (reduceMotion) {
       map.fitBounds(bounds, { ...options, animate: false });
     } else {
@@ -167,7 +333,11 @@ function EventPopup({ event, impact }) {
         <div className="gs-popup__row">Rumah rusak: {formatNumber(event.houses_damaged)}</div>
       )}
       {event.description && <div className="gs-popup__desc">{event.description}</div>}
-      {event.source_note && <div className="gs-popup__note">Sumber: {event.source_note}</div>}
+      {event.source_note && (
+        <div className="gs-popup__note gs-popup__note--source" title={event.source_note}>
+          Sumber: {event.source_note}
+        </div>
+      )}
       <div className="gs-popup__note">Lokasi perkiraan tingkat kabupaten/kota</div>
     </div>
   );
@@ -383,7 +553,7 @@ export default function PetaBencana() {
                   <Tooltip direction="top" offset={[0, -impact.size / 2]} className="gs-tooltip">
                     {event.regency || event.province || event.title}
                   </Tooltip>
-                  <Popup minWidth={250} maxWidth={300} autoPanPadding={[40, 40]}>
+                  <Popup minWidth={250} maxWidth={300} autoPan={false}>
                     <EventPopup event={event} impact={impact} />
                   </Popup>
                 </Marker>
