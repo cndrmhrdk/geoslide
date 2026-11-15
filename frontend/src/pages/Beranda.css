@@ -1,0 +1,1186 @@
+/* ============================================================
+   Beranda.css — Hero sinematik, akses cepat, dan bagian edukasi.
+   Semua kelas berawalan bh- agar tidak bentrok dengan halaman lain.
+   Memakai token dari index.css (--primary, --forest, --gold, dst.).
+   ============================================================ */
+
+.bh {
+  --bh-moss: #9ad36a;
+  --bh-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --sy: 0;
+  overflow-x: clip;
+  background: var(--bg);
+}
+
+/* ---------- Muncul saat masuk layar ---------- */
+.bh.bh-anim [data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s var(--bh-ease), transform 0.7s var(--bh-ease);
+  transition-delay: calc(var(--i, 0) * 90ms);
+}
+
+.bh.bh-anim [data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- Tipografi bagian ---------- */
+.bh-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.9rem;
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+
+.bh-eyebrow::before {
+  content: '';
+  width: 26px;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+}
+
+.bh-eyebrow--light {
+  color: var(--bh-moss);
+}
+
+.bh-title {
+  margin-bottom: 1.1rem;
+  font-size: clamp(1.95rem, 2.6vw + 0.9rem, 3.1rem);
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+}
+
+.bh-text {
+  max-width: 56ch;
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: var(--muted);
+}
+
+.bh-text--center {
+  margin-inline: auto;
+  text-align: center;
+}
+
+.bh-section {
+  padding: 5.5rem 0;
+}
+
+.bh-section--white {
+  background: var(--surface);
+}
+
+.bh-head {
+  max-width: 720px;
+  margin: 0 auto 3.2rem;
+  text-align: center;
+}
+
+.bh-head .bh-eyebrow::after {
+  content: '';
+  width: 26px;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.bh-hero {
+  position: relative;
+  isolation: isolate;
+  min-height: clamp(700px, 100svh, 940px);
+  display: flex;
+  align-items: center;
+  padding: 150px 0 190px;
+  color: #fff;
+  background: #0c1f15;
+  overflow: hidden;
+}
+
+.bh-scene {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -3;
+}
+
+.bh-layer {
+  will-change: transform;
+}
+.bh-layer--far {
+  transform: translate3d(0, calc(var(--sy) * 0.05px), 0);
+}
+.bh-layer--mid {
+  transform: translate3d(0, calc(var(--sy) * 0.1px), 0);
+}
+.bh-layer--near {
+  transform: translate3d(0, calc(var(--sy) * 0.17px), 0);
+}
+.bh-layer--front {
+  transform: translate3d(0, calc(var(--sy) * 0.26px), 0);
+}
+
+.bh-mist--a {
+  animation: bhMist 22s ease-in-out infinite alternate;
+}
+.bh-mist--b {
+  animation: bhMist 28s ease-in-out infinite alternate-reverse;
+}
+
+.bh-rain {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  opacity: 0.55;
+  background-image: repeating-linear-gradient(
+    102deg,
+    rgba(215, 238, 255, 0.2) 0 1px,
+    transparent 1px 34px
+  );
+  background-size: 180px 240px;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 45%, transparent 82%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 45%, transparent 82%);
+  animation: bhRain 1.3s linear infinite;
+}
+
+.bh-hero__shade {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(6, 16, 10, 0.55) 0%, rgba(6, 16, 10, 0) 26%),
+    linear-gradient(90deg, rgba(6, 16, 10, 0.72) 0%, rgba(6, 16, 10, 0.4) 50%, rgba(6, 16, 10, 0.05) 100%),
+    linear-gradient(0deg, rgba(6, 16, 10, 0.55) 0%, rgba(6, 16, 10, 0) 30%);
+}
+
+.bh-hero__inner {
+  position: relative;
+}
+
+.bh-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 1rem;
+  margin-bottom: 1.4rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+.bh-chip i {
+  color: var(--bh-moss);
+}
+
+.bh-hero__title {
+  max-width: 14em;
+  margin-bottom: 1.4rem;
+  font-size: clamp(2.4rem, 3.6vw + 1.2rem, 4.7rem);
+  line-height: 1.06;
+  letter-spacing: -0.035em;
+  color: #fff;
+  text-shadow: 0 2px 30px rgba(0, 0, 0, 0.25);
+}
+
+.bh-hero__title span {
+  color: var(--bh-moss);
+}
+
+.bh-hero__lead {
+  max-width: 540px;
+  margin-bottom: 2rem;
+  font-size: 1.08rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.84);
+}
+
+.bh-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.bh-hero__actions .btn-pill-glass {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 48px;
+}
+
+/* ---------- Kartu angka di hero ---------- */
+.bh-hero__card {
+  padding: 1.5rem;
+  border-radius: 28px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.11);
+  border: 1px solid rgba(255, 255, 255, 0.26);
+  -webkit-backdrop-filter: blur(22px) saturate(1.2);
+  backdrop-filter: blur(22px) saturate(1.2);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+}
+
+.bh-hero__card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1.1rem;
+  font-size: 0.78rem;
+}
+
+.bh-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.bh-live i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--bh-moss);
+  box-shadow: 0 0 0 0 rgba(154, 211, 106, 0.6);
+  animation: bhLive 1.8s ease-out infinite;
+}
+
+.bh-hero__card-year {
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.bh-hero__big {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding-bottom: 1.1rem;
+  margin-bottom: 1.1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.bh-hero__big strong {
+  font-size: clamp(2.8rem, 3vw + 1.4rem, 4.2rem);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.bh-hero__big span {
+  font-size: 0.88rem;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.bh-hero__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.bh-hstat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.bh-hstat strong {
+  font-size: 1.45rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.bh-hstat span {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.bh-hero__card-empty {
+  margin: 0 0 1.25rem;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.bh-hero__card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #fff;
+}
+
+.bh-hero__card-link:hover {
+  color: var(--bh-moss);
+}
+
+.bh-hero__card-link i {
+  transition: transform 0.25s var(--bh-ease);
+}
+
+.bh-hero__card-link:hover i {
+  transform: translateX(3px);
+}
+
+.bh-skeleton {
+  height: 120px;
+  margin-bottom: 1.25rem;
+  border-radius: 16px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.08) 25%,
+    rgba(255, 255, 255, 0.18) 50%,
+    rgba(255, 255, 255, 0.08) 75%
+  );
+  background-size: 200% 100%;
+  animation: bhShimmer 1.4s linear infinite;
+}
+
+/* ============================================================
+   AKSES CEPAT
+   ============================================================ */
+.bh-quick {
+  position: relative;
+  z-index: 2;
+  margin-top: -84px;
+}
+
+.bh-quick__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.bh-quick__card {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.95rem;
+  padding: 1.25rem 1.3rem;
+  border-radius: 22px;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+  transition: box-shadow 0.3s var(--bh-ease), border-color 0.3s ease;
+}
+
+.bh-quick__card:hover {
+  color: var(--ink);
+  border-color: rgba(63, 122, 26, 0.35);
+  box-shadow: var(--shadow-lg);
+}
+
+.bh-quick__icon {
+  flex: none;
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  font-size: 1.25rem;
+  color: var(--primary);
+  background: var(--primary-soft);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.bh-quick__card:hover .bh-quick__icon {
+  color: #fff;
+  background: var(--primary);
+}
+
+.bh-quick__text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+  padding-right: 1.1rem;
+}
+
+.bh-quick__text strong {
+  font-size: 1.02rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.bh-quick__text span {
+  font-size: 0.84rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.bh-quick__arrow {
+  position: absolute;
+  top: 1.1rem;
+  right: 1.1rem;
+  font-size: 0.9rem;
+  color: var(--muted);
+  transition: transform 0.3s var(--bh-ease), color 0.3s ease;
+}
+
+.bh-quick__card:hover .bh-quick__arrow {
+  color: var(--primary);
+  transform: translate(2px, -2px);
+}
+
+/* ============================================================
+   APA ITU
+   ============================================================ */
+.bh-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bh-chips li {
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  font-size: 0.86rem;
+  font-weight: 500;
+  color: var(--forest);
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.bh-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.6rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.bh-link i {
+  transition: transform 0.25s var(--bh-ease);
+}
+
+.bh-link:hover i {
+  transform: translateX(4px);
+}
+
+.bh-figure {
+  margin: 0;
+  padding: 1rem;
+  border-radius: 30px;
+  background: linear-gradient(160deg, #fbfaf7 0%, #e7eee0 100%);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+}
+
+.bh-figure figcaption {
+  display: flex;
+  gap: 0.55rem;
+  padding: 0.85rem 0.5rem 0.35rem;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.bh-figure figcaption i {
+  color: var(--primary);
+}
+
+.bh-slope {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 20px;
+  background: linear-gradient(180deg, #cfe3f2 0%, #eaf2f1 60%);
+}
+
+.bh-slope__mass {
+  animation: bhSlide 7s var(--bh-ease) infinite;
+}
+
+.bh-slope__rain {
+  animation: bhDrops 0.9s linear infinite;
+}
+
+.bh-slope__label {
+  font-size: 13px;
+  font-weight: 600;
+  fill: #fff;
+  paint-order: stroke;
+  stroke: rgba(0, 0, 0, 0.35);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+
+.bh-slope__label--gold {
+  fill: #ffe29a;
+}
+
+/* ============================================================
+   JENIS-JENIS
+   ============================================================ */
+.bh-types {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 1.15rem;
+}
+
+.bh-type {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 22px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  transition: box-shadow 0.3s var(--bh-ease), border-color 0.3s ease;
+}
+
+.bh-type:hover {
+  border-color: rgba(63, 122, 26, 0.3);
+  box-shadow: var(--shadow-md);
+}
+
+.bh-type__media {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: #fff;
+}
+
+.bh-type__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s var(--bh-ease);
+}
+
+.bh-type:hover .bh-type__media img {
+  transform: scale(1.07);
+}
+
+.bh-type__fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: rgba(31, 61, 38, 0.35);
+  background: linear-gradient(135deg, #e5efdf, #f4f3ef);
+}
+
+.bh-type__no {
+  position: absolute;
+  top: 0.7rem;
+  left: 0.7rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #fff;
+  background: var(--ink);
+}
+
+.bh-type__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 1rem 1.1rem 1.25rem;
+}
+
+.bh-type__body h3 {
+  margin: 0;
+  font-size: 1.02rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.bh-type__id {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--primary);
+}
+
+.bh-type__body p {
+  margin: 0.45rem 0 0;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+/* ============================================================
+   PENYEBAB
+   ============================================================ */
+.bh-causes {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.15rem;
+}
+
+.bh-cause {
+  position: relative;
+  overflow: hidden;
+  padding: 1.7rem 1.5rem 1.6rem;
+  border-radius: 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.3s var(--bh-ease), border-color 0.3s ease;
+}
+
+.bh-cause:hover {
+  border-color: rgba(63, 122, 26, 0.3);
+  box-shadow: var(--shadow-md);
+}
+
+.bh-cause__no {
+  position: absolute;
+  top: 0.9rem;
+  right: 1.2rem;
+  font-size: 3.1rem;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  color: rgba(15, 15, 15, 0.06);
+}
+
+.bh-cause__icon {
+  width: 54px;
+  height: 54px;
+  margin-bottom: 1.3rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 18px;
+  font-size: 1.5rem;
+  color: var(--primary);
+  background: var(--primary-soft);
+}
+
+.bh-cause h3 {
+  margin-bottom: 0.45rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.bh-cause p {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+/* ============================================================
+   DAMPAK (pita hijau hutan)
+   ============================================================ */
+.bh-impact {
+  position: relative;
+  padding: 5.5rem 0;
+  color: #fff;
+  background:
+    radial-gradient(60% 80% at 85% 0%, rgba(154, 211, 106, 0.16), transparent 60%),
+    radial-gradient(50% 70% at 0% 100%, rgba(217, 169, 58, 0.12), transparent 60%),
+    linear-gradient(160deg, #1f3d26 0%, #142819 100%);
+}
+
+.bh-impact .bh-title {
+  color: #fff;
+}
+
+.bh-impact .bh-title span {
+  color: var(--bh-moss);
+}
+
+.bh-impact .bh-text {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.bh-impact__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.15rem;
+}
+
+.bh-impact__card {
+  --tone: var(--bh-moss);
+  padding: 1.7rem 1.5rem;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.bh-impact__card:hover {
+  border-color: var(--tone);
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.bh-tone--coral {
+  --tone: #ee7a68;
+}
+.bh-tone--moss {
+  --tone: #9ad36a;
+}
+.bh-tone--gold {
+  --tone: #e8bb54;
+}
+.bh-tone--sand {
+  --tone: #d6c7a3;
+}
+
+.bh-impact__icon {
+  width: 54px;
+  height: 54px;
+  margin-bottom: 1.3rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 18px;
+  font-size: 1.45rem;
+  color: var(--tone);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.bh-impact__card h3 {
+  margin-bottom: 0.45rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.bh-impact__card p {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+/* ============================================================
+   MITIGASI
+   ============================================================ */
+.bh-steps {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bh-steps::before {
+  content: '';
+  position: absolute;
+  top: 2.9rem;
+  left: 8%;
+  right: 8%;
+  height: 2px;
+  background: repeating-linear-gradient(90deg, var(--border-strong) 0 8px, transparent 8px 16px);
+}
+
+.bh-step {
+  position: relative;
+  padding: 1.5rem 1.6rem 1.7rem;
+  border-radius: 26px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+
+.bh-step__top {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.2rem;
+}
+
+.bh-step__no {
+  width: 46px;
+  height: 46px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--ink);
+  box-shadow: 0 0 0 6px var(--surface);
+}
+
+.bh-step__icon {
+  width: 46px;
+  height: 46px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  font-size: 1.3rem;
+  color: var(--primary);
+  background: var(--primary-soft);
+}
+
+.bh-step:nth-child(2) .bh-step__icon {
+  color: #8c6712;
+  background: rgba(217, 169, 58, 0.18);
+}
+
+.bh-step:nth-child(3) .bh-step__icon {
+  color: var(--forest);
+  background: rgba(31, 61, 38, 0.1);
+}
+
+.bh-step h3 {
+  margin-bottom: 0.9rem;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.bh-step ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bh-step li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+.bh-step li i {
+  flex: none;
+  margin-top: 0.12rem;
+  color: var(--primary);
+}
+
+/* ============================================================
+   CTA
+   ============================================================ */
+.bh-cta-wrap {
+  padding: 5.5rem 0 5rem;
+}
+
+.bh-cta {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 2rem;
+  padding: 3.4rem;
+  border-radius: 34px;
+  color: #fff;
+  background:
+    radial-gradient(60% 90% at 100% 0%, rgba(154, 211, 106, 0.2), transparent 60%),
+    linear-gradient(150deg, #24492d 0%, #142819 100%);
+  box-shadow: var(--shadow-lg);
+}
+
+.bh-cta__art {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 58%;
+  pointer-events: none;
+}
+
+.bh-cta__body,
+.bh-cta__sos {
+  position: relative;
+}
+
+.bh-cta h2 {
+  max-width: 14em;
+  margin-bottom: 0.9rem;
+  font-size: clamp(1.9rem, 2.4vw + 0.9rem, 3rem);
+  color: #fff;
+}
+
+.bh-cta p {
+  max-width: 46ch;
+  margin-bottom: 1.8rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.bh-cta__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.bh-btn-light {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 46px;
+  padding: 0.55rem 1.4rem;
+  border-radius: 999px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--ink);
+  background: #fff;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+  transition: transform 0.25s var(--bh-ease), box-shadow 0.25s ease;
+}
+
+.bh-btn-light:hover {
+  color: var(--ink);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.24);
+}
+
+.bh-cta__actions .btn-pill-glass {
+  min-height: 46px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.bh-cta__sos {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding: 1.3rem;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+
+.bh-cta__sos > span {
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.bh-cta__sos a {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.7rem 1rem;
+  border-radius: 16px;
+  font-size: 0.95rem;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+  transition: background-color 0.25s ease;
+}
+
+.bh-cta__sos a:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.bh-cta__sos a i {
+  color: var(--bh-moss);
+}
+
+.bh-cta__sos a b {
+  margin-left: auto;
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* ============================================================
+   Keyframes
+   ============================================================ */
+@keyframes bhMist {
+  from {
+    transform: translateX(-70px);
+  }
+  to {
+    transform: translateX(90px);
+  }
+}
+
+@keyframes bhRain {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -70px 240px;
+  }
+}
+
+@keyframes bhLive {
+  0% {
+    box-shadow: 0 0 0 0 rgba(154, 211, 106, 0.6);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 10px rgba(154, 211, 106, 0);
+  }
+}
+
+@keyframes bhShimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes bhSlide {
+  0%,
+  18% {
+    transform: translate(0, 0);
+  }
+  58%,
+  86% {
+    transform: translate(44px, 19px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes bhDrops {
+  from {
+    transform: translateY(-6px);
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.9;
+  }
+  to {
+    transform: translateY(18px);
+    opacity: 0.2;
+  }
+}
+
+/* ============================================================
+   Responsif
+   ============================================================ */
+@media (max-width: 1199.98px) {
+  .bh-types {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 991.98px) {
+  .bh-section,
+  .bh-impact {
+    padding: 4rem 0;
+  }
+
+  .bh-hero {
+    padding: 128px 0 170px;
+  }
+
+  .bh-quick__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .bh-types {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .bh-causes,
+  .bh-impact__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .bh-steps {
+    grid-template-columns: 1fr;
+  }
+
+  .bh-steps::before {
+    display: none;
+  }
+
+  .bh-cta {
+    grid-template-columns: 1fr;
+    padding: 2.4rem 1.6rem;
+    border-radius: 28px;
+  }
+
+  .bh-cta-wrap {
+    padding: 4rem 0;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .bh-hero {
+    min-height: 0;
+    padding: 112px 0 150px;
+  }
+
+  .bh-quick {
+    margin-top: -70px;
+  }
+
+  .bh-quick__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .bh-types {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.8rem;
+  }
+
+  .bh-type__body {
+    padding: 0.8rem 0.85rem 1rem;
+  }
+
+  .bh-type__body p {
+    display: none;
+  }
+
+  .bh-causes,
+  .bh-impact__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .bh-hero__actions > * {
+    flex: 1 1 100%;
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bh *,
+  .bh *::before,
+  .bh *::after {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .bh-layer {
+    transform: none !important;
+  }
+}
