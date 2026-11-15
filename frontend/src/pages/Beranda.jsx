@@ -3,13 +3,6 @@ import { Link } from 'react-router-dom';
 import PageHeader from '../components/PageHeader';
 import Section from '../components/Section';
 
-/**
- * Halaman: Beranda
- * File ini milik: [nama anggota]
- *
- * Isi konten halaman beranda di sini.
- * Komponen yang tersedia: PageHeader, Section, dan lainnya (lihat docs/UI-GUIDE.md)
- */
 export default function Beranda() {
   return (
     <>
@@ -90,7 +83,7 @@ export default function Beranda() {
                 <img src="https://d9-wret.s3.us-west-2.amazonaws.com/assets/palladium/production/s3fs-public/media/images/05.%20Rockfall.gif" alt="Rockfall" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
               <h3 className="h5 mb-2">4. Rockfall (Runtuhan Batuan)</h3>
-              <p className="text-muted-custom small mb-0">Jatuhnya batuan secara bebas dari tebing terjal akibat pelapukan gravitasi.</p>
+              <p className="text-muted-custom small mb-0">Jatuhnya batuan secara bebas dari tebing terjal akibat pelapukan dan gaya gravitasi.</p>
             </div>
 
             <div className="card-solid">
@@ -114,7 +107,7 @@ export default function Beranda() {
                 <img src="https://cdn-syd.brandkit.com/accounts/23/files/01HQXQ0H9FHXB2CXM2YXFR2AGR/449500-preview.webp?v=63876836007" alt="Lateral Spread" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
               <h3 className="h5 mb-2">7. Lateral Spread (Penyebaran Lateral)</h3>
-              <p className="text-muted-custom small mb-0">Peregangan horizontal massa tanah akibat likuifaksi atau patahan lempengan.</p>
+              <p className="text-muted-custom small mb-0">Peregangan horizontal massa tanah akibat likuifaksi atau getaran gempa.</p>
             </div>
 
             <div className="card-solid">
