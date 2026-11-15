@@ -398,3 +398,189 @@
     padding: 1rem 1.25rem;
   }
 }
+/* ==========================================
+   IMPROVEMENT HALAMAN CEK STATUS LAPORAN
+========================================== */
+
+/* Memperlebar keseluruhan konten */
+.csl-wrap {
+  width: 100%;
+  max-width: 860px;
+  margin: -4.5rem auto 0;
+  gap: 1.25rem;
+  position: relative;
+  z-index: 2;
+}
+
+/* Memperbesar box pencarian */
+.csl-search-card {
+  width: 100%;
+  padding: 2.75rem 3rem 2.5rem;
+  border-radius: 22px;
+  box-shadow: 0 12px 35px rgba(35, 65, 35, 0.07);
+}
+
+/* Memperbesar ikon */
+.csl-search-card__icon-wrap {
+  width: 66px;
+  height: 66px;
+  border-radius: 18px;
+  font-size: 1.7rem;
+  margin-bottom: 1.25rem;
+}
+
+/* Judul box */
+.csl-search-card__title {
+  font-size: 1.5rem;
+  margin-bottom: 0.6rem;
+}
+
+/* Deskripsi box */
+.csl-search-card__sub {
+  max-width: 650px;
+  margin: 0 auto 1.75rem;
+  font-size: 0.9rem;
+  line-height: 1.8;
+}
+
+/* Form pencarian dibuat lebih proporsional */
+.csl-form {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.csl-input {
+  min-height: 54px;
+  font-size: 0.95rem;
+}
+
+.csl-submit-btn {
+  min-height: 54px;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+/* Memperbesar tampilan informasi status */
+.csl-info-row {
+  gap: 1rem;
+}
+
+.csl-info-item {
+  padding: 1.25rem;
+  border-radius: 14px;
+}
+
+/* Bagian bantuan */
+.csl-help {
+  padding: 1.5rem 1.75rem;
+  border-radius: 14px;
+}
+
+/* Kartu hasil pencarian */
+.csl-result-card {
+  border-radius: 20px;
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 768px) {
+  .csl-wrap {
+    max-width: 100%;
+    margin-top: -2.5rem;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .csl-search-card {
+    padding: 2rem 1.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .csl-wrap {
+    margin-top: -1.5rem;
+  }
+
+  .csl-search-card__title {
+    font-size: 1.25rem;
+  }
+
+  .csl-search-card__sub {
+    font-size: 0.82rem;
+  }
+
+  .csl-info-row {
+    grid-template-columns: 1fr;
+  }
+}
+/* ==========================================
+   HEADER CEK STATUS LAPORAN
+========================================== */
+
+.csl-page-header {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 12px 24px 20px;
+  text-align: left;
+}
+
+/* Badge dan ikon dalam satu baris */
+.csl-header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 14px;
+  margin-bottom: 18px;
+  border-radius: 30px;
+  background: #e8f1e2;
+  color: #43852f;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.csl-header-badge i {
+  font-size: 15px;
+}
+
+/* Judul halaman */
+.csl-header-title {
+  margin: 0 0 14px;
+  font-size: clamp(36px, 4vw, 52px);
+  font-weight: 500;
+  letter-spacing: -2px;
+  line-height: 1.15;
+  color: #151515;
+  text-align: left;
+}
+
+.csl-header-title span {
+  color: #43852f;
+}
+
+/* Deskripsi */
+.csl-header-subtitle {
+  max-width: 650px;
+  margin: 0;
+  color: #777873;
+  font-size: 16px;
+  line-height: 1.8;
+  text-align: left;
+}
+
+@media (max-width: 768px) {
+  .csl-page-header {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .csl-header-title {
+    font-size: 36px;
+  }
+
+  .csl-header-subtitle {
+    font-size: 14px;
+  }
+}

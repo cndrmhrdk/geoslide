@@ -240,13 +240,23 @@ export default function LaporkanOrangHilang() {
      ============================================================ */
   return (
     <>
-      <PageHeader
-        badge="Pelaporan Masyarakat"
-        title="Laporkan Orang Hilang"
-        highlight="Orang Hilang"
-        subtitle="Laporkan orang yang hilang akibat bencana tanah longsor. Laporan Anda akan diverifikasi dan dipublikasikan jika disetujui."
-        icon="bi-person-exclamation"
-      />
+      <div className="loh-page-header">
+  <div className="loh-header-top">
+    <span className="loh-badge">
+      <i className="bi bi-person-exclamation"></i>
+      Pelaporan Masyarakat
+    </span>
+  </div>
+
+  <h1 className="loh-header-title">
+    Laporkan <span>Orang Hilang</span>
+  </h1>
+
+  <p className="loh-header-subtitle">
+    Laporkan orang yang hilang akibat bencana tanah longsor.
+    Laporan Anda akan diverifikasi dan dipublikasikan jika disetujui.
+  </p>
+</div>
 
       <Section bg="subtle" py="lg">
         <div className="lb-layout" ref={topRef}>

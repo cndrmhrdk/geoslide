@@ -761,3 +761,556 @@
 
   .lb-tracking-box__code { font-size: 1.1rem; }
 }
+/* ============================================================
+   VISUAL ENHANCEMENT — LAPORKAN BENCANA
+   Tempel di bagian PALING BAWAH LaporkanBencana.css
+   ============================================================ */
+
+/* ---- Background dan layout utama ---- */
+.lb-layout {
+  gap: 1.75rem;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0.5rem 0;
+}
+
+.lb-form-col {
+  gap: 1.4rem;
+}
+
+/* ---- Stepper ---- */
+.lb-stepper {
+  padding: 1.25rem 1.5rem;
+  border-radius: 16px;
+  background: #ffffff;
+  border: 1px solid #e7eee3;
+  box-shadow: 0 5px 20px rgba(38, 70, 32, 0.05);
+}
+
+.lb-stepper__circle {
+  width: 40px;
+  height: 40px;
+  font-size: 1rem;
+  border: 1px solid #e5ebdf;
+  background: #f5f7f2;
+}
+
+.lb-stepper__item--active .lb-stepper__circle {
+  background: #43852f;
+  border-color: #43852f;
+  color: white;
+  box-shadow: 0 4px 12px rgba(67, 133, 47, 0.25);
+  transform: scale(1.05);
+}
+
+.lb-stepper__item--done .lb-stepper__circle {
+  background: #e8f3e3;
+  border-color: #cce2c2;
+  color: #43852f;
+}
+
+.lb-stepper__label {
+  font-size: 0.8rem;
+  letter-spacing: -0.01em;
+}
+
+.lb-stepper__line {
+  background: #e4eadf;
+}
+
+/* ---- Form card ---- */
+.lb-card {
+  padding: 2rem;
+  border: 1px solid #e8eee5;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 8px 28px rgba(36, 65, 30, 0.055);
+  gap: 1.4rem;
+  transition: box-shadow 0.25s ease;
+}
+
+.lb-card__heading {
+  align-items: center;
+  gap: 1rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid #edf1e9;
+}
+
+.lb-card__heading-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  margin: 0;
+  border-radius: 13px;
+  background: #edf5e9;
+  color: #43852f;
+  font-size: 1.35rem;
+}
+
+.lb-card__title {
+  font-size: 1.12rem;
+  font-weight: 750;
+  color: #263a26;
+}
+
+.lb-card__sub {
+  margin-top: 5px;
+  color: #7b8878;
+  font-size: 0.83rem;
+  line-height: 1.5;
+}
+
+/* ---- Form fields ---- */
+.lb-field {
+  margin-bottom: 1.15rem;
+}
+
+.lb-field__label {
+  margin-bottom: 0.5rem;
+  font-size: 0.84rem;
+  font-weight: 650;
+  color: #354633;
+}
+
+.lb-field__req {
+  color: #e05252;
+}
+
+.lb-field__hint {
+  margin-top: 0.4rem;
+  color: #899386;
+  font-size: 0.74rem;
+}
+
+.lb-input {
+  min-height: 46px;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid #dce5d8;
+  border-radius: 10px;
+  background: #fbfcfa;
+  color: #344332;
+  font-size: 0.86rem;
+  transition: all 0.2s ease;
+}
+
+.lb-input:hover {
+  border-color: #b9cdb0;
+}
+
+.lb-input:focus {
+  border-color: #579344;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(75, 145, 57, 0.10);
+}
+
+.lb-input::placeholder {
+  color: #a7b0a3;
+}
+
+.lb-textarea {
+  min-height: 155px;
+  line-height: 1.75;
+}
+
+/* ---- Grid form ---- */
+.lb-grid-2 {
+  column-gap: 1.15rem;
+  row-gap: 0.15rem;
+}
+
+/* ---- Coordinate section ---- */
+.lb-coord-section {
+  padding: 1.25rem 1.2rem 0.6rem;
+  border: 1px solid #dfead9;
+  border-radius: 13px;
+  background: #f7faf5;
+}
+
+.lb-coord-section__title {
+  font-size: 0.88rem;
+  color: #344b30;
+}
+
+.lb-coord-section__sub {
+  margin-top: 4px;
+  font-size: 0.76rem;
+  color: #84917e;
+}
+
+.lb-btn-geo {
+  padding: 0.55rem 1rem;
+  background: #eaf4e5;
+  border-color: #d2e5c9;
+  color: #43852f;
+  font-size: 0.78rem;
+}
+
+.lb-btn-geo:hover:not(:disabled) {
+  background: #dcefd3;
+  transform: translateY(-2px);
+}
+
+/* ---- Upload foto ---- */
+.lb-dropzone {
+  padding: 2.8rem 1.5rem;
+  border: 2px dashed #c9dac0;
+  border-radius: 15px;
+  background: #f9fbf7;
+}
+
+.lb-dropzone:hover,
+.lb-dropzone:focus {
+  border-color: #579344;
+  background: #f0f7ec;
+}
+
+.lb-dropzone__icon {
+  color: #7b9e6e;
+  font-size: 2.5rem;
+  margin-bottom: 0.8rem;
+}
+
+.lb-dropzone__text {
+  color: #354b30;
+  font-size: 0.92rem;
+}
+
+.lb-dropzone__hint {
+  color: #899486;
+  line-height: 1.6;
+}
+
+.lb-photo-grid {
+  gap: 1rem;
+}
+
+.lb-photo-item {
+  border-radius: 12px;
+  border-color: #e1e9dc;
+  box-shadow: 0 3px 10px rgba(35, 60, 30, 0.05);
+}
+
+/* ---- Summary ---- */
+.lb-summary {
+  border: 1px solid #dfead9;
+  border-radius: 13px;
+  background: #f8fbf6;
+}
+
+.lb-summary__title {
+  padding: 0.85rem 1rem;
+  background: #edf5e9;
+  color: #43852f;
+  font-size: 0.84rem;
+}
+
+.lb-summary__row {
+  padding: 0.65rem 1rem;
+  line-height: 1.55;
+}
+
+.lb-summary__key {
+  min-width: 90px;
+  color: #7b8878;
+}
+
+.lb-summary__val {
+  color: #344332;
+  overflow-wrap: anywhere;
+}
+
+/* ---- Privacy notice ---- */
+.lb-privacy-notice {
+  padding: 1rem 1.1rem;
+  border: 1px solid #dce9f5;
+  border-radius: 12px;
+  background: #f4f8fc;
+}
+
+.lb-privacy-notice__icon {
+  color: #4285b8;
+}
+
+.lb-privacy-notice__text {
+  color: #49657c;
+  font-size: 0.81rem;
+  line-height: 1.65;
+}
+
+/* ---- Navigation buttons ---- */
+.lb-nav {
+  padding-top: 1.25rem;
+  margin-top: 0.5rem;
+  border-top: 1px solid #edf1e9;
+}
+
+.lb-nav button {
+  min-height: 43px;
+  transition: all 0.2s ease;
+}
+
+.lb-nav button:hover {
+  transform: translateY(-2px);
+}
+
+.lb-nav button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ---- Aside / panel kanan ---- */
+.lb-aside {
+  gap: 1.15rem;
+}
+
+.lb-aside__card {
+  padding: 1.4rem;
+  border: 1px solid #e7eee3;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 6px 20px rgba(38, 70, 32, 0.045);
+}
+
+.lb-aside__title {
+  font-size: 0.9rem;
+  color: #344b30;
+  margin-bottom: 1rem;
+}
+
+.lb-aside__list {
+  gap: 0.8rem;
+}
+
+.lb-aside__list li {
+  color: #687665;
+  font-size: 0.81rem;
+  line-height: 1.55;
+}
+
+.lb-aside__check {
+  color: #579344;
+  font-size: 0.8rem;
+}
+
+.lb-aside__card--warn {
+  background: #fffaf0;
+  border-color: #f2e6c9;
+}
+
+.lb-aside__card--warn .lb-aside__title {
+  color: #956b24;
+}
+
+.lb-aside__card--warn .lb-aside__p {
+  color: #80683d;
+  line-height: 1.7;
+}
+
+.lb-aside__card--dark {
+  background: #29452e;
+  border-color: #29452e;
+  box-shadow: 0 8px 20px rgba(31, 65, 36, 0.13);
+}
+
+.lb-aside__card--dark .lb-aside__title {
+  color: #ffffff;
+}
+
+/* ---- Alerts ---- */
+.lb-alert {
+  padding: 1rem 1.1rem;
+  border-radius: 11px;
+  line-height: 1.6;
+}
+
+/* ---- Success screen ---- */
+.lb-success-card {
+  border: 1px solid #e4ecdf;
+  border-radius: 20px;
+  box-shadow: 0 12px 35px rgba(38, 70, 32, 0.08);
+}
+
+.lb-success-card__icon {
+  color: #4b9639;
+}
+
+.lb-tracking-box {
+  padding: 1.25rem;
+  border: 1px dashed #b9d5ae;
+  border-radius: 13px;
+  background: #f5f9f2;
+}
+
+.lb-tracking-box__code {
+  color: #43852f;
+  letter-spacing: 0.1em;
+}
+
+.lb-success-info {
+  border: 1px solid #e9eee5;
+  background: #f8faf6;
+  border-radius: 12px;
+}
+
+/* ---- Smooth appearance ---- */
+.lb-card,
+.lb-aside__card,
+.lb-stepper {
+  animation: lb-fade-up 0.35s ease both;
+}
+
+@keyframes lb-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 900px) {
+  .lb-layout {
+    gap: 1.4rem;
+  }
+
+  .lb-aside {
+    position: static;
+  }
+}
+
+@media (max-width: 640px) {
+  .lb-card {
+    padding: 1.35rem 1.1rem;
+    border-radius: 15px;
+  }
+
+  .lb-stepper {
+    padding: 0.9rem;
+  }
+
+  .lb-stepper__circle {
+    width: 36px;
+    height: 36px;
+  }
+
+  .lb-card__title {
+    font-size: 1rem;
+  }
+
+  .lb-coord-section {
+    padding: 1rem 0.9rem 0.4rem;
+  }
+
+  .lb-dropzone {
+    padding: 2rem 1rem;
+  }
+
+  .lb-aside__card {
+    padding: 1.15rem;
+  }
+}/* =====================================
+   PERBAIKAN HERO LAPORKAN BENCANA
+===================================== */
+
+/* Mengurangi jarak area hero */
+.lb-hero {
+  padding-top: 12px !important;
+  padding-bottom: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* Mengatur isi hero */
+.lb-hero__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* Badge dan ikon warning dalam satu baris */
+.lb-hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 14px;
+  margin-bottom: 12px;
+  border: 1px solid #dcebd5;
+  border-radius: 30px;
+  background: #eaf3e5;
+  color: #43852f;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Ikon warning */
+.lb-hero__badge i {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  color: #43852f;
+}
+
+/* Mengurangi jarak menuju formulir */
+.lb-layout {
+  margin-top: -55px !important;
+}
+
+/* Tampilan layar kecil */
+@media (max-width: 768px) {
+  .lb-hero__inner {
+    padding: 0 18px;
+  }
+
+  .lb-layout {
+    margin-top: -25px !important;
+  }
+}
+/* Label Pelaporan Masyarakat */
+.lb-hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  width: fit-content;
+  padding: 5px 13px;
+  margin-bottom: 10px;
+  border-radius: 20px;
+  background: #e5f0df;
+  color: #397d24;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.lb-hero__badge i {
+  font-size: 12px;
+}
+/* Label Pelaporan Masyarakat */
+.lb-hero__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.lb-hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  width: fit-content;
+  padding: 5px 13px;
+  margin-bottom: 12px;
+  border-radius: 20px;
+  background: #e5f0df;
+  color: #397d24;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.lb-hero__badge i {
+  font-size: 12px;
+}

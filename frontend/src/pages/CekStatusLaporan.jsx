@@ -73,14 +73,23 @@ export default function CekStatusLaporan() {
 
   return (
     <>
-      <PageHeader
-        badge="Pelaporan Masyarakat"
-        title="Cek Status Laporan"
-        highlight="Status"
-        subtitle="Masukkan kode pelacakan yang Anda terima saat mengirim laporan untuk melihat perkembangannya."
-        icon="bi-search"
-      />
+   <div className="csl-page-header">
+  <div className="csl-header-top">
+    <div className="csl-header-badge">
+      <i className="bi bi-search"></i>
+      <span>Pelaporan Masyarakat</span>
+    </div>
 
+    <h1 className="csl-header-title">
+      Cek <span>Status</span> Laporan
+    </h1>
+  </div>
+
+  <p className="csl-header-subtitle">
+    Masukkan kode pelacakan yang Anda terima saat mengirim laporan
+    untuk melihat perkembangannya.
+  </p>
+</div>
       <Section bg="subtle" py="lg">
         <div className="csl-wrap">
 

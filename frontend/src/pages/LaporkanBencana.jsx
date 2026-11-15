@@ -197,9 +197,29 @@ export default function LaporkanBencana() {
       Object.entries(form).forEach(([k, v]) => { if (v !== '') fd.append(k, v); });
       photos.filter(p => !p.error).forEach(p => fd.append('photos', p.file));
 
-      const res = await fetch('/api/laporan-bencana', { method: 'POST', body: fd });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || 'Gagal mengirim laporan.');
+      
+const res = await fetch('/api/laporan-bencana', {
+  method: 'POST',
+  body: fd
+});
+
+const contentType = res.headers.get('content-type') || '';
+
+if (!contentType.includes('application/json')) {
+  const responseText = await res.text();
+  console.error('Respons server:', responseText);
+
+  throw new Error(
+    `Server tidak mengembalikan JSON. Status: ${res.status}. Periksa endpoint API dan backend.`
+  );
+}
+
+const data = await res.json();
+
+if (!res.ok) {
+  throw new Error(data.message || 'Gagal mengirim laporan.');
+}
+
       setTrackingCode(data.tracking_code);
       scrollTop();
     } catch (err) {
@@ -214,7 +234,7 @@ export default function LaporkanBencana() {
     return (
       <>
         <PageHeader
-          badge="Laporan Terkirim"
+          badge="Laporan Terkirim"  
           title="Laporan Berhasil Dikirim"
           subtitle="Tim GeoSlide akan memverifikasi laporan Anda secepatnya."
           icon="bi-check-circle"
@@ -286,14 +306,20 @@ export default function LaporkanBencana() {
   /* ---- Form ---- */
   return (
     <>
-      <PageHeader
-        badge="Pelaporan Masyarakat"
-        title="Laporkan Bencana"
-        highlight="Bencana"
-        subtitle="Laporkan kejadian tanah longsor yang belum tercatat di GeoSlide. Laporan Anda membantu respons yang lebih cepat."
-        icon="bi-exclamation-triangle"
-      />
+                    <div className="lb-hero">
+  <div className="lb-hero__inner">
+    <div className="lb-hero__badge">
+      <i className="bi bi-exclamation-triangle"></i>
+      <span>Pelaporan Masyarakat</span>
+    </div>
 
+    <PageHeader
+      title="Laporkan Bencana"
+      highlight="Bencana"
+      subtitle="Laporkan kejadian tanah longsor yang belum tercatat di GeoSlide. Laporan Anda membantu respons yang lebih cepat."
+    />
+  </div>
+</div>
       <Section bg="subtle" py="lg">
         <div className="lb-layout" ref={topRef}>
 
