@@ -1,11 +1,4 @@
--- Semua kejadian tanah longsor (650 baris: 2026 + 2024-2025) ke disaster_events
--- Titik di kabupaten/kota yang sama digeser sedikit (acak tetap per kejadian) supaya tidak menumpuk.
--- Aman dijalankan pada database kosong MAUPUN yang sudah berisi data sebelumnya:
--- jika id sudah ada, hanya latitude/longitude yang diperbarui.
--- Syarat: data_sources id=1 sudah ada.
 
-SET NAMES utf8mb4;
-START TRANSACTION;
 
 INSERT INTO `disaster_events` (`id`, `data_source_id`, `external_id`, `title`, `event_date`, `province`, `regency`, `latitude`, `longitude`, `deaths`, `missing`, `injured`, `displaced`, `houses_damaged`) VALUES
 (1, 1, 'd048f683-a26c-4b67-9a71-fb120395b7ae', 'Tanah Longsor', '2026-11-03', 'Aceh', 'Kabupaten Gayo Lues', 3.9551650, 97.3516558, 1, 0, 0, 0, 0),
