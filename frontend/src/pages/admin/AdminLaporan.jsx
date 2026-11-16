@@ -8,13 +8,13 @@ function Modal({ open, title, onClose, children, footer }) {
   if (!open) return null;
   return (
     <div className="adm-modal-backdrop" onClick={e => e.target === e.currentTarget && onClose()}>
-      <div className="adm-modal">
-        <div className="adm-modal__header">
-          <h2 className="adm-modal__title">{title}</h2>
+      <div className="adm-modal" style={{ borderRadius: '20px', padding: '1.75rem', boxShadow: '0 15px 40px rgba(15,15,15,0.12)' }}>
+        <div className="adm-modal__header" style={{ marginBottom: '1.25rem' }}>
+          <h2 className="adm-modal__title" style={{ fontSize: '1.25rem', fontWeight: 700 }}>{title}</h2>
           <button className="adm-modal__close" onClick={onClose}><i className="bi bi-x-lg"></i></button>
         </div>
         <div className="adm-modal__body">{children}</div>
-        {footer && <div className="adm-modal__footer">{footer}</div>}
+        {footer && <div className="adm-modal__footer" style={{ marginTop: '1.5rem', display: 'flex', gap: '0.75rem', justifyContent: 'flex-end' }}>{footer}</div>}
       </div>
     </div>
   );
@@ -81,29 +81,30 @@ export default function AdminLaporan() {
   const totalPages = Math.ceil(total / PER_PAGE);
 
   return (
-    <div>
-      <div className="adm-page-header">
-        <h1 className="adm-page-header__title">Kelola Laporan</h1>
-        <p className="adm-page-header__subtitle">Tinjau laporan bencana dari masyarakat, terima atau tolak.</p>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+      {/* Page header */}
+      <div className="adm-page-header" style={{ marginBottom: '0.25rem' }}>
+        <h1 className="adm-page-header__title" style={{ fontSize: '1.75rem', fontWeight: 700 }}>Kelola Laporan</h1>
+        <p className="adm-page-header__subtitle" style={{ fontSize: '0.95rem' }}>Tinjau laporan bencana dari masyarakat, terima atau tolak.</p>
       </div>
 
       {alert && (
-        <div className={`adm-alert adm-alert--${alert.type}`} onClick={() => setAlert(null)} style={{ cursor: 'pointer' }}>
+        <div className={`adm-alert adm-alert--${alert.type}`} onClick={() => setAlert(null)} style={{ cursor: 'pointer', borderRadius: '12px' }}>
           <i className={`bi bi-${alert.type === 'success' ? 'check-circle' : 'exclamation-circle'}`}></i>
           {alert.text}
         </div>
       )}
 
-      <div className="adm-table-card">
-        <div className="adm-table-card__header">
-          <h2 className="adm-table-card__title">Daftar Laporan</h2>
-          <div className="adm-filter-bar">
+      <div className="adm-table-card" style={{ padding: '1.5rem', borderRadius: '16px', boxShadow: '0 4px 14px rgba(15,15,15,0.04)' }}>
+        <div className="adm-table-card__header" style={{ marginBottom: '1.25rem', flexWrap: 'wrap', gap: '1rem' }}>
+          <h2 className="adm-table-card__title" style={{ fontSize: '1.05rem', fontWeight: 600 }}>Daftar Laporan</h2>
+          <div className="adm-filter-bar" style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
             <input
               type="text" placeholder="Cari nama / lokasi…"
               value={search} onChange={e => { setSearch(e.target.value); setPage(1); }}
-              style={{ width: 200 }}
+              style={{ width: 220, padding: '0.5rem 0.85rem', borderRadius: '10px', border: '1px solid rgba(15,15,15,0.1)' }}
             />
-            <select value={filter} onChange={e => { setFilter(e.target.value); setPage(1); }}>
+            <select value={filter} onChange={e => { setFilter(e.target.value); setPage(1); }} style={{ padding: '0.5rem 0.85rem', borderRadius: '10px', border: '1px solid rgba(15,15,15,0.1)' }}>
               <option value="all">Semua Status</option>
               <option value="pending">Pending</option>
               <option value="approved">Disetujui</option>
@@ -146,8 +147,8 @@ export default function AdminLaporan() {
                     <td style={{ fontSize: '0.75rem', color: 'var(--muted)' }}>{new Date(row.created_at).toLocaleDateString('id-ID')}</td>
                     <td><StatusBadge status={row.status} /></td>
                     <td>
-                      <div style={{ display: 'flex', gap: '4px' }}>
-                        <button className="adm-btn adm-btn--outline adm-btn--sm" onClick={() => { setSelected(row); setModal('detail'); }}>
+                      <div style={{ display: 'flex', gap: '6px' }}>
+                        <button className="adm-btn adm-btn--outline adm-btn--sm" title="Detail" onClick={() => { setSelected(row); setModal('detail'); }}>
                           <i className="bi bi-eye"></i>
                         </button>
                         {row.status === 'pending' && (
@@ -170,8 +171,8 @@ export default function AdminLaporan() {
         </div>
 
         {totalPages > 1 && (
-          <div className="adm-pagination">
-            <span>Menampilkan {rows.length} dari {total}</span>
+          <div className="adm-pagination" style={{ marginTop: '1.25rem' }}>
+            <span>Menampilkan {rows.length} dari {total} data</span>
             <div className="adm-pagination__btns">
               <button className="adm-pagination__btn" disabled={page <= 1} onClick={() => setPage(p => p - 1)}><i className="bi bi-chevron-left"></i></button>
               {Array.from({ length: Math.min(totalPages, 7) }, (_, i) => i + 1).map(p => (
@@ -187,7 +188,7 @@ export default function AdminLaporan() {
       <Modal open={modal === 'detail'} title="Detail Laporan" onClose={() => setModal(null)}>
         {selected && (
           <div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem 1.25rem', marginBottom: '1rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem 1.25rem', marginBottom: '1.25rem' }}>
               {[
                 ['Kode Laporan', selected.tracking_code],
                 ['Pelapor', selected.reporter_name],
@@ -200,30 +201,30 @@ export default function AdminLaporan() {
               ].map(([k, v]) => (
                 <div key={k}>
                   <div style={{ fontSize: '0.72rem', color: 'var(--muted)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.04em' }}>{k}</div>
-                  <div style={{ fontSize: '0.875rem', fontWeight: 500 }}>{v}</div>
+                  <div style={{ fontSize: '0.875rem', fontWeight: 500, marginTop: '0.1rem' }}>{v}</div>
                 </div>
               ))}
             </div>
             <div className="adm-form-group">
-              <label>Deskripsi</label>
-              <div style={{ background: '#F8F9FB', borderRadius: 8, padding: '0.75rem', fontSize: '0.875rem', lineHeight: 1.6 }}>{selected.description}</div>
+              <label style={{ fontWeight: 600, fontSize: '0.8rem', marginBottom: '0.35rem', display: 'block' }}>Deskripsi</label>
+              <div style={{ background: '#F8F9FB', borderRadius: '10px', padding: '0.85rem', fontSize: '0.875rem', lineHeight: 1.6, border: '1px solid rgba(15,15,15,0.04)' }}>{selected.description}</div>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '1rem' }}>
               <span style={{ fontSize: '0.72rem', color: 'var(--muted)', fontWeight: 600, textTransform: 'uppercase' }}>Status:</span>
               <StatusBadge status={selected.status} />
             </div>
             {selected.rejection_reason && (
-              <div className="adm-alert adm-alert--error" style={{ marginTop: '1rem' }}>
+              <div className="adm-alert adm-alert--error" style={{ marginTop: '1rem', borderRadius: '10px' }}>
                 <i className="bi bi-exclamation-circle"></i>
                 <div><strong>Alasan Penolakan:</strong> {selected.rejection_reason}</div>
               </div>
             )}
             {selected.status === 'pending' && (
-              <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1.25rem' }}>
-                <button className="adm-btn adm-btn--primary" onClick={() => updateStatus(selected.id, 'approved')} disabled={saving}>
+              <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1.5rem' }}>
+                <button className="adm-btn adm-btn--primary" onClick={() => updateStatus(selected.id, 'approved')} disabled={saving} style={{ borderRadius: '10px', padding: '0.55rem 1.25rem' }}>
                   <i className="bi bi-check-lg"></i> Setujui
                 </button>
-                <button className="adm-btn adm-btn--danger" onClick={() => { setModal('reject'); setRejReason(''); }} disabled={saving}>
+                <button className="adm-btn adm-btn--danger" onClick={() => { setModal('reject'); setRejReason(''); }} disabled={saving} style={{ borderRadius: '10px', padding: '0.55rem 1.25rem' }}>
                   <i className="bi bi-x-lg"></i> Tolak
                 </button>
               </div>
@@ -238,16 +239,16 @@ export default function AdminLaporan() {
         title="Tolak Laporan"
         onClose={() => setModal(null)}
         footer={<>
-          <button className="adm-btn adm-btn--outline" onClick={() => setModal(null)}>Batal</button>
-          <button className="adm-btn adm-btn--danger" onClick={() => updateStatus(selected.id, 'rejected', rejReason)} disabled={saving || !rejReason.trim()}>
+          <button className="adm-btn adm-btn--outline" onClick={() => setModal(null)} style={{ borderRadius: '10px' }}>Batal</button>
+          <button className="adm-btn adm-btn--danger" onClick={() => updateStatus(selected.id, 'rejected', rejReason)} disabled={saving || !rejReason.trim()} style={{ borderRadius: '10px' }}>
             {saving ? 'Mengirim…' : 'Tolak Laporan'}
           </button>
         </>}
       >
-        <p style={{ fontSize: '0.875rem', marginBottom: '1rem' }}>Berikan alasan penolakan untuk laporan dari <strong>{selected?.reporter_name}</strong>:</p>
+        <p style={{ fontSize: '0.875rem', marginBottom: '1rem', color: 'var(--muted)' }}>Berikan alasan penolakan untuk laporan dari <strong>{selected?.reporter_name}</strong>:</p>
         <div className="adm-form-group">
-          <label>Alasan Penolakan</label>
-          <textarea value={rejReason} onChange={e => setRejReason(e.target.value)} rows={4} placeholder="Tulis alasan penolakan di sini…" />
+          <label style={{ fontWeight: 600, fontSize: '0.8rem', marginBottom: '0.35rem', display: 'block' }}>Alasan Penolakan</label>
+          <textarea value={rejReason} onChange={e => setRejReason(e.target.value)} rows={4} placeholder="Tulis alasan penolakan di sini…" style={{ borderRadius: '10px', padding: '0.75rem', border: '1px solid rgba(15,15,15,0.1)', width: '100%' }} />
         </div>
       </Modal>
     </div>

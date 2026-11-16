@@ -10,24 +10,24 @@ import {
 } from 'recharts';
 
 const STAT_CARDS = [
-  { key: 'total_events',          label: 'Kejadian Bencana',       icon: 'bi-geo-alt-fill',         color: '#3F7A1A', bg: '#E5EFDF' },
-  { key: 'total_reports',         label: 'Laporan Masuk',          icon: 'bi-clipboard2-data-fill',  color: '#1D4ED8', bg: '#DBEAFE' },
-  { key: 'pending_reports',       label: 'Menunggu Verifikasi',    icon: 'bi-hourglass-split',       color: '#854D0E', bg: '#FEF9C3' },
-  { key: 'total_missing',         label: 'Orang Hilang',           icon: 'bi-person-exclamation',    color: '#991B1B', bg: '#FEE2E2' },
+  { key: 'total_events',        label: 'Kejadian Bencana',      icon: 'bi-geo-alt-fill',        color: '#3F7A1A', bg: '#E5EFDF' },
+  { key: 'total_reports',       label: 'Laporan Masuk',         icon: 'bi-clipboard2-data-fill',  color: '#1D4ED8', bg: '#DBEAFE' },
+  { key: 'pending_reports',     label: 'Menunggu Verifikasi',   icon: 'bi-hourglass-split',      color: '#854D0E', bg: '#FEF9C3' },
+  { key: 'total_missing',       label: 'Orang Hilang',          icon: 'bi-person-exclamation',    color: '#991B1B', bg: '#FEE2E2' },
 ];
 
 const PIE_COLORS = ['#FEF9C3', '#DCFCE7', '#FEE2E2'];
 
 function StatCard({ value, label, icon, color, bg, loading }) {
   return (
-    <div className="adm-stat-card">
-      <div className="adm-stat-card__icon" style={{ backgroundColor: bg, color }}>
+    <div className="adm-stat-card" style={{ padding: '1.5rem', borderRadius: '16px', boxShadow: '0 4px 14px rgba(15,15,15,0.05)', transition: 'all 0.2s ease' }}>
+      <div className="adm-stat-card__icon" style={{ backgroundColor: bg, color, width: '48px', height: '48px', borderRadius: '12px', fontSize: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem' }}>
         <i className={`bi ${icon}`}></i>
       </div>
-      <div className="adm-stat-card__value" style={{ color }}>
+      <div className="adm-stat-card__value" style={{ color, fontSize: '1.85rem', fontWeight: 700, lineHeight: 1.2, marginBottom: '0.25rem' }}>
         {loading ? '—' : (value ?? 0).toLocaleString('id-ID')}
       </div>
-      <div className="adm-stat-card__label">{label}</div>
+      <div className="adm-stat-card__label" style={{ fontSize: '0.9rem', fontWeight: 500, color: 'var(--muted)' }}>{label}</div>
     </div>
   );
 }
@@ -92,40 +92,40 @@ export default function AdminDashboard() {
   }, [stats, loading]);
 
   return (
-    <div>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
       {/* Page header */}
-      <div className="adm-page-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
+      <div className="adm-page-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '0.5rem' }}>
         <div>
-          <h1 className="adm-page-header__title">Dashboard</h1>
-          <p className="adm-page-header__subtitle">Ringkasan aktivitas dan data bencana GeoSlide</p>
+          <h1 className="adm-page-header__title" style={{ fontSize: '1.75rem', fontWeight: 700 }}>Dashboard</h1>
+          <p className="adm-page-header__subtitle" style={{ fontSize: '0.95rem' }}>Ringkasan aktivitas dan data bencana GeoSlide</p>
         </div>
-        <div style={{ fontSize: '0.8rem', color: 'var(--muted)', background: '#fff', padding: '0.4rem 1rem', borderRadius: '8px', border: '1px solid rgba(15,15,15,0.07)' }}>
+        <div style={{ fontSize: '0.85rem', color: 'var(--muted)', background: '#fff', padding: '0.5rem 1.1rem', borderRadius: '10px', border: '1px solid rgba(15,15,15,0.07)', boxShadow: '0 2px 5px rgba(15,15,15,0.02)' }}>
           <i className="bi bi-clock me-1"></i>
           {new Date().toLocaleDateString('id-ID', { weekday:'long', day:'numeric', month:'long', year:'numeric' })}
         </div>
       </div>
 
       {/* Stat cards */}
-      <div className="adm-stat-grid">
+      <div className="adm-stat-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.25rem' }}>
         {STAT_CARDS.map(c => (
           <StatCard key={c.key} loading={loading} value={stats[c.key]} {...c} />
         ))}
       </div>
 
       {/* Charts row */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) 300px', gap: '1.25rem', marginBottom: '1.5rem', alignItems: 'start' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) 320px', gap: '1.25rem', alignItems: 'start' }}>
         {/* Bar chart: kejadian per bulan */}
-        <div className="adm-table-card" style={{ padding: '1.25rem 1.5rem' }}>
-          <div style={{ marginBottom: '1rem' }}>
-            <div className="adm-table-card__title">Kejadian Bencana per Bulan</div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--muted)' }}>Tahun berjalan</div>
+        <div className="adm-table-card" style={{ padding: '1.5rem', borderRadius: '16px', boxShadow: '0 4px 14px rgba(15,15,15,0.04)' }}>
+          <div style={{ marginBottom: '1.25rem' }}>
+            <div className="adm-table-card__title" style={{ fontSize: '1.05rem', fontWeight: 600 }}>Kejadian Bencana per Bulan</div>
+            <div style={{ fontSize: '0.8rem', color: 'var(--muted)' }}>Tahun berjalan</div>
           </div>
           {loading ? (
             <div className="adm-spinner"><div className="adm-spinner__ring"></div></div>
           ) : monthly.length === 0 ? (
             <div className="adm-empty"><div className="adm-empty__icon"><i className="bi bi-bar-chart"></i></div><p className="adm-empty__text">Data belum tersedia</p></div>
           ) : (
-            <ResponsiveContainer width="100%" height={220}>
+            <ResponsiveContainer width="100%" height={240}>
               <BarChart data={monthly} margin={{ top: 4, right: 8, left: -20, bottom: 4 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(15,15,15,0.06)" />
                 <XAxis dataKey="month" tick={{ fontSize: 11, fill: '#6E6E69' }} />
@@ -134,24 +134,24 @@ export default function AdminDashboard() {
                   contentStyle={{ borderRadius: '10px', border: '1px solid rgba(15,15,15,0.08)', fontSize: '0.8rem' }}
                   formatter={(v) => [v, 'Kejadian']}
                 />
-                <Bar dataKey="count" fill="#3F7A1A" radius={[5,5,0,0]} />
+                <Bar dataKey="count" fill="#3F7A1A" radius={[6,6,0,0]} />
               </BarChart>
             </ResponsiveContainer>
           )}
         </div>
 
         {/* Pie chart: status laporan */}
-        <div className="adm-table-card" style={{ padding: '1.25rem 1.5rem' }}>
-          <div className="adm-table-card__title" style={{ marginBottom: '1rem' }}>Status Laporan</div>
+        <div className="adm-table-card" style={{ padding: '1.5rem', borderRadius: '16px', boxShadow: '0 4px 14px rgba(15,15,15,0.04)' }}>
+          <div className="adm-table-card__title" style={{ marginBottom: '1.25rem', fontSize: '1.05rem', fontWeight: 600 }}>Status Laporan</div>
           {loading ? (
             <div className="adm-spinner"><div className="adm-spinner__ring"></div></div>
           ) : (
-            <ResponsiveContainer width="100%" height={220}>
+            <ResponsiveContainer width="100%" height={240}>
               <PieChart>
-                <Pie data={piData} cx="50%" cy="45%" outerRadius={70} dataKey="value" label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`} labelLine={false} style={{ fontSize: '0.7rem' }}>
+                <Pie data={piData} cx="50%" cy="45%" outerRadius={75} dataKey="value" label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`} labelLine={false} style={{ fontSize: '0.75rem' }}>
                   {piData.map((_, i) => <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} stroke={PIE_COLORS[i % PIE_COLORS.length]} />)}
                 </Pie>
-                <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: '0.75rem' }} />
+                <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: '0.75rem', paddingTop: '10px' }} />
                 <Tooltip formatter={(v, n) => [v, n]} contentStyle={{ borderRadius: '10px', fontSize: '0.8rem' }} />
               </PieChart>
             </ResponsiveContainer>
@@ -160,9 +160,9 @@ export default function AdminDashboard() {
       </div>
 
       {/* Recent reports table */}
-      <div className="adm-table-card">
-        <div className="adm-table-card__header">
-          <h2 className="adm-table-card__title">Laporan Terbaru</h2>
+      <div className="adm-table-card" style={{ padding: '1.5rem', borderRadius: '16px', boxShadow: '0 4px 14px rgba(15,15,15,0.04)' }}>
+        <div className="adm-table-card__header" style={{ marginBottom: '1rem' }}>
+          <h2 className="adm-table-card__title" style={{ fontSize: '1.05rem', fontWeight: 600 }}>Laporan Terbaru</h2>
           <Link to="/admin/laporan" className="adm-btn adm-btn--outline adm-btn--sm">
             Lihat Semua <i className="bi bi-arrow-right"></i>
           </Link>
@@ -194,21 +194,21 @@ export default function AdminDashboard() {
       </div>
 
       {/* Quick links */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '0.85rem', marginTop: '0.5rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>
         {[
           { to: '/admin/data-bencana', icon: 'bi-plus-circle', label: 'Tambah Kejadian', color: '#3F7A1A', bg: '#E5EFDF' },
           { to: '/admin/laporan',      icon: 'bi-check2-circle', label: 'Verifikasi Laporan', color: '#1D4ED8', bg: '#DBEAFE' },
           { to: '/admin/orang-hilang', icon: 'bi-person-check', label: 'Verifikasi Orang Hilang', color: '#854D0E', bg: '#FEF9C3' },
           { to: '/admin/sumber-data',  icon: 'bi-cloud-upload', label: 'Impor Data', color: '#6B21A8', bg: '#F3E8FF' },
         ].map(q => (
-          <Link key={q.to} to={q.to} style={{ background: '#fff', border: '1px solid rgba(15,15,15,0.07)', borderRadius: '12px', padding: '1rem 1.1rem', display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none', boxShadow: '0 2px 6px rgba(15,15,15,0.03)', transition: 'transform 0.18s, box-shadow 0.18s' }}
-            onMouseEnter={e => { e.currentTarget.style.transform='translateY(-2px)'; e.currentTarget.style.boxShadow='0 6px 18px rgba(15,15,15,0.07)'; }}
-            onMouseLeave={e => { e.currentTarget.style.transform=''; e.currentTarget.style.boxShadow='0 2px 6px rgba(15,15,15,0.03)'; }}
+          <Link key={q.to} to={q.to} style={{ background: '#fff', border: '1px solid rgba(15,15,15,0.07)', borderRadius: '14px', padding: '1.15rem 1.25rem', display: 'flex', alignItems: 'center', gap: '0.85rem', textDecoration: 'none', boxShadow: '0 2px 8px rgba(15,15,15,0.03)', transition: 'transform 0.18s, box-shadow 0.18s' }}
+            onMouseEnter={e => { e.currentTarget.style.transform='translateY(-2px)'; e.currentTarget.style.boxShadow='0 8px 20px rgba(15,15,15,0.08)'; }}
+            onMouseLeave={e => { e.currentTarget.style.transform=''; e.currentTarget.style.boxShadow='0 2px 8px rgba(15,15,15,0.03)'; }}
           >
-            <div style={{ width: 36, height: 36, borderRadius: 10, background: q.bg, color: q.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem', flexShrink: 0 }}>
+            <div style={{ width: 42, height: 42, borderRadius: 12, background: q.bg, color: q.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.1rem', flexShrink: 0 }}>
               <i className={`bi ${q.icon}`}></i>
             </div>
-            <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--ink)' }}>{q.label}</span>
+            <span style={{ fontSize: '0.87rem', fontWeight: 600, color: 'var(--ink)' }}>{q.label}</span>
           </Link>
         ))}
       </div>
