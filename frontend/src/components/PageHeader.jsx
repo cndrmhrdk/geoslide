@@ -70,14 +70,15 @@ export default function PageHeader({
       <div className="container position-relative gs-page-header__container">
         <div className="gs-page-header__inner">
           {badge && (
-            <div className="mb-2">
-              <span className={`badge-pill ${backgroundImage ? 'badge-glass' : 'badge-primary-soft'}`}>
-                {badge}
+            <div className="gs-page-header__badge-wrap mb-3">
+              <span className={`gs-page-header__badge badge-pill ${backgroundImage ? 'badge-glass' : 'badge-primary-soft'}`}>
+                {icon && <i className={`bi ${icon} gs-page-header__badge-icon`} aria-hidden="true" />}
+                <span>{badge}</span>
               </span>
             </div>
           )}
 
-          {icon && (
+          {!badge && icon && (
             <span
               className={`gs-page-header__icon ${
                 backgroundImage ? 'gs-page-header__icon--glass' : ''

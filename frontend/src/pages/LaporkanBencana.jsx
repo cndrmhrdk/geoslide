@@ -306,20 +306,13 @@ if (!res.ok) {
   /* ---- Form ---- */
   return (
     <>
-                    <div className="lb-hero">
-  <div className="lb-hero__inner">
-    <div className="lb-hero__badge">
-      <i className="bi bi-exclamation-triangle"></i>
-      <span>Pelaporan Masyarakat</span>
-    </div>
-
-    <PageHeader
-      title="Laporkan Bencana"
-      highlight="Bencana"
-      subtitle="Laporkan kejadian tanah longsor yang belum tercatat di GeoSlide. Laporan Anda membantu respons yang lebih cepat."
-    />
-  </div>
-</div>
+      <PageHeader
+        badge="Pelaporan Masyarakat"
+        icon="bi-exclamation-triangle"
+        title="Laporkan Kejadian Bencana"
+        highlight="Bencana"
+        subtitle="Laporkan kejadian tanah longsor yang belum tercatat di GeoSlide. Laporan Anda membantu respons darurat dan mitigasi yang lebih cepat."
+      />
       <Section bg="subtle" py="lg">
         <div className="lb-layout" ref={topRef}>
 

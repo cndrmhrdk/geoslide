@@ -501,8 +501,9 @@ export default function PetaBencana() {
   return (
     <>
       <PageHeader
-        badge="Data kejadian terverifikasi"
+        badge="Data Kejadian Terverifikasi"
         title="Peta Kejadian Tanah Longsor"
+        highlight="Tanah Longsor"
         subtitle="Jelajahi titik kejadian yang tercatat. Lokasi pada peta mewakili kabupaten/kota, bukan koordinat longsor yang presisi."
         icon="bi-map"
       />

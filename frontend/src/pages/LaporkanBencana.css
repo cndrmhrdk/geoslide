@@ -1248,69 +1248,9 @@
   font-weight: 600;
 }
 
-/* Ikon warning */
-.lb-hero__badge i {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 15px;
-  color: #43852f;
-}
-
-/* Mengurangi jarak menuju formulir */
-.lb-layout {
-  margin-top: -55px !important;
-}
-
-/* Tampilan layar kecil */
-@media (max-width: 768px) {
-  .lb-hero__inner {
-    padding: 0 18px;
-  }
-
+/* Responsif layout pelaporan */
+@media (max-width: 991.98px) {
   .lb-layout {
-    margin-top: -25px !important;
+    grid-template-columns: 1fr;
   }
-}
-/* Label Pelaporan Masyarakat */
-.lb-hero__badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  width: fit-content;
-  padding: 5px 13px;
-  margin-bottom: 10px;
-  border-radius: 20px;
-  background: #e5f0df;
-  color: #397d24;
-  font-size: 13px;
-  font-weight: 500;
-}
-
-.lb-hero__badge i {
-  font-size: 12px;
-}
-/* Label Pelaporan Masyarakat */
-.lb-hero__inner {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.lb-hero__badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  width: fit-content;
-  padding: 5px 13px;
-  margin-bottom: 12px;
-  border-radius: 20px;
-  background: #e5f0df;
-  color: #397d24;
-  font-size: 13px;
-  font-weight: 500;
-}
-
-.lb-hero__badge i {
-  font-size: 12px;
 }

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import PageHeader from '../components/PageHeader';
 import Section from '../components/Section';
 import './CekStatusLaporan.css';
@@ -73,23 +74,13 @@ export default function CekStatusLaporan() {
 
   return (
     <>
-   <div className="csl-page-header">
-  <div className="csl-header-top">
-    <div className="csl-header-badge">
-      <i className="bi bi-search"></i>
-      <span>Pelaporan Masyarakat</span>
-    </div>
-
-    <h1 className="csl-header-title">
-      Cek <span>Status</span> Laporan
-    </h1>
-  </div>
-
-  <p className="csl-header-subtitle">
-    Masukkan kode pelacakan yang Anda terima saat mengirim laporan
-    untuk melihat perkembangannya.
-  </p>
-</div>
+      <PageHeader
+        badge="Pelaporan Masyarakat"
+        icon="bi-search"
+        title="Cek Status Laporan"
+        highlight="Status"
+        subtitle="Masukkan kode pelacakan yang Anda terima saat mengirim laporan untuk melihat perkembangan dan tindak lanjutnya."
+      />
       <Section bg="subtle" py="lg">
         <div className="csl-wrap">
 
@@ -231,10 +222,10 @@ export default function CekStatusLaporan() {
                   <i className="bi bi-arrow-left me-1"></i> Cek Kode Lain
                 </button>
                 {result.status === 'rejected' && (
-                  <a href="/pelaporan/laporkan-bencana" className="btn-pill-action">
+                  <Link to="/pelaporan/laporkan-bencana" className="btn-pill-action">
                     <span>Kirim Laporan Baru</span>
                     <span className="btn-pill-action__icon"><i className="bi bi-arrow-right"></i></span>
-                  </a>
+                  </Link>
                 )}
               </div>
             </div>
@@ -266,12 +257,12 @@ export default function CekStatusLaporan() {
               <div className="csl-help__title">Tidak menemukan kode Anda?</div>
               <p className="csl-help__text">
                 Pastikan kode diketik dengan benar. Kode pelacakan terdiri dari format{' '}
-                <code>GS-YYYYMMDD-XXXXXX</code> dan diberikan saat laporan berhasil terkirim.
+                <code>GS-YYYYMMDD-XXXXXX</code> atau <code>OH-YYYYMMDD-XXXXXX</code> dan diberikan saat laporan berhasil terkirim.
                 Jika Anda tidak menyimpan kode, Anda perlu mengirim laporan baru.
               </p>
-              <a href="/pelaporan/laporkan-bencana" className="csl-help__link">
+              <Link to="/pelaporan/laporkan-bencana" className="csl-help__link">
                 <i className="bi bi-plus-circle me-1"></i>Kirim laporan baru
-              </a>
+              </Link>
             </div>
           </div>
 

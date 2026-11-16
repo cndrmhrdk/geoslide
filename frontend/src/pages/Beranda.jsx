@@ -11,7 +11,7 @@ import './Beranda.css';
 const ROUTES = {
   peta: '/data-bencana/peta',
   statistik: '/data-bencana/statistik',
-  orangHilang: '/orang-hilang',
+  orangHilang: '/informasi-orang-hilang',
   lapor: '/pelaporan/laporkan-bencana',
   edukasi: '/edukasi',
 };

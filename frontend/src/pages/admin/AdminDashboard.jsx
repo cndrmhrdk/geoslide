@@ -16,7 +16,7 @@ const STAT_CARDS = [
   { key: 'total_missing',       label: 'Orang Hilang',          icon: 'bi-person-exclamation',    color: '#991B1B', bg: '#FEE2E2' },
 ];
 
-const PIE_COLORS = ['#FEF9C3', '#DCFCE7', '#FEE2E2'];
+const PIE_COLORS = ['#D9A93A', '#3F7A1A', '#E05A47'];
 
 function StatCard({ value, label, icon, color, bg, loading }) {
   return (

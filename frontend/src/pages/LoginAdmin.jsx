@@ -26,6 +26,7 @@ export default function LoginAdmin() {
       <PageHeader
         badge="Portal Administrator"
         title="Login Admin GeoSlide"
+        highlight="Admin"
         subtitle="Masuk ke dasbor manajemen laporan kejadian, verifikasi data, dan konfigurasi sistem."
         icon="bi-shield-lock"
         center

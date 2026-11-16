@@ -52,6 +52,7 @@ function App() {
             <Route path="/data-bencana/statistik"          element={<StatistikBencana />} />
             <Route path="/informasi-orang-hilang"          element={<InformasiOrangHilang />} />
             <Route path="/informasi-orang-hilang/:id"      element={<InformasiOrangHilangDetail />} />
+            <Route path="/orang-hilang"                    element={<Navigate to="/informasi-orang-hilang" replace />} />
             <Route path="/pelaporan/laporkan-bencana"      element={<LaporkanBencana />} />
             <Route path="/pelaporan/laporkan-orang-hilang" element={<LaporkanOrangHilang />} />
             <Route path="/pelaporan/cek-status"            element={<CekStatusLaporan />} />

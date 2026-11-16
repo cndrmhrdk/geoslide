@@ -80,24 +80,51 @@ function PanduanMitigasi() {
 
   return (
     <div>
-      <div className="card-solid mb-4">
+      <div className="card-solid mb-4" style={{ padding: '2rem' }}>
+        <div className="d-flex align-items-center gap-2 mb-2">
+          <span className="badge-pill badge-primary-soft">
+            <i className="bi bi-shield-exclamation me-1"></i>Deteksi Dini
+          </span>
+        </div>
         <h2 className="h4 mb-2">Tanda-tanda Lereng Akan Longsor</h2>
-        <p className="text-muted-custom small mb-3">
+        <p className="text-muted-custom small mb-4">
           Jika kamu melihat salah satu tanda ini, jauhi lereng dan segera laporkan ke petugas setempat.
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
-        {tandaPeringatan.map((t) => (
-          <div key={t.t} className="d-flex gap-3 align-items-start">
-            <i className={`bi ${t.i}`} style={{ fontSize: '1.4rem', color: 'var(--forest)' }}></i>
-            <span className="text-muted-custom small">{t.t}</span>
-          </div>
-        ))}
-</div>
+          {tandaPeringatan.map((t) => (
+            <div
+              key={t.t}
+              className="d-flex gap-3 align-items-start p-3 rounded-3"
+              style={{ background: 'var(--bg)', border: '1px solid var(--border)', transition: 'transform 0.2s ease, background 0.2s ease' }}
+            >
+              <span
+                style={{
+                  width: '38px',
+                  height: '38px',
+                  borderRadius: '10px',
+                  backgroundColor: 'var(--primary-soft)',
+                  color: 'var(--primary)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '1.2rem',
+                  flexShrink: 0,
+                }}
+              >
+                <i className={`bi ${t.i}`}></i>
+              </span>
+              <span className="text-ink small fw-medium" style={{ lineHeight: 1.5 }}>{t.t}</span>
+            </div>
+          ))}
+        </div>
       </div>
 
       <div className="text-center mb-3">
-        <h2 className="mb-1">Panduan Mitigasi</h2>
-        <p className="text-muted-custom">Pilih tahapan untuk melihat apa yang perlu dilakukan.</p>
+        <span className="badge-pill badge-primary-soft mb-2">
+          <i className="bi bi-compass me-1"></i>Langkah Penyelamatan
+        </span>
+        <h2 className="mb-1">Panduan Mitigasi Terpadu</h2>
+        <p className="text-muted-custom">Pilih tahapan untuk melihat protokol keselamatan yang tepat.</p>
       </div>
 
       <div role="tablist" aria-label="Tahapan mitigasi" className="d-flex justify-content-center gap-2 flex-wrap mb-4">
@@ -111,56 +138,105 @@ function PanduanMitigasi() {
             aria-controls={`panel-${key}`}
             className={aktif === key ? 'btn-pill-action' : 'btn-pill-surface'}
             onClick={() => setAktif(key)}
+            style={{ padding: '0.55rem 1.4rem' }}
           >
-            <span><i className={`bi ${t.icon} me-2`}></i>{t.label}</span>
+            <span><i className={`bi ${t.icon} me-2`}></i>{t.label} Longsor</span>
+            {aktif === key && (
+              <span className="btn-pill-action__icon" aria-hidden="true">
+                <i className="bi bi-check2"></i>
+              </span>
+            )}
           </button>
         ))}
       </div>
 
       <div role="tabpanel" id={`panel-${aktif}`} aria-labelledby={`tab-${aktif}`} className="mb-4">
-  <div className="text-center mb-4">
-    <h3 className="h4 mb-1">{data.judul}</h3>
-    <p className="text-muted-custom mb-0">{data.ringkas}</p>
-  </div>
-  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1rem' }}>
-    {data.poin.map((p) => (
-      <div key={p.t} className="card-solid">
-        <div
-          style={{
-            width: 44, height: 44, borderRadius: '50%',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: '1.25rem', color: 'var(--forest)',
-            background: 'color-mix(in srgb, var(--forest) 12%, white)',
-            marginBottom: '0.75rem',
-          }}
-        >
-          <i className={`bi ${p.i}`}></i>
+        <div className="text-center mb-4">
+          <h3 className="h4 mb-1">{data.judul}</h3>
+          <p className="text-muted-custom mb-0">{data.ringkas}</p>
         </div>
-        <h4 className="h6 mb-1">{p.t}</h4>
-        <p className="text-muted-custom small mb-0">{p.d}</p>
-      </div>
-    ))}
-  </div>
-</div>
-
-      <div className="card-solid mb-4">
-        <h3 className="h5 mb-3">Nomor Darurat</h3>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
-          {kontakDarurat.map((k) => (
-            <div key={k.nomor}>
-              <div className="h3 mb-0">{k.nomor}</div>
-              <div className="text-muted-custom small">{k.nama}</div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.25rem' }}>
+          {data.poin.map((p) => (
+            <div key={p.t} className="card-solid" style={{ padding: '1.5rem', transition: 'transform 0.25s ease, box-shadow 0.25s ease' }}>
+              <div
+                style={{
+                  width: 44, height: 44, borderRadius: '12px',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: '1.25rem', color: 'var(--primary)',
+                  background: 'var(--primary-soft)',
+                  marginBottom: '1rem',
+                  boxShadow: '0 2px 6px rgba(63, 122, 26, 0.1)',
+                }}
+              >
+                <i className={`bi ${p.i}`}></i>
+              </div>
+              <h4 className="h6 mb-2" style={{ fontWeight: 600 }}>{p.t}</h4>
+              <p className="text-muted-custom small mb-0" style={{ lineHeight: 1.6 }}>{p.d}</p>
             </div>
           ))}
         </div>
       </div>
 
-      <div>
-        <h3 className="h6 mb-2">Sumber</h3>
-        <ul className="text-muted-custom small ps-3 mb-0" style={{ lineHeight: 1.7 }}>
+      <div className="card-solid mb-4" style={{ padding: '1.75rem 2rem' }}>
+        <h3 className="h5 mb-3 d-flex align-items-center gap-2">
+          <i className="bi bi-telephone-outbound text-accent"></i> Kontak Darurat &amp; Siaga
+        </h3>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+          {kontakDarurat.map((k) => (
+            <a
+              key={k.nomor}
+              href={`tel:${k.nomor}`}
+              className="d-flex align-items-center gap-3 p-3 rounded-3 text-decoration-none"
+              style={{
+                background: 'var(--bg)',
+                border: '1px solid var(--border)',
+                transition: 'transform 0.2s, box-shadow 0.2s',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.boxShadow = 'var(--shadow-md)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = '';
+                e.currentTarget.style.boxShadow = '';
+              }}
+            >
+              <div
+                style={{
+                  width: '42px',
+                  height: '42px',
+                  borderRadius: '50%',
+                  background: 'var(--primary-soft)',
+                  color: 'var(--primary)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '1.2rem',
+                  flexShrink: 0,
+                }}
+              >
+                <i className="bi bi-telephone-fill"></i>
+              </div>
+              <div>
+                <div className="h4 mb-0 text-ink" style={{ fontWeight: 700 }}>{k.nomor}</div>
+                <div className="text-muted-custom small">{k.nama}</div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <div className="card-solid" style={{ padding: '1.5rem 2rem' }}>
+        <h3 className="h6 mb-2 d-flex align-items-center gap-2">
+          <i className="bi bi-journal-bookmark text-accent"></i> Referensi &amp; Sumber Resmi
+        </h3>
+        <ul className="text-muted-custom small ps-3 mb-0" style={{ lineHeight: 1.8 }}>
           {sumber.map((s) => (
             <li key={s.url}>
-              <a href={s.url} target="_blank" rel="noopener noreferrer">{s.nama}</a>
+              <a href={s.url} target="_blank" rel="noopener noreferrer" className="d-inline-flex align-items-center gap-1">
+                <span>{s.nama}</span>
+                <i className="bi bi-box-arrow-up-right" style={{ fontSize: '0.75rem' }}></i>
+              </a>
             </li>
           ))}
         </ul>
@@ -173,10 +249,11 @@ export default function EdukasiModel3D() {
   return (
     <>
       <PageHeader
-        badge="Edukasi"
+        badge="Panduan & Edukasi"
         title="Edukasi Mitigasi Tanah Longsor"
+        highlight="Tanah Longsor"
         subtitle="Pahami cara mengurangi risiko dan apa yang harus dilakukan sebelum, saat, dan setelah longsor."
-        icon="bi-layers"
+        icon="bi-mortarboard"
       />
       <Section bg="subtle" py="md">
         <Suspense fallback={<p>Memuat model 3D...</p>}>

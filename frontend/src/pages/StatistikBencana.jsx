@@ -379,8 +379,9 @@ export default function StatistikBencana() {
   return (
     <>
       <PageHeader
-        badge="Ringkasan dari data terverifikasi"
+        badge="Ringkasan Data Terverifikasi"
         title="Statistik Kejadian Tanah Longsor"
+        highlight="Tanah Longsor"
         subtitle="Jumlah kejadian dan dampak dihitung dari data GeoSlide yang telah diverifikasi."
         icon="bi-bar-chart-line"
       />
