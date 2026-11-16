@@ -12,6 +12,27 @@
   background: var(--bg);
 }
 
+/* Layout bersama (.gs-layout) selama Beranda aktif. Penanda: html.bh-page (ditambah dari Beranda.jsx). */
+.bh-page .gs-layout {
+  background-color: #0c1f15;
+  overflow-x: clip; /* overflow-x: hidden bawaan layout memotong elemen sticky/fixed turunan */
+}
+
+/* PublicLayout.css membuat wrapper navbar overlay menjadi position: relative dengan margin -84px,
+   sehingga navbar ikut tergulung dan meninggalkan selisih tipis di puncak halaman.
+   Selama Beranda tampil, wrapper dikembalikan ke fixed seperti mode solid. */
+.bh-page .gs-layout .gs-navbar-wrapper {
+  position: fixed;
+  top: 0;
+  margin-bottom: 0;
+}
+
+/* Tidak ada jarak di atas hero, supaya tidak ada garis terang di puncak halaman */
+.bh-page .gs-layout .gs-layout__main {
+  padding-top: 0;
+  margin-top: 0;
+}
+
 /* ---------- Muncul saat masuk layar ---------- */
 .bh.bh-anim [data-reveal] {
   opacity: 0;

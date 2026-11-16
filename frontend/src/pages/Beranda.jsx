@@ -475,6 +475,15 @@ export default function Beranda() {
     return () => setVariant('solid');
   }, [setVariant]);
 
+  // Selama Beranda tampil, <html> diberi kelas bh-page agar CSS Beranda bisa menyesuaikan layout bersama
+  // (latar gelap, overflow-x: clip, dan navbar tetap fixed). Kelas ditaruh di <html>, bukan di .gs-layout,
+  // karena className .gs-layout ditulis ulang React setiap varian navbar berganti.
+  useEffect(() => {
+    const root = document.documentElement;
+    root.classList.add('bh-page');
+    return () => root.classList.remove('bh-page');
+  }, []);
+
   // Munculkan elemen saat masuk layar.
   useEffect(() => {
     const root = rootRef.current;
@@ -502,26 +511,37 @@ export default function Beranda() {
     return () => observer.disconnect();
   }, []);
 
-  // Parallax ringan pada lapisan bukit.
+  // Saat scroll: parallax ringan pada lapisan bukit, dan navbar berganti dari
+  // overlay (transparan, teks putih) ke solid begitu hero sudah lewat.
   useEffect(() => {
     const hero = heroRef.current;
-    if (!hero || prefersReducedMotion()) return undefined;
+    if (!hero) return undefined;
+    const reduceMotion = prefersReducedMotion();
     let frame = 0;
+    let current = 'overlay';
+
     const update = () => {
       frame = 0;
-      const y = Math.min(window.scrollY, hero.offsetHeight);
-      hero.style.setProperty('--sy', y.toFixed(0));
+      const y = window.scrollY;
+      if (!reduceMotion) hero.style.setProperty('--sy', Math.min(y, hero.offsetHeight).toFixed(0));
+
+      const next = y > hero.offsetHeight - 110 ? 'solid' : 'overlay';
+      if (next !== current && typeof setVariant === 'function') {
+        current = next;
+        setVariant(next);
+      }
     };
     const onScroll = () => {
       if (!frame) frame = requestAnimationFrame(update);
     };
+
     window.addEventListener('scroll', onScroll, { passive: true });
     update();
     return () => {
       window.removeEventListener('scroll', onScroll);
       if (frame) cancelAnimationFrame(frame);
     };
-  }, []);
+  }, [setVariant]);
 
   return (
     <div className="bh" ref={rootRef}>
