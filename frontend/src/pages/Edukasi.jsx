@@ -1,6 +1,7 @@
 import { lazy, Suspense, useState } from 'react';
 import PageHeader from '../components/PageHeader';
 import Section from '../components/Section';
+import './Edukasi.css';
 
 const LandslideModel3D = lazy(() => import('../components/LandSlideModel3d'));
 
@@ -80,7 +81,7 @@ function PanduanMitigasi() {
 
   return (
     <div>
-      <div className="card-solid mb-4" style={{ padding: '2rem' }}>
+      <div className="card-solid edu-panel mb-4">
         <div className="d-flex align-items-center gap-2 mb-2">
           <span className="badge-pill badge-primary-soft">
             <i className="bi bi-shield-exclamation me-1"></i>Deteksi Dini
@@ -90,30 +91,13 @@ function PanduanMitigasi() {
         <p className="text-muted-custom small mb-4">
           Jika kamu melihat salah satu tanda ini, jauhi lereng dan segera laporkan ke petugas setempat.
         </p>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
+        <div className="edu-warning-grid">
           {tandaPeringatan.map((t) => (
-            <div
-              key={t.t}
-              className="d-flex gap-3 align-items-start p-3 rounded-3"
-              style={{ background: 'var(--bg)', border: '1px solid var(--border)', transition: 'transform 0.2s ease, background 0.2s ease' }}
-            >
-              <span
-                style={{
-                  width: '38px',
-                  height: '38px',
-                  borderRadius: '10px',
-                  backgroundColor: 'var(--primary-soft)',
-                  color: 'var(--primary)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '1.2rem',
-                  flexShrink: 0,
-                }}
-              >
+            <div key={t.t} className="edu-warning-item">
+              <span className="edu-warning-item__icon" aria-hidden="true">
                 <i className={`bi ${t.i}`}></i>
               </span>
-              <span className="text-ink small fw-medium" style={{ lineHeight: 1.5 }}>{t.t}</span>
+              <span className="text-ink fw-medium">{t.t}</span>
             </div>
           ))}
         </div>
@@ -155,78 +139,39 @@ function PanduanMitigasi() {
           <h3 className="h4 mb-1">{data.judul}</h3>
           <p className="text-muted-custom mb-0">{data.ringkas}</p>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.25rem' }}>
+        <div className="edu-step-grid">
           {data.poin.map((p) => (
-            <div key={p.t} className="card-solid" style={{ padding: '1.5rem', transition: 'transform 0.25s ease, box-shadow 0.25s ease' }}>
-              <div
-                style={{
-                  width: 44, height: 44, borderRadius: '12px',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '1.25rem', color: 'var(--primary)',
-                  background: 'var(--primary-soft)',
-                  marginBottom: '1rem',
-                  boxShadow: '0 2px 6px rgba(63, 122, 26, 0.1)',
-                }}
-              >
+            <div key={p.t} className="card-solid edu-step">
+              <span className="edu-step__icon" aria-hidden="true">
                 <i className={`bi ${p.i}`}></i>
-              </div>
-              <h4 className="h6 mb-2" style={{ fontWeight: 600 }}>{p.t}</h4>
-              <p className="text-muted-custom small mb-0" style={{ lineHeight: 1.6 }}>{p.d}</p>
+              </span>
+              <h4 className="h6 mb-2">{p.t}</h4>
+              <p className="text-muted-custom mb-0">{p.d}</p>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="card-solid mb-4" style={{ padding: '1.75rem 2rem' }}>
+      <div className="card-solid edu-panel mb-4">
         <h3 className="h5 mb-3 d-flex align-items-center gap-2">
           <i className="bi bi-telephone-outbound text-accent"></i> Kontak Darurat &amp; Siaga
         </h3>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+        <div className="edu-contact-grid">
           {kontakDarurat.map((k) => (
-            <a
-              key={k.nomor}
-              href={`tel:${k.nomor}`}
-              className="d-flex align-items-center gap-3 p-3 rounded-3 text-decoration-none"
-              style={{
-                background: 'var(--bg)',
-                border: '1px solid var(--border)',
-                transition: 'transform 0.2s, box-shadow 0.2s',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-2px)';
-                e.currentTarget.style.boxShadow = 'var(--shadow-md)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = '';
-                e.currentTarget.style.boxShadow = '';
-              }}
-            >
-              <div
-                style={{
-                  width: '42px',
-                  height: '42px',
-                  borderRadius: '50%',
-                  background: 'var(--primary-soft)',
-                  color: 'var(--primary)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '1.2rem',
-                  flexShrink: 0,
-                }}
-              >
+            <a key={k.nomor} href={`tel:${k.nomor}`} className="edu-contact">
+              <span className="edu-contact__icon" aria-hidden="true">
                 <i className="bi bi-telephone-fill"></i>
-              </div>
+              </span>
               <div>
-                <div className="h4 mb-0 text-ink" style={{ fontWeight: 700 }}>{k.nomor}</div>
-                <div className="text-muted-custom small">{k.nama}</div>
+                <div className="edu-contact__number">{k.nomor}</div>
+                <div className="text-muted-custom">{k.nama}</div>
               </div>
             </a>
           ))}
         </div>
       </div>
 
-      <div className="card-solid" style={{ padding: '1.5rem 2rem' }}>
+      <div className="card-solid edu-panel edu-sources">
         <h3 className="h6 mb-2 d-flex align-items-center gap-2">
           <i className="bi bi-journal-bookmark text-accent"></i> Referensi &amp; Sumber Resmi
         </h3>
@@ -247,7 +192,7 @@ function PanduanMitigasi() {
 
 export default function EdukasiModel3D() {
   return (
-    <>
+    <div className="edu-page">
       <PageHeader
         badge="Panduan & Edukasi"
         title="Edukasi Mitigasi Tanah Longsor"
@@ -255,17 +200,17 @@ export default function EdukasiModel3D() {
         subtitle="Pahami cara mengurangi risiko dan apa yang harus dilakukan sebelum, saat, dan setelah longsor."
         icon="bi-mortarboard"
       />
-      <Section bg="subtle" py="md">
+      <Section bg="subtle" py="md" className="edu-model-section">
         <Suspense fallback={<p>Memuat model 3D...</p>}>
           <LandslideModel3D />
         </Suspense>
       </Section>
 
-    <Section bg="white" py="md">
+      <Section bg="white" py="md" className="edu-content-section">
         <PanduanMitigasi />
       </Section>
 
-     <Section bg="subtle" py="md">
+      <Section bg="subtle" py="md" className="edu-video-section">
         <div className="text-center mb-4">
           <h2 className="mb-1">Video Edukasi</h2>
           <p className="text-muted-custom">Tonton panduan mitigasi dan keselamatan saat longsor.</p>
@@ -289,7 +234,6 @@ export default function EdukasiModel3D() {
           )}
         </div>
       </Section>
-
-    </>
+    </div>
   );
 }

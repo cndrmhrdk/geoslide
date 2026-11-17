@@ -874,3 +874,57 @@
 .gs-map-shell .gs-map-tiles {
   filter: saturate(1.0) contrast(1.02) brightness(1.03);
 }
+
+/* Match the solid surfaces and tighter corners used across public pages. */
+.gs-map-shell {
+  border-color: var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  background: var(--surface);
+}
+
+.gs-glass {
+  background: var(--surface);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  border-color: var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.gs-map-filter .form-control,
+.gs-map-filter .form-select {
+  border-radius: var(--radius-sm);
+  border-color: var(--border-strong);
+  background-color: var(--surface);
+}
+
+.gs-map-stat {
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+}
+
+.gs-map-item.is-active {
+  background: var(--primary-soft);
+  box-shadow: none;
+}
+
+.gs-map-legend {
+  border-radius: var(--radius-md);
+}
+
+.gs-map-shell .leaflet-popup-content-wrapper {
+  border-radius: var(--radius-lg);
+}
+
+.gs-map-shell .leaflet-bar {
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+}
+
+@media (max-width: 991.98px) {
+  .gs-map-stage {
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+  }
+}

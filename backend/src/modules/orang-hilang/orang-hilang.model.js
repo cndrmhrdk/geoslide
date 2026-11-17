@@ -19,6 +19,53 @@ const FROM_PUBLIC = `
   LEFT JOIN disaster_events de ON de.id = mp.disaster_event_id
 `;
 
+exports.createReport = async (report, files = []) => {
+  const connection = await db.getConnection();
+  let transactionStarted = false;
+
+  try {
+    await connection.beginTransaction();
+    transactionStarted = true;
+
+    const [result] = await connection.query(
+      `INSERT INTO missing_persons (
+         tracking_code, name, age, gender, physical_description,
+         last_seen_location, last_seen_at, reporter_name, reporter_contact,
+         public_contact_note, public_consent
+       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [
+        report.tracking_code,
+        report.name,
+        report.age,
+        report.gender,
+        report.physical_description,
+        report.last_seen_location,
+        report.last_seen_at,
+        report.reporter_name,
+        report.reporter_contact,
+        report.public_contact_note,
+        report.public_consent,
+      ]
+    );
+
+    for (const file of files) {
+      await connection.query(
+        `INSERT INTO missing_person_documents (missing_person_id, file_path, file_type)
+         VALUES (?, ?, ?)`,
+        [result.insertId, `orang-hilang/${file.filename}`, file.mimetype || null]
+      );
+    }
+
+    await connection.commit();
+    return result.insertId;
+  } catch (error) {
+    if (transactionStarted) await connection.rollback();
+    throw error;
+  } finally {
+    connection.release();
+  }
+};
+
 function buildPublicWhere({ q, province, regency, eventId, status }) {
   // Hanya laporan yang sudah diverifikasi admin yang boleh tampil publik.
   const where = ["mp.verification_status = 'approved'"];
