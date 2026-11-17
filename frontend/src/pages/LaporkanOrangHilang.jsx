@@ -1,5 +1,4 @@
 import { useState, useRef, useCallback } from 'react';
-import PageHeader from '../components/PageHeader';
 import Section from '../components/Section';
 /* Gunakan ulang semua utility class lb-* dari LaporkanBencana */
 import './LaporkanBencana.css';
@@ -16,6 +15,25 @@ const STEPS = [
   { id: 3, icon: 'bi-camera',            label: 'Foto' },
   { id: 4, icon: 'bi-person-lines-fill', label: 'Identitas Pelapor' },
 ];
+
+/* Hero bersama (gaya sama dengan halaman Orang Hilang) */
+function Hero({ badge, icon, title, highlight, subtitle, center }) {
+  const [before, after] = highlight && title.includes(highlight) ? title.split(highlight) : [title, ''];
+  return (
+    <header className={`lb-hero${center ? ' lb-hero--center' : ''}`}>
+      <svg className="lb-hero__ridge" viewBox="0 0 1440 220" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 150 C 160 90 280 170 440 120 C 600 70 700 160 880 110 C 1060 60 1200 150 1440 90 L1440 220 L0 220Z" />
+      </svg>
+      <div className="lb-hero__inner">
+        <span className="lb-hero__badge"><i className={`bi ${icon}`} aria-hidden="true"></i> {badge}</span>
+        <h1 className="lb-hero__title">
+          {before}{highlight && <em>{highlight}</em>}{after}
+        </h1>
+        <p className="lb-hero__sub">{subtitle}</p>
+      </div>
+    </header>
+  );
+}
 
 /* ---- Stepper (identical logic, different steps) ---- */
 function Stepper({ current }) {
@@ -168,7 +186,7 @@ export default function LaporkanOrangHilang() {
   if (trackingCode) {
     return (
       <>
-        <PageHeader
+        <Hero
           badge="Laporan Terkirim"
           title="Laporan Berhasil Dikirim"
           subtitle="Tim GeoSlide akan memverifikasi laporan Anda secepatnya."
@@ -240,7 +258,7 @@ export default function LaporkanOrangHilang() {
      ============================================================ */
   return (
     <>
-      <PageHeader
+      <Hero
         badge="Pelaporan Masyarakat"
         icon="bi-person-exclamation"
         title="Laporkan Orang Hilang"

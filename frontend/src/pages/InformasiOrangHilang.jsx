@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import PageHeader from '../components/PageHeader';
 import Section from '../components/Section';
 import StatusBadge from '../components/StatusBadge';
 import {
@@ -13,6 +12,11 @@ import { getOpsiFilterOrangHilang, getOrangHilang } from '../services/orangHilan
 import './InformasiOrangHilang.css';
 
 const LIMIT = 12;
+
+// Inisial dua huruf untuk avatar bila foto tidak dipublikasikan
+function inisial(nama = '') {
+  return nama.trim().split(/\s+/).slice(0, 2).map((kata) => kata[0]?.toUpperCase() || '').join('') || '?';
+}
 const initialFilters = { q: '', province: '', eventId: '', status: '' };
 const initialApplied = { ...initialFilters, page: 1 };
 
@@ -97,16 +101,32 @@ export default function InformasiOrangHilang() {
 
   return (
     <>
-      <PageHeader
-        badge="Informasi Publik"
-        title="Informasi Orang Hilang Akibat Tanah Longsor"
-        highlight="Orang Hilang"
-        subtitle="Daftar orang yang dilaporkan hilang pada kejadian tanah longsor dan sudah diverifikasi admin. Status pencarian diperbarui oleh admin."
-        icon="bi-people"
-      />
+      <header className="oh-hero">
+        <svg className="oh-hero__ridge" viewBox="0 0 1440 220" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M0 150 C 160 90 280 170 440 120 C 600 70 700 160 880 110 C 1060 60 1200 150 1440 90 L1440 220 L0 220Z" />
+        </svg>
+        <div className="oh-hero__inner">
+          <span className="oh-hero__badge"><i className="bi bi-people" aria-hidden="true"></i> Informasi Publik</span>
+          <h1 className="oh-hero__title">
+            Informasi <em>Orang Hilang</em> Akibat Tanah Longsor
+          </h1>
+          <p className="oh-hero__sub">
+            Daftar orang yang dilaporkan hilang pada kejadian tanah longsor dan sudah diverifikasi admin.
+            Status pencarian diperbarui oleh admin.
+          </p>
+          <div className="oh-hero__actions">
+            <a href="tel:117" className="oh-hero__btn oh-hero__btn--solid">
+              <i className="bi bi-telephone" aria-hidden="true"></i> BNPB 117
+            </a>
+            <a href="tel:112" className="oh-hero__btn">
+              <i className="bi bi-telephone-outbound" aria-hidden="true"></i> Darurat 112
+            </a>
+          </div>
+        </div>
+      </header>
 
       <Section bg="subtle" py="md">
-        <form className="oh-filter card-solid" role="search" onSubmit={handleSubmit}>
+        <form className="oh-filter" role="search" onSubmit={handleSubmit}>
           <div className="oh-filter__field oh-filter__field--search">
             <label htmlFor="oh-cari">Cari nama</label>
             <div className="oh-search-row">
@@ -203,39 +223,69 @@ export default function InformasiOrangHilang() {
           </div>
         )}
 
+        {loading && !error && data.length === 0 && (
+          <div className="oh-grid" aria-hidden="true">
+            {Array.from({ length: 6 }, (_, i) => (
+              <div key={i} className="oh-card oh-skeleton">
+                <div className="oh-card__photo" />
+                <div className="oh-card__body">
+                  <span className="oh-skeleton__line" style={{ width: '40%' }} />
+                  <span className="oh-skeleton__line oh-skeleton__line--lg" style={{ width: '75%' }} />
+                  <span className="oh-skeleton__line" style={{ width: '55%' }} />
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
         <div className="oh-grid">
           {data.map((orang) => (
-            <Link key={orang.id} to={`/informasi-orang-hilang/${orang.id}`} className="oh-card card-solid">
+            <Link key={orang.id} to={`/informasi-orang-hilang/${orang.id}`} className="oh-card">
               <div className="oh-card__photo">
                 {orang.foto ? (
                   <img src={orang.foto} alt={`Foto ${orang.nama}`} loading="lazy" />
                 ) : (
-                  <div className="oh-card__placeholder" role="img" aria-label="Foto tidak dipublikasikan">
-                    <i className="bi bi-person" aria-hidden="true"></i>
+                  <div
+                    className={`oh-card__placeholder oh-tone-${orang.id % 4}`}
+                    role="img"
+                    aria-label="Foto tidak dipublikasikan"
+                  >
+                    <span className="oh-card__initials" aria-hidden="true">{inisial(orang.nama)}</span>
+                    <small>Foto tidak dipublikasikan</small>
                   </div>
                 )}
+                <div className="oh-card__badge"><StatusBadge status={orang.status} /></div>
               </div>
 
               <div className="oh-card__body">
-                <StatusBadge status={orang.status} />
                 <h3 className="oh-card__name">{orang.nama}</h3>
                 <p className="oh-card__sub">
                   {formatUsia(orang.usia)}, {JENIS_KELAMIN[orang.jenisKelamin]}
                 </p>
 
-                <dl className="oh-card__facts">
-                  <div>
-                    <dt>Terakhir terlihat</dt>
-                    <dd>{orang.lokasiTerakhir}</dd>
-                    <dd className="gs-text-muted">{formatTanggal(orang.waktuTerakhirTerlihat)}</dd>
-                  </div>
-                  {orang.kejadian && (
-                    <div>
-                      <dt>Kejadian</dt>
-                      <dd>{orang.kejadian.judul}</dd>
-                    </div>
-                  )}
-                </dl>
+                <ul className="oh-card__facts">
+                  <li>
+                    <i className="bi bi-geo-alt" aria-hidden="true"></i>
+                    <span>
+                      <b>Terakhir terlihat</b>
+                      {orang.lokasiTerakhir}
+                    </span>
+                  </li>
+                  <li>
+                    <i className="bi bi-clock-history" aria-hidden="true"></i>
+                    <span>
+                      <b>Waktu</b>
+                      {formatTanggal(orang.waktuTerakhirTerlihat)}
+                    </span>
+                  </li>
+                </ul>
+
+                {orang.kejadian && (
+                  <span className="oh-card__event" title={orang.kejadian.judul}>
+                    <i className="bi bi-triangle-fill" aria-hidden="true"></i>
+                    {orang.kejadian.judul}
+                  </span>
+                )}
 
                 <span className="oh-card__more">
                   Lihat detail <i className="bi bi-arrow-right" aria-hidden="true"></i>
@@ -270,7 +320,7 @@ export default function InformasiOrangHilang() {
 
       <Section bg="white" py="md">
         <div className="oh-notice">
-          <i className="bi bi-shield-check" aria-hidden="true"></i>
+          <span className="oh-notice__icon"><i className="bi bi-shield-check" aria-hidden="true"></i></span>
           <div>
             <h4>Tentang informasi di halaman ini</h4>
             <p className="gs-text-muted mb-2">

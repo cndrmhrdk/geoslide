@@ -1,108 +1,22 @@
-/* ============================================================
-   LaporkanOrangHilang.css
-   Hanya berisi kelas spesifik halaman ini.
-   Semua utilitas lb-* diwarisi dari LaporkanBencana.css
-   ============================================================ */
+/* LaporkanOrangHilang.css — hanya kelas khusus halaman ini.
+   Utilitas lb-* (hero, stepper, kartu, field, dst.) diwarisi dari LaporkanBencana.css */
 
-/* ---- Info box (step 2) ---- */
-.loh-info-box {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.65rem;
-  background: rgba(59,130,246,0.06);
-  border: 1px solid rgba(59,130,246,0.18);
-  border-radius: var(--radius-md);
-  padding: 0.9rem 1rem;
-}
+/* Kotak info (langkah 2) */
+.loh-info-box { display: flex; align-items: flex-start; gap: 0.75rem; padding: 1rem 1.1rem; background: color-mix(in srgb, var(--gold, #D9A93A) 12%, var(--surface, #fff)); border: 1px solid color-mix(in srgb, var(--gold, #D9A93A) 45%, transparent); border-radius: 18px; }
+.loh-info-box__icon { flex: none; margin-top: 2px; font-size: 1.1rem; color: #8a6511; }
+.loh-info-box__text { margin: 0; font-size: 0.84rem; line-height: 1.65; color: #5c4510; }
 
-.loh-info-box__icon {
-  color: #3b82f6;
-  font-size: 1.05rem;
-  flex-shrink: 0;
-  margin-top: 1px;
-}
+/* Persetujuan publik (langkah 4) */
+.loh-consent-box { padding: 1.05rem 1.2rem; background: color-mix(in srgb, var(--primary, #3F7A1A) 6%, var(--surface, #fff)); border: 1px solid color-mix(in srgb, var(--primary, #3F7A1A) 30%, transparent); border-radius: 18px; }
+.loh-consent-box__label { display: flex; align-items: flex-start; gap: 0.8rem; cursor: pointer; }
+.loh-consent-box__check { flex: none; width: 20px; height: 20px; margin-top: 2px; cursor: pointer; accent-color: var(--primary, #3F7A1A); }
+.loh-consent-box__text { font-size: 0.88rem; line-height: 1.6; color: var(--ink, #0f0f0f); }
 
-.loh-info-box__text {
-  font-size: 0.8rem;
-  color: #1e40af;
-  line-height: 1.55;
-  margin: 0;
-}
-
-/* ---- Consent checkbox (step 4) ---- */
-.loh-consent-box {
-  background: rgba(63,122,26,0.04);
-  border: 1px solid rgba(63,122,26,0.18);
-  border-radius: var(--radius-md);
-  padding: 1rem 1.1rem;
-}
-
-.loh-consent-box__label {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-  cursor: pointer;
-}
-
-.loh-consent-box__check {
-  width: 18px;
-  height: 18px;
-  flex-shrink: 0;
-  margin-top: 1px;
-  accent-color: var(--primary);
-  cursor: pointer;
-}
-
-.loh-consent-box__text {
-  font-size: 0.84rem;
-  color: var(--ink);
-  line-height: 1.55;
-}
-
-/* ---- Status flow panel (aside) ---- */
-.loh-status-card__title {
-  font-size: 0.84rem;
-  font-weight: 700;
-  color: var(--ink);
-}
-
-.loh-status-flow {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.loh-status-flow__item {
-  display: flex;
-  align-items: center;
-  gap: 0.65rem;
-}
-
-.loh-status-flow__icon {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.85rem;
-  flex-shrink: 0;
-}
-
-.loh-status-flow__label {
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: var(--ink);
-  line-height: 1.1;
-}
-
-.loh-status-flow__desc {
-  font-size: 0.72rem;
-  color: var(--muted);
-}
-
-.loh-status-flow__arrow {
-  margin-left: auto;
-  color: var(--muted);
-  font-size: 0.7rem;
-}
+/* Alur status (aside) */
+.loh-status-card__title { font-size: 0.95rem; font-weight: 600; color: var(--ink, #0f0f0f); }
+.loh-status-flow { display: flex; flex-direction: column; gap: 0.7rem; }
+.loh-status-flow__item { display: flex; align-items: center; gap: 0.75rem; }
+.loh-status-flow__icon { display: grid; place-items: center; flex: none; width: 36px; height: 36px; font-size: 0.95rem; border-radius: 50%; }
+.loh-status-flow__label { font-size: 0.85rem; font-weight: 600; line-height: 1.15; color: var(--ink, #0f0f0f); }
+.loh-status-flow__desc { font-size: 0.76rem; color: var(--muted, #6b6b66); }
+.loh-status-flow__arrow { margin-left: auto; font-size: 0.7rem; color: var(--muted, #6b6b66); transform: rotate(90deg); }
