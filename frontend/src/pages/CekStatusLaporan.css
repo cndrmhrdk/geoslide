@@ -9,7 +9,7 @@
 .csl-hero__ridge { position: absolute; left: 0; right: 0; bottom: -1px; width: 100%; height: 140px; fill: var(--bg, #F2F1EE); pointer-events: none; }
 .csl-hero__inner { position: relative; max-width: 860px; margin: 0 auto; padding: 0 1.5rem; display: flex; flex-direction: column; align-items: center; gap: 1rem; text-align: center; }
 .csl-hero__badge { display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.35rem 0.9rem; font-size: 0.85rem; font-weight: 600; color: var(--gold, #D9A93A); background: rgb(255 255 255 / 0.1); border: 1px solid rgb(255 255 255 / 0.2); border-radius: 999px; }
-.csl-hero__title { margin: 0; font-size: clamp(2rem, 4.4vw, 3.2rem); font-weight: 600; line-height: 1.08; letter-spacing: -0.03em; }
+.csl-hero__title { margin: 0; font-size: clamp(2rem, 4.4vw, 3.2rem); font-weight: 600; line-height: 1.08; letter-spacing: -0.03em; color: var(--surface);}
 .csl-hero__title em { font-style: normal; color: var(--gold, #D9A93A); }
 .csl-hero__sub { margin: 0; max-width: 58ch; font-size: 1.05rem; color: rgb(255 255 255 / 0.78); }
 
