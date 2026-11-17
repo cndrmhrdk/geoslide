@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import PageHeader from '../components/PageHeader';
 import Section from '../components/Section';
 import './CekStatusLaporan.css';
 
@@ -74,13 +73,18 @@ export default function CekStatusLaporan() {
 
   return (
     <>
-      <PageHeader
-        badge="Pelaporan Masyarakat"
-        icon="bi-search"
-        title="Cek Status Laporan"
-        highlight="Status"
-        subtitle="Masukkan kode pelacakan yang Anda terima saat mengirim laporan untuk melihat perkembangan dan tindak lanjutnya."
-      />
+      <header className="csl-hero">
+        <svg className="csl-hero__ridge" viewBox="0 0 1440 220" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M0 150 C 160 90 280 170 440 120 C 600 70 700 160 880 110 C 1060 60 1200 150 1440 90 L1440 220 L0 220Z" />
+        </svg>
+        <div className="csl-hero__inner">
+          <span className="csl-hero__badge"><i className="bi bi-search" aria-hidden="true"></i> Pelaporan Masyarakat</span>
+          <h1 className="csl-hero__title">Cek <em>Status</em> Laporan</h1>
+          <p className="csl-hero__sub">
+            Masukkan kode pelacakan yang Anda terima saat mengirim laporan untuk melihat perkembangan dan tindak lanjutnya.
+          </p>
+        </div>
+      </header>
       <Section bg="subtle" py="lg">
         <div className="csl-wrap">
 
@@ -145,6 +149,21 @@ export default function CekStatusLaporan() {
                 </div>
               </div>
 
+              {/* Alur proses */}
+              <ol className="csl-progress" aria-label="Tahapan laporan">
+                {[
+                  ['Terkirim', 'bi-send-check', true],
+                  ['Ditinjau admin', 'bi-person-check', result.status !== 'pending'],
+                  [result.status === 'rejected' ? 'Ditolak' : 'Dipublikasikan',
+                    result.status === 'rejected' ? 'bi-x-lg' : 'bi-globe2', result.status !== 'pending'],
+                ].map(([label, icon, done], i) => (
+                  <li key={label} className={`csl-progress__step${done ? ' csl-progress__step--done' : ''}`}>
+                    <span className="csl-progress__dot"><i className={`bi ${icon}`} aria-hidden="true"></i></span>
+                    <span className="csl-progress__label">{label}</span>
+                  </li>
+                ))}
+              </ol>
+
               {/* Detail grid */}
               <div className="csl-detail-grid">
                 {/* Kode & Jenis */}
@@ -185,9 +204,9 @@ export default function CekStatusLaporan() {
                   <div className="csl-detail-item">
                     <span className="csl-detail-item__key"><i className="bi bi-search me-1"></i>Status Pencarian</span>
                     <span className="csl-detail-item__val">
-                      {result.search_status === 'searching' ? '🔍 Sedang Dicari'
-                        : result.search_status === 'found' ? '✅ Ditemukan'
-                        : '📁 Kasus Ditutup'}
+                      {result.search_status === 'searching' ? 'Sedang dicari'
+                        : result.search_status === 'found' ? 'Ditemukan'
+                        : 'Kasus ditutup'}
                     </span>
                   </div>
                 )}
@@ -222,7 +241,10 @@ export default function CekStatusLaporan() {
                   <i className="bi bi-arrow-left me-1"></i> Cek Kode Lain
                 </button>
                 {result.status === 'rejected' && (
-                  <Link to="/pelaporan/laporkan-bencana" className="btn-pill-action">
+                  <Link
+                    to={result.jenis === 'orang_hilang' ? '/pelaporan/laporkan-orang-hilang' : '/pelaporan/laporkan-bencana'}
+                    className="btn-pill-action"
+                  >
                     <span>Kirim Laporan Baru</span>
                     <span className="btn-pill-action__icon"><i className="bi bi-arrow-right"></i></span>
                   </Link>
